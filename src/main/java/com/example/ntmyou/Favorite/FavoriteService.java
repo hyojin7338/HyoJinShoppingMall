@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
@@ -27,12 +28,13 @@ public class FavoriteService {
         this.favoriteRepository = favoriteRepository;
     }
 
+    // RequestDto, ResponseDto, Mapper 추가하여 로직 변경 // 2025-02-25
     @Transactional
-    public Favorite addFavorite(Long userId, Long productId) {
-        User user = userRepository.findById(userId)
+    public FavoriteResponseDto addFavorite(FavoriteRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 회원이니다."));
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
 
         // 중복확인
@@ -41,21 +43,28 @@ public class FavoriteService {
             throw new FavoriteExistsException("이미 찜한 상품입니다.");
         }
 
-        Favorite favorite = Favorite.builder()
-                .user(user)
-                .product(product)
-                .build();
+        // requestDto -> Mapper 저장
+        Favorite favorite = FavoriteMapper.toEntity(requestDto, user, product);
 
-        return favoriteRepository.save(favorite);
+        // 서비스 저장
+        favorite = favoriteRepository.save(favorite);
+
+        return FavoriteMapper.toResponseDto(favorite);
     }
 
     // 특정유저가 찜 목록 전체 조회하기
+    // RequestDto, ResponseDto, Mapper 추가하여 로직 변경 // 2025-02-25
     @Transactional(readOnly = true)
-    public List<Favorite> getFindFavorite(Long userId) {
+    public List<FavoriteResponseDto> getFindFavorite(Long userId) {
         // 유저가 존재하는지 확인하고
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 회원이니다."));
-        return favoriteRepository.findByUser(user);
+        // 찜한 목록 조회 후 DTO 변환
+        List<Favorite> favorites = favoriteRepository.findByUser(user);
+
+        return favorites.stream()
+                .map(FavoriteMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     // 특정 찜한 상품 삭제
