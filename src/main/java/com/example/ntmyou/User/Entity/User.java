@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender = Gender.MALE; // 기본 설정은 남자
 
-    @Column(nullable = false)
-    private Integer age; // 나이
-
     @Column
     private String zipCode; // 우편번호
 
@@ -50,7 +48,7 @@ public class User {
     private LocalDateTime sDay; // 가입날짜
 
     @Column
-    private String brithDay; // 생일
+    private LocalDate birthDay; // 생일
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER; // 기본 값 일반회원

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -33,12 +35,11 @@ public class UserSignupRequestDto {
 
     private Gender gender; // 성별
 
-    @NotNull(message = "나이를 입력해 주세요.")
-    @Min(18) @Max(100)
-    private Integer age;
-
     private String zipCode; // 우편번호
     private String address; // 주소
     private String region; // 상세주소
+
+    private String tel; // 전화번호
+    private LocalDate birthDay; // 생년월일
 
 }

@@ -14,10 +14,11 @@ public class UserMapper {
                 .name(requestDto.getName())
                 .password(passwordEncoder.encode(requestDto.getPassword())) // 여기서 암호화
                 .gender(requestDto.getGender())
-                .age(requestDto.getAge())
                 .zipCode(requestDto.getZipCode())
                 .address(requestDto.getAddress())
                 .region(requestDto.getRegion())
+                .tel(requestDto.getTel())  //  전화번호 추가
+                .birthDay(requestDto.getBirthDay()) // 생년월일 추가 // 추후 생일쿠폰 지급
                 .build();
     }
 
@@ -26,8 +27,7 @@ public class UserMapper {
         return new UserSignupResponseDto(
                 user.getCode(),
                 user.getName(),
-                user.getGender(),
-                user.getAge()
+                user.getGender()
         );
     }
 
