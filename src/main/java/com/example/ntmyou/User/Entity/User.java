@@ -2,6 +2,7 @@ package com.example.ntmyou.User.Entity;
 
 import com.example.ntmyou.Config.Enum.Gender;
 import com.example.ntmyou.Config.Enum.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -64,6 +65,7 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "user_images", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "image_url", length = 1000)
+    @JsonIgnore
     private List<String> imageUrls = new ArrayList<>();
 
 
