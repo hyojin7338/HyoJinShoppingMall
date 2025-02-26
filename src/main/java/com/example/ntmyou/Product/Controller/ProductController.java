@@ -49,6 +49,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    // 카테고리에 맞는 상품이 조회를 하는 로직이 필요하네..!
 
 
 }

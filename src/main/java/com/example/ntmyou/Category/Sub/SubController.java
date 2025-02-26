@@ -1,8 +1,5 @@
 package com.example.ntmyou.Category.Sub;
 
-import com.example.ntmyou.Category.Child.ChildRequestDto;
-import com.example.ntmyou.Category.Child.ChildResponseDto;
-import com.example.ntmyou.Category.Child.ChildService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +20,8 @@ public class SubController {
         return ResponseEntity.status(HttpStatus.CREATED).body(subResponseDto);
     }
 
-    @GetMapping("/master/category/sub/find")
-    public ResponseEntity<List<SubCategory>> findAllSubCategory() {
-        return ResponseEntity.ok(subService.getAllSubCategory());
+    @GetMapping("/master/categorySub/find/{childId}")
+    public ResponseEntity<List<SubCategory>> getAllSubByChildId(@PathVariable Long childId) {
+        return ResponseEntity.ok(subService.getAllSubCategory(childId));
     }
 }

@@ -29,7 +29,7 @@ public class SubService {
     }
 
     @Transactional(readOnly = true)
-    public List<SubCategory> getAllSubCategory() {
-        return subRepository.findAllWithChild();
+    public List<SubCategory> getAllSubCategory(Long childId) {
+        return subRepository.findAllWithChild(childId);
     }
 }

@@ -17,6 +17,7 @@ public class ChildService {
     private final ChildMapper childMapper;
 
 
+    // 생성
     @Transactional
     public ChildResponseDto createChild(ChildRequestDto dto, Long parentId) {
         ParentsCategory parentsCategory = parentsRepository.findById(parentId)
@@ -28,8 +29,9 @@ public class ChildService {
         return childMapper.responseDto(savedEntity);
     }
 
+    // 조회인데
     @Transactional(readOnly = true)
-    public List<ChildCategory> getAllChild() {
-        return childRepository.findAllWithParents();
+    public List<ChildCategory> getAllChildByParentId(Long parentId) {
+        return childRepository.findAllByParentId(parentId);
     }
 }
