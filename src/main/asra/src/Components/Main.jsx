@@ -10,7 +10,7 @@ const Main = () => {
     const [subCategories, setSubCategories] = useState([]); // 소분류 카테고리
     const [selectedSub, setSelectedSub] = useState(null); // 선택한 소분류
 
-    // ✅ 1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
+    //  1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
     useEffect(() => {
         axios.get("http://localhost:8080/master/category/parents/find")
             .then(response => {
