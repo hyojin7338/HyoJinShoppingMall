@@ -22,8 +22,8 @@ public class ChildController {
     }
 
     // 중분류 전체 조회
-    @GetMapping("/master/category/child/find")
-    public ResponseEntity<List<ChildCategory>> getAllChild(){
-        return ResponseEntity.ok(childService.getAllChild());
+    @GetMapping("/master/categoryChild/find/{parentId}")
+    public ResponseEntity<List<ChildCategory>> getAllChildByParentId(@PathVariable Long parentId) {
+        return ResponseEntity.ok(childService.getAllChildByParentId(parentId));
     }
 }
