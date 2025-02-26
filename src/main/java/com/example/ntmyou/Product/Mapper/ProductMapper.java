@@ -45,7 +45,7 @@ public class ProductMapper {
                 .parentsCategoryName(product.getParentsCategory() != null ? product.getParentsCategory().getName() : null)
                 .childCategoryName(product.getChildCategory() != null ? product.getChildCategory().getName() : null)
                 .subCategoryName(product.getSubCategory() != null ? product.getSubCategory().getName() : null)
-                .masterName(product.getMaster() != null ? product.getMaster().getName() : null)
+                .businessName(product.getMaster() != null ? product.getMaster().getBusinessName() : null)
                 .mainImg(product.getMainImgUrl())
                 .imageUrls(product.getImageUrls() != null ? product.getImageUrls() : new ArrayList<>()) // null 방지
                 .build();
