@@ -10,12 +10,14 @@ const Login = () => {
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
 
-    // 로컬 스토리지에서 저장 된 이메일 불러오기
+    // 로컬 스토리지에서 저장 된 아이디(Code) 불러오기
     useEffect(() => {
-        const saveCode = localStorage.getItem("saveCode");
-        if (saveCode){
-            setFormData((prev) => ({ ...prev, code : saveCode }));
-            setRememberCode(true);
+        const savedCode = localStorage.getItem("savedCode"); // 저장된 아이디 가져오기
+        const savedRemember = localStorage.getItem("rememberCode") === "true"; // 저장된 체크 여부 확인
+
+        if (savedCode) {
+            setFormData((prev) => ({ ...prev, code: savedCode }));
+            setRememberCode(savedRemember); //  로그인 후에도 체크박스 상태 유지
         }
     }, []);
 
@@ -43,21 +45,23 @@ const Login = () => {
             // 이메일 기억하기
             if (rememberCode) {
                 localStorage.setItem("savedCode", formData.code);
+                localStorage.setItem("rememberCode", "true"); // 체크 여부 저장
             } else {
                 localStorage.removeItem("savedCode");
+                localStorage.setItem("rememberCode", "false"); // 체크 해제 상태 저장
             }
-
             // JWT 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
 
-            setSuccess("로그인 성공적으로 완료되었습니다.");
-            setError("");
+            alert("로그인 성공! 메인 화면으로 이동합니다."); // 성공 시 알림
+            navigate("/main"); //  메인 화면으로 이동
+
         } catch (err) {
             if (err.response) {
-                setError(err.response.data || "로그인에 실패하였습니다.");
+                alert(err.response.data.message || "로그인에 실패하였습니다."); // 실패 시 팝업
             } else {
-                setError("네트워크 오류가 발생하였습니다.");
+                alert("네트워크 오류가 발생하였습니다."); // 네트워크 오류
             }
         }
     };
@@ -108,7 +112,7 @@ const Login = () => {
                             checked={rememberCode}
                             onChange={handleRememberCode}
                         />
-                        이메일 기억하기
+                        아이디 기억하기
                     </label>
                 </div>
                 <button type="submit">로그인</button>

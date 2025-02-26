@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -205,9 +206,16 @@ public class ProductService {
 
     }
 
-    // 선택한 카테고리에 맞는 상품이 조회가 되어야한다
+    // 선택한 카테고리에 맞는 상품이 조회가 되어야한다 // 2025-02-26
     // 대분류 -> 중분류 -> 소분류
+    @Transactional(readOnly = true)
+    public List<ProductResponseDto> getProductByCategory(Long subCategoryId) {
 
+        List<Product> products = productRepository.findByProductAndSubCategory(subCategoryId);
 
+        return products.stream()
+                .map(product -> new ProductMapper().toResponseDto(product))
+                .collect(Collectors.toList());
+    }
 
 }

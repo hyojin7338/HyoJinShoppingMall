@@ -9,8 +9,9 @@ const Main = () => {
     const [selectedChild, setSelectedChild] = useState(null); // 선택한 중분류
     const [subCategories, setSubCategories] = useState([]); // 소분류 카테고리
     const [selectedSub, setSelectedSub] = useState(null); // 선택한 소분류
+    const [products, setProducts] = useState([]); // 상품 목록
 
-    // ✅ 1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
+    //  1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
     useEffect(() => {
         axios.get("http://localhost:8080/master/category/parents/find")
             .then(response => {
@@ -50,6 +51,15 @@ const Main = () => {
             })
             .catch(error => console.error("소분류 불러오기 실패:", error));
     }, [selectedChild]);
+
+    useEffect(() => {
+        if (!selectedSub) return;
+        axios.get(`http://localhost:8080/products/findByProductAndSubCategory?subCategoryId=${selectedSub.subCategoryId}`)
+            .then(response => {
+                setProducts(response.data);
+            })
+            .catch(error => console.error("상품 불러오기 실패:", error));
+    }, [selectedSub]);
 
     return (
         <div className="main-container">
@@ -106,6 +116,25 @@ const Main = () => {
                     ))}
                 </div>
             )}
+            {/* 4. 소분류까지 선택한 상품 가지고 오기 */}
+            <h2>상품 목록</h2>
+            <div className="product-grid">
+                {products.length > 0 ? (
+                    products.map(product => (
+                        <div key={product.productId} className="product-card">
+                            <img src={product.mainImgUrl} alt={product.name} className="product-image" />
+                            <div className="product-info">
+                                <h3>{product.name}</h3>
+                                <p>{product.contents}</p>
+                                <p><strong>가격:</strong> {product.amount}원</p>
+                                <p><strong>판매자:</strong> {product.businessName}</p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p>선택한 카테고리에 맞는 상품이 없습니다.</p>
+                )}
+            </div>
         </div>
     );
 };

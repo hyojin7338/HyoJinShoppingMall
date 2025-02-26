@@ -50,6 +50,12 @@ public class ProductController {
     }
 
     // 카테고리에 맞는 상품이 조회를 하는 로직이 필요하네..!
+    @GetMapping("/products/findByProductAndSubCategory")
+    public ResponseEntity<List<ProductResponseDto>> getProductsBySubCategory(
+            @RequestParam("subCategoryId") Long subCategoryId) {
+        List<ProductResponseDto> responseDto = productService.getProductByCategory(subCategoryId);
+        return ResponseEntity.ok(responseDto);
+    }
 
 
 }

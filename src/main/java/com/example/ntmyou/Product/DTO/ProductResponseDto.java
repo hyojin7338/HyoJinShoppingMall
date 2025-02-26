@@ -20,7 +20,8 @@ public class ProductResponseDto {
     private String parentsCategoryName; // 대분류 이름
     private String childCategoryName;   // 중분류 이름
     private String subCategoryName;     // 소분류 이름
-    private String masterName;          // 판매자 이름
+    //private String masterName;          // 판매자 이름
+    private String businessName; // 상호명 추가 함
 
     private String mainImg;  // 대표 이미지
     private List<String > imageUrls; // 서브 이미지
