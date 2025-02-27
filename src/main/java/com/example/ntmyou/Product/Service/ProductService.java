@@ -19,7 +19,6 @@ import com.example.ntmyou.Product.Mapper.ProductMapper;
 import com.example.ntmyou.Product.Mapper.ProductUpdateMapper;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +70,7 @@ public class ProductService {
         }
 
         // 상품 가격이 0원 이상이여야한다  // ex) 가격이 마이너스 또는 0원이면 안됨
-        if (requestDto.getAmount() == null || requestDto.getAmount() <= 0 ||
-                requestDto.getCnt() == null || requestDto.getCnt() <= 0) {
+        if (requestDto.getAmount() == null || requestDto.getAmount() <= 0 ) {
             throw new ProductAmountAndCntException("가격과 재고는 0 이상이어야 합니다.");
         }
 
@@ -143,7 +141,6 @@ public class ProductService {
         if (updateRequestDto.getName() != null)product.setName(updateRequestDto.getName());
         if (updateRequestDto.getContents() != null) product.setContents(updateRequestDto.getContents());
         if (updateRequestDto.getAmount() != null) product.setAmount(updateRequestDto.getAmount());
-        if (updateRequestDto.getCnt() != null) product.setCnt(updateRequestDto.getCnt());
 
         // 카테고리 변경
         ParentsCategory newParentsCategory = (updateRequestDto.getParentsCategoryId() != null) ?
@@ -216,6 +213,14 @@ public class ProductService {
         return products.stream()
                 .map(product -> new ProductMapper().toResponseDto(product))
                 .collect(Collectors.toList());
+    }
+
+    // 특정 상품만 조회
+    @Transactional(readOnly = true)
+    public ProductResponseDto getProductById(Long productId) {
+        Product product = productRepository.findProductWithImages(productId)
+                .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+        return new ProductMapper().toResponseDto(product);
     }
 
 }

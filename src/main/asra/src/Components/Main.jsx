@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/Main.css"; // 스타일 적용을 위한 CSS 파일
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
+    const navigate = useNavigate();
+
     const [categories, setCategories] = useState([]); // 대분류 카테고리
     const [selectedParent, setSelectedParent] = useState(null); // 선택한 대분류
     const [children, setChildren] = useState([]); // 중분류 카테고리
@@ -52,6 +55,7 @@ const Main = () => {
             .catch(error => console.error("소분류 불러오기 실패:", error));
     }, [selectedChild]);
 
+    //  4. 선택한 소분류에 맞는 상품 목록 가져오기
     useEffect(() => {
         if (!selectedSub) return;
         axios.get(`http://localhost:8080/products/findByProductAndSubCategory?subCategoryId=${selectedSub.subCategoryId}`)
@@ -73,16 +77,13 @@ const Main = () => {
                 <div className="nav-icons">
                     <button>알림</button> <button>장바구니</button>
                 </div>
-
             </nav>
-
-
 
             {/*  1. 대분류 선택 */}
             <div className="parents-category-bar">
-                {categories.map((parent, index) => (
+                {categories.map(parent => (
                     <button
-                        key={parent.parentsId || index}
+                        key={parent.parentsId} // ✅ index 제거하고 고유한 parentsId 사용
                         className={`category-item ${selectedParent?.parentsId === parent.parentsId ? "active" : ""}`}
                         onClick={() => {
                             console.log("대분류 버튼 클릭됨:", parent);
@@ -97,9 +98,9 @@ const Main = () => {
             {/*  2. 중분류 선택 */}
             {selectedParent && children.length > 0 && (
                 <div className="child-category-bar">
-                    {children.map((child, index) => (
+                    {children.map(child => (
                         <button
-                            key={child.childCategoryId || index} // `childCategoryId` 사용
+                            key={child.childCategoryId} // ✅ index 제거하고 고유한 childCategoryId 사용
                             className={`sub-category-item ${selectedChild?.childCategoryId === child.childCategoryId ? "active" : ""}`}
                             onClick={() => {
                                 console.log("중분류 버튼 클릭됨:", child);
@@ -115,9 +116,9 @@ const Main = () => {
             {/*  3. 소분류 선택 */}
             {selectedChild && subCategories.length > 0 && (
                 <div className="sub-category-bar">
-                    {subCategories.map((sub, index) => (
+                    {subCategories.map(sub => (
                         <button
-                            key={sub.subCategoryId || index} // `subCategoryId` 사용
+                            key={sub.subCategoryId} // ✅ index 제거하고 고유한 subCategoryId 사용
                             className={`sub-category-item ${selectedSub?.subCategoryId === sub.subCategoryId ? "active" : ""}`}
                             onClick={() => {
                                 console.log("소분류 버튼 클릭됨:", sub);
@@ -129,23 +130,32 @@ const Main = () => {
                     ))}
                 </div>
             )}
+
             {/* 4. 소분류까지 선택한 상품 가지고 오기 */}
             <div className="product-grid">
                 {products.length > 0 ? (
-                    products.map(product => (
-                        <div key={product.productId} className="product-card">
-                            <img src={product.mainImgUrl} alt={product.name} className="product-image" />
-                            <div className="product-info">
-                                <h3>{product.name}</h3>
-                                <p>{product.contents}</p>
-                                <p><strong>가격:</strong> {product.amount}원</p>
-                                <p><strong>판매자:</strong> {product.businessName}</p>
+                    products.map(product => {
+                        console.log("상품 ID:", product.productId);
+                        return (
+                            <div
+                                key={product.productId}
+                                className="product-card"
+                                onClick={() => navigate(`/product/${product.productId}`)}
+                            >
+                                <img src={product.mainImgUrl} alt={product.name} className="product-image" />
+                                <div className="product-info">
+                                    <h3>{product.name}</h3>
+                                    <p>{product.contents}</p>
+                                    <p><strong>가격:</strong> {product.amount}원</p>
+                                    <p><strong>판매자:</strong> {product.businessName}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
                     <p>선택한 카테고리에 맞는 상품이 없습니다.</p>
                 )}
+
             </div>
         </div>
     );

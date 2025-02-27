@@ -35,8 +35,8 @@ public class Product {
     @Column
     private Integer amount; // 가격
 
-    @Column
-    private Integer cnt; // 현 재고
+    //@Column
+    //private Integer cnt; // 현 재고 productSize 엔티티 추가 후 주석처리
 
     @Column
     private LocalDateTime sDay; // 등록날짜
@@ -80,5 +80,8 @@ public class Product {
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url", length = 1000)
     private List<String> imageUrls = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductSize> sizes = new ArrayList<>();
 
 }
