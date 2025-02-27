@@ -26,7 +26,8 @@ public class ProductRequestDto {
     private Integer amount; // 가격
 
 
-    private Integer cnt;  // 현 재고
+    //private Integer cnt;  // 현 재고 productSize 추가 후 주석처리
+    private List<ProductSizeRequestDto> sizes; // 여라 상품 등록
 
 
     private Long parentsCategoryId; // 대분류 ID

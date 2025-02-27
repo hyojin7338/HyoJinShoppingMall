@@ -15,4 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageUrls WHERE p.subCategory.subCategoryId = :subCategoryId")
     List<Product> findByProductAndSubCategory(@Param("subCategoryId") Long subCategoryId);
 
+    // 특정 상품 조회
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageUrls WHERE p.productId = :productId")
+    Optional<Product> findProductWithImages(@Param("productId") Long productId);
+
 }

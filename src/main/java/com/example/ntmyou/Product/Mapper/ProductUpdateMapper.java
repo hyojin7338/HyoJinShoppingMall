@@ -25,7 +25,7 @@ public class ProductUpdateMapper {
         if (updateRequestDto.getName() != null) product.setName(updateRequestDto.getName());
         if (updateRequestDto.getContents() != null) product.setContents(updateRequestDto.getContents());
         if (updateRequestDto.getAmount() != null) product.setAmount(updateRequestDto.getAmount());
-        if (updateRequestDto.getCnt() != null) product.setCnt(updateRequestDto.getCnt());
+
 
         // 카테고리 수정 빈 값이면 기존 값을 그대로 유지
         if (parentsId != null) product.setParentsCategory(parentsId);
@@ -50,7 +50,6 @@ public class ProductUpdateMapper {
                 .name(product.getName())
                 .contents(product.getContents())
                 .amount(product.getAmount())
-                .cnt(product.getCnt())
                 .parentsCategoryName(product.getParentsCategory() != null ? product.getParentsCategory().getName() : null)
                 .childCategoryName(product.getChildCategory() != null ? product.getChildCategory().getName() : null)
                 .subCategoryName(product.getSubCategory() != null ? product.getSubCategory().getName() : null)

@@ -11,11 +11,13 @@ import java.util.List;
 @Getter
 @Builder
 public class ProductResponseDto {
+    private Long productId;
     private String code; // 상품을 관리할 코드
     private String name; // 상품명
     private String contents; // 상품 설명
     private Integer amount; // 가격
-    private Integer cnt;  // 현 재고
+   // private Integer cnt;  // 현 재고 // productSize 추가 후 주석처리
+    private List<ProductSizeResponseDto> sizes;
 
     private String parentsCategoryName; // 대분류 이름
     private String childCategoryName;   // 중분류 이름
