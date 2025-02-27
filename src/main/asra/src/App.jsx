@@ -6,6 +6,7 @@ import Login from "./Components/Login.jsx";
 import MasterSignup from "./Components/MasterSignup.jsx";
 import MasterLogin from "./Components/MasterLogin.jsx";
 import Main from "./Components/Main.jsx";
+import MasterMain from "./Components/MasterMain.jsx"
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/Login" element={<Login/>} />
           <Route path="/MasterLogin" element={<MasterLogin/>} />
           <Route path="/Main" element={<Main/>} />
+          <Route path="/MasterMain" element={<MasterMain/>} />
         </Routes>
       </Router>
   );

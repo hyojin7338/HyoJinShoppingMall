@@ -63,7 +63,20 @@ const Main = () => {
 
     return (
         <div className="main-container">
-            <h2>카테고리 선택</h2>
+
+            <nav className="navbar">
+                <div className="logo">Asra</div> {/* 왼쪽 상단 로고 */}
+                <div className="search-bar">
+                    <input type="text" placeholder="검색어를 입력하세요" />
+                    <button>검색</button>
+                </div>
+                <div className="nav-icons">
+                    <button>알림</button> <button>장바구니</button>
+                </div>
+
+            </nav>
+
+
 
             {/*  1. 대분류 선택 */}
             <div className="parents-category-bar">
@@ -117,7 +130,6 @@ const Main = () => {
                 </div>
             )}
             {/* 4. 소분류까지 선택한 상품 가지고 오기 */}
-            <h2>상품 목록</h2>
             <div className="product-grid">
                 {products.length > 0 ? (
                     products.map(product => (
