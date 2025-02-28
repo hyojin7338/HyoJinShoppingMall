@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext } from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import "../styles/Login.css"
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
 
     // 로컬 스토리지에서 저장 된 아이디(Code) 불러오기
     useEffect(() => {
@@ -40,7 +42,17 @@ const Login = () => {
 
         try {
             const response = await axios.post("http://localhost:8080/login", formData);
-            const { accessToken, refreshToken } = response.data;
+
+            console.log("로그인 API 응답 데이터:", response.data);
+
+            const { accessToken, refreshToken, user } = response.data;
+
+            const userData = user || { name };
+
+            if (!userData) {
+                console.error("로그인 응답에 user 정보가 없습니다!");
+                return;
+            }
 
             // 이메일 기억하기
             if (rememberCode) {
@@ -53,8 +65,13 @@ const Login = () => {
             // JWT 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("user", JSON.stringify(userData));
 
-            alert("로그인 성공! 메인 화면으로 이동합니다."); // 성공 시 알림
+            //  로그인한 유저 정보를 UserContext에 업데이트
+            setUser(userData);
+            console.log("로그인한 유저 정보:", userData);
+
+            alert("환영합니다! "+ userData +"님 메인 화면으로 이동합니다."); // 성공 시 알림
             navigate("/main"); //  메인 화면으로 이동
 
         } catch (err) {

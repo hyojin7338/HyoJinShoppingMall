@@ -58,7 +58,7 @@ public class ProductController {
     }
 
     // 특정 상품만 조회되는 로직도 필요했네..!
-    // DetailProduct 상품상세 페이지로 들어갔을 때 필요한 API가 있어야한다
+    // DetailProduct 상품상세 페이지로 들어갔을 때 필요한 API 있어야한다
     @GetMapping("/product/{productId}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long productId) {
         ProductResponseDto responseDto = productService.getProductById(productId);

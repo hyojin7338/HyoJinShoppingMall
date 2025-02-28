@@ -49,6 +49,7 @@ public class ProductMapper {
     // 삼항 연산자 사용 ->  조건식 ? 참일 때 반환할 값 : 거짓일 때 반환할 값;
     public ProductResponseDto toResponseDto(Product product) {
         return ProductResponseDto.builder()
+                .productId(product.getProductId())
                 .code(product.getCode())
                 .name(product.getName())
                 .contents(product.getContents())
