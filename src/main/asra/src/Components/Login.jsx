@@ -45,9 +45,9 @@ const Login = () => {
 
             console.log("로그인 API 응답 데이터:", response.data);
 
-            const { accessToken, refreshToken, user } = response.data;
+            const { accessToken, refreshToken, name } = response.data;
 
-            const userData = user || { name };
+            const userData = name || { name };
 
             if (!userData) {
                 console.error("로그인 응답에 user 정보가 없습니다!");

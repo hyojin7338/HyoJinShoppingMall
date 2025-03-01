@@ -99,7 +99,7 @@ const Main = () => {
             {isSidebarOpen && user &&(
                 <div className="sidebar">
                     <button className="close-btn" onClick={toggleSidebar}>X</button>
-                    <h2>{user?.name} 님</h2>
+                    <h2>{name?.name} 님</h2>
                     <p>닉네임: {user?.name}</p>
                     <button onClick={() => navigate("/mypage")}>마이페이지 이동</button>
                     <button onClick={() => navigate("/logout")}>로그아웃</button>
