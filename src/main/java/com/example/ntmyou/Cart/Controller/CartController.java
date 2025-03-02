@@ -1,14 +1,11 @@
 package com.example.ntmyou.Cart.Controller;
 
+import com.example.ntmyou.Cart.DTO.CartResponseDto;
 import com.example.ntmyou.Cart.Service.CartService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +22,12 @@ public class CartController {
         return ResponseEntity.ok("상품이 장바구니에 추가되었습니다.");
     }
 
+    // 특정 유저가 본인 장바구니를 조회하는 API
+    @GetMapping("/cart/{userId}")
+    public ResponseEntity<CartResponseDto> getCartByUserId(@PathVariable Long userId) {
+        CartResponseDto cart = cartService.getCartByUserId(userId);
+        return ResponseEntity.ok(cart);
+    }
     // 장바구니에 쿠폰 적용 API
     @PostMapping("/{cartId}/apply-coupon/{userCouponId}")
     public ResponseEntity<String> applyCouponToCart(
