@@ -1,5 +1,7 @@
 package com.example.ntmyou.Cart.Service;
 
+import com.example.ntmyou.Cart.DTO.CartItemDto;
+import com.example.ntmyou.Cart.DTO.CartResponseDto;
 import com.example.ntmyou.Cart.Entity.Cart;
 import com.example.ntmyou.Cart.Entity.CartItem;
 import com.example.ntmyou.Cart.Repository.CartRepository;
@@ -12,6 +14,9 @@ import com.example.ntmyou.User.Repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +73,28 @@ public class CartService {
         cart.updateCartTotals();
         cartRepository.save(cart);
     }
+
+    // 특정 유저 조회
+    @Transactional(readOnly = true)
+    public CartResponseDto getCartByUserId(Long userId) {
+        // 특정 유저의 장바구니 찾기
+        Cart cart = cartRepository.findByUser_UserId(userId)
+                .orElseThrow(() -> new CartNotFoundException("장바구니가 존재하지 않습니다."));
+
+        // 장바구니에 담긴 상품들을 DTO로 변환
+        List<CartItemDto> cartItems = cart.getCartItems().stream()
+                .map(item -> new CartItemDto(
+                        item.getCartItemId(),
+                        item.getProduct().getProductId(),
+                        item.getProduct().getName(),
+                        item.getProduct().getAmount(),
+                        item.getQty()
+                ))
+                .collect(Collectors.toList());
+
+        return new CartResponseDto(cart.getCartId(), cartItems, cart.getTotalPrice(), cart.getFinalPrice());
+    }
+
 
     // 쿠폰적용하기
     @Transactional
