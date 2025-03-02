@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useContext } from "react";
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import {UserContext} from "../context/UserContext";
 import "../styles/Login.css"
 
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
-    const { setUser } = useContext(UserContext);
+    const {setUser} = useContext(UserContext);
 
     // 로컬 스토리지에서 저장 된 아이디(Code) 불러오기
     useEffect(() => {
@@ -18,7 +18,7 @@ const Login = () => {
         const savedRemember = localStorage.getItem("rememberCode") === "true"; // 저장된 체크 여부 확인
 
         if (savedCode) {
-            setFormData((prev) => ({ ...prev, code: savedCode }));
+            setFormData((prev) => ({...prev, code: savedCode}));
             setRememberCode(savedRemember); //  로그인 후에도 체크박스 상태 유지
         }
     }, []);
@@ -42,17 +42,17 @@ const Login = () => {
 
         try {
             const response = await axios.post("http://localhost:8080/login", formData);
-
             console.log("로그인 API 응답 데이터:", response.data);
 
-            const { accessToken, refreshToken, name } = response.data;
+            const {accessToken, refreshToken, userId, name, cartId} = response.data;
 
-            const userData = name || { name };
-
-            if (!userData) {
+            if (!userId || !name || !cartId) {
                 console.error("로그인 응답에 user 정보가 없습니다!");
                 return;
             }
+
+            const userData = { userId, name, cartId };
+
 
             // 이메일 기억하기
             if (rememberCode) {
@@ -62,6 +62,7 @@ const Login = () => {
                 localStorage.removeItem("savedCode");
                 localStorage.setItem("rememberCode", "false"); // 체크 해제 상태 저장
             }
+
             // JWT 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
@@ -71,7 +72,7 @@ const Login = () => {
             setUser(userData);
             console.log("로그인한 유저 정보:", userData);
 
-            alert("환영합니다! "+ userData +"님 메인 화면으로 이동합니다."); // 성공 시 알림
+            alert(`환영합니다! ${name}님`);
             navigate("/main"); //  메인 화면으로 이동
 
         } catch (err) {

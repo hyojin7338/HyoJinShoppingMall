@@ -1,0 +1,39 @@
+.footer-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%; /* 전체 너비로 설정 */
+    height: 60px;
+    background: #222;
+    color: white;
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 하단 메뉴 버튼 그룹 */
+.footer-nav .button-group {
+    display: flex;
+    gap: 15px; /* 버튼 간격 */
+    max-width: 400px; /* 버튼 최대 너비 */
+    width: 100%; /* 버튼이 부모 요소를 차지하도록 */
+    justify-content: space-between; /* 버튼 간격 균등하게 */
+}
+
+/* 하단 버튼 스타일 */
+.footer-nav button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: all 0.3s ease-in-out;
+    flex: 1; /* 버튼 크기 균등 분배 */
+    text-align: center;
+}
+
+.footer-nav button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
