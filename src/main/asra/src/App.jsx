@@ -11,6 +11,7 @@ import DetailProduct from "./Components/DetailProduct.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute"; // 로그인 필요 페이지 보호
 import MyPage from "./Components/MyPage.jsx";
 import Cart from "./Components/Cart.jsx";
+import Favorite from "./Components/Favorite.jsx";
 import { UserContext  } from "./context/UserContext"; // 유저 정보 가져오기
 
 
@@ -33,6 +34,7 @@ function App() {
                   <Route path="/MasterMain" element={<MasterMain />} />
                   <Route path="/MyPage" element={<MyPage />} />
                   <Route path="/Cart" element={<Cart />} />
+                  <Route path="/Favorite" element={<Favorite />} />
               </Route>
           </Routes>
       </Router>

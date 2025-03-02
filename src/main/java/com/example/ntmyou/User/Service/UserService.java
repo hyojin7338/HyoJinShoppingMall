@@ -187,6 +187,9 @@ public class UserService {
             throw new UserCreditException("휴먼 계정입니다. 로그인이 불가합니다.");
         }
 
+        // ✅ cartId 가져오기 (User 엔티티에 Cart와 연관관계가 있어야 함)
+        Long cartId = user.getCart() != null ? user.getCart().getCartId() : null;
+
         // JWT 토큰 생성
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 user.getCode(), null, Collections.singletonList(new SimpleGrantedAuthority("USER"))
@@ -195,7 +198,9 @@ public class UserService {
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
 
         return new UserLoginResponseDto(
+                user.getUserId(),
                 user.getName(),
+                cartId,
                 jwtToken.getAccessToken(),
                 jwtToken.getRefreshToken()
         );

@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/Main.css"; // 스타일 적용을 위한 CSS 파일
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import FooterNav from "../Components/FooterNav.jsx";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -16,7 +17,6 @@ const Main = () => {
     const [subCategories, setSubCategories] = useState([]); // 소분류 카테고리
     const [selectedSub, setSelectedSub] = useState(null); // 선택한 소분류
     const [products, setProducts] = useState([]); // 상품 목록
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // 사이드바 상태 추가
 
 
     //  1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
@@ -74,7 +74,7 @@ const Main = () => {
     useEffect(() => {
         console.log("로그인 상태 변경됨:", user);
     }, [user]);
-    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen); // 토글로 사이드바 열기/ 닫기
+
 
     return (
         <div className="main-container">
@@ -85,26 +85,7 @@ const Main = () => {
                     <input type="text" placeholder="검색어를 입력하세요" />
                     <button>검색</button>
                 </div>
-                <div className="nav-icons">
-                    <button>알림</button>
-                    <button>장바구니</button>
-                    {user ? (
-                        <button onClick={toggleSidebar}>마이페이지</button>
-                    ) : (
-                        <button onClick={() => navigate("/login")}>로그인</button>
-                    )}
-                </div>
             </nav>
-            {/* 마이페이지 사이드바 */}
-            {isSidebarOpen && user &&(
-                <div className="sidebar">
-                    <button className="close-btn" onClick={toggleSidebar}>X</button>
-                    <h2>{name?.name} 님</h2>
-                    <p>닉네임: {user?.name}</p>
-                    <button onClick={() => navigate("/mypage")}>마이페이지 이동</button>
-                    <button onClick={() => navigate("/logout")}>로그아웃</button>
-                </div>
-            )}
 
             {/*  1. 대분류 선택 */}
             <div className="parents-category-bar">
@@ -183,6 +164,7 @@ const Main = () => {
                 )}
 
             </div>
+            <FooterNav/>
         </div>
     );
 };

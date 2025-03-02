@@ -1,5 +1,6 @@
 package com.example.ntmyou.User.Entity;
 
+import com.example.ntmyou.Cart.Entity.Cart;
 import com.example.ntmyou.Config.Enum.Gender;
 import com.example.ntmyou.Config.Enum.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,6 +72,9 @@ public class User {
     private String tel; // 전화번호
 
 
+    //
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Cart cart;
 
     // 프로필 정보 부분 업데이트 메서드 // 기존 정보 데이터 유지와 롤백 방지
     public void updateProfileInfo(String zipCode, String address, String region, String tel) {
