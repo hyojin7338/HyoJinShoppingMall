@@ -1,0 +1,74 @@
+/*  장바구니 컨테이너 */
+.cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 장바구니 제목 */
+.cart-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 장바구니 리스트 */
+.cart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* 개별 상품 항목 */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* 🛍️ 상품 이름 */
+.cart-item h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+}
+
+/*  가격 & 수량 */
+.cart-item p {
+    font-size: 14px;
+    color: #555;
+}
+
+/*  총 가격 & 최종 결제 금액 */
+.cart-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #000;
+}
+
+/* 🛒 버튼 스타일 */
+.cart-button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.cart-button:hover {
+    background-color: #ff3b3b;
+}
