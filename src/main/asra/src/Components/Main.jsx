@@ -75,6 +75,11 @@ const Main = () => {
         console.log("로그인 상태 변경됨:", user);
     }, [user]);
 
+    // 숫자에 콤마를 추가하는 함수
+    const formatPrice = (price) => {
+        return price.toLocaleString();  // 1,000 단위로 콤마 추가
+    };
+
 
     return (
         <div className="main-container">
@@ -153,7 +158,7 @@ const Main = () => {
                                 <div className="product-info">
                                     <h3>{product.name}</h3>
                                     <p>{product.contents}</p>
-                                    <p><strong>가격:</strong> {product.amount}원</p>
+                                    <p><strong>가격:</strong> {formatPrice(product.amount)}원</p>
                                     <p><strong>판매자:</strong> {product.businessName}</p>
                                 </div>
                             </div>

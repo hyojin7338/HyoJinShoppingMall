@@ -29,13 +29,23 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
     // 장바구니에 쿠폰 적용 API
-    @PostMapping("/{cartId}/apply-coupon/{userCouponId}")
+    @PostMapping("/cart/{cartId}/apply-coupon/{userCouponId}")
     public ResponseEntity<String> applyCouponToCart(
             @PathVariable Long cartId,
             @PathVariable Long userCouponId
     ) {
         cartService.applyCouponToCart(cartId, userCouponId);
         return ResponseEntity.ok("쿠폰이 장바구니에 적용되었습니다.");
+    }
+
+    // 장바구니 삭제
+    @DeleteMapping("/cart/{cartId}/Delete/{productId}")
+    public ResponseEntity<String> removeProductFromCart(
+            @PathVariable Long cartId,
+            @PathVariable Long productId
+    ) {
+        cartService.removeProductFromCart(cartId, productId);
+        return ResponseEntity.ok("장바구니에서 정상적으로 제거 되었습니다.");
     }
 
     // 결제 API
