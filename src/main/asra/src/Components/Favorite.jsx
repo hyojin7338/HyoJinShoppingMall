@@ -11,49 +11,56 @@ const Favorite = () => {
     const [favorites, setFavorites] = useState([]); // 찜한 상품 목록
     const [loading, setLoading] = useState(true);
 
-    //  찜 목록 조회
-    useEffect(() => {
+
+    // 찜 목록 조회 함수
+    const fetchFavorites = async () => {
         if (!user) {
             alert("로그인이 필요합니다.");
             navigate("/login");
             return;
         }
 
-        axios.get(`http://localhost:8080/favorite/find/${user.userId}`)
-            .then(response => {
-                console.log("찜 목록 데이터:", response.data);
-                setFavorites(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("찜 목록 조회 실패:", error);
-                setLoading(false);
-            });
+        try {
+            const response = await axios.get(`http://localhost:8080/favorite/find/${user.userId}`);
+            console.log("찜 목록 데이터:", response.data);
+            setFavorites(response.data);
+        } catch (error) {
+            console.error("찜 목록 조회 실패:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // useEffect에서 찜 목록 불러오기
+    useEffect(() => {
+        fetchFavorites();
     }, [user, navigate]);
 
+
     //  찜 목록에서 상품 삭제
-    const handleRemoveFavorite = async (favoriteId) => {
+    const handleRemoveFavorite = async (productId) => {
         try {
-            await axios.delete(`http://localhost:8080/favorite/remove/${user.userId}/${favoriteId}`);
-            setFavorites(favorites.filter(item => item.favoriteId !== favoriteId)); // UI 업데이트
+            await axios.delete(`http://localhost:8080/favorite/remove/${user.userId}/${productId}`);
             alert("찜 목록에서 삭제되었습니다.");
+            // 삭제 후 찜 목록 다시 불러오기 조회하기
+            fetchFavorites();
         } catch (error) {
             console.error("찜 삭제 실패:", error);
             alert("삭제 실패!");
         }
     };
 
+
     // 찜 목록에서 장바구니로 추가
-    const handleAddToCart = async (favoriteId) => {
+    const handleAddToCart = async (productId) => {
         try {
-            const response = await axios.post(`http://localhost:8080/cart/${user.cartId}/add-product/${favoriteId}`, {
-                qty: 1
-            });
+            const response = await axios.post(`http://localhost:8080/favorite/add-to-cart/${user.userId}/${productId}`);
             console.log("장바구니 추가 성공:", response.data);
             alert("장바구니에 추가되었습니다.");
         } catch (error) {
             console.error("장바구니 추가 실패:", error);
-            alert("장바구니 추가 실패!");
+            alert(error.response?.data.message || "장바구니 추가 실패!");
         }
     };
 

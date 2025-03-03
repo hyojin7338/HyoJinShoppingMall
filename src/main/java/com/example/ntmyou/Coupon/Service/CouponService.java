@@ -13,6 +13,8 @@ import com.example.ntmyou.Master.Entity.Master;
 import com.example.ntmyou.Master.Repository.MasterRepository;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Repository.ProductRepository;
+import com.example.ntmyou.User.Entity.UserCoupon;
+import com.example.ntmyou.User.Repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ public class CouponService {
     private final MasterRepository masterRepository;
     private final ProductRepository productRepository;
     private final CouponRepository couponRepository;
+
+    private final UserCouponRepository userCouponRepository;
 
     // 쿠폰 생성하기
     @Transactional
@@ -76,10 +80,12 @@ public class CouponService {
     }
 
     // 쿠폰 조회
-    @Transactional
-    public List<CouponResponseDto> getCoupon() {
-        return couponRepository.findAll().stream()
-                .map(CouponMapper::toResponseDto)
+    @Transactional(readOnly = true)
+    public List<CouponResponseDto> getUserCoupons(Long userId) {
+        List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
+        return userCoupons.stream()
+                .map(userCoupon -> CouponMapper.toResponseDto(userCoupon.getCoupon()))
                 .collect(Collectors.toList());
     }
+
 }

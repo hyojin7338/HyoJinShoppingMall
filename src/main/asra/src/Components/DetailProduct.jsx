@@ -1,18 +1,19 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import {UserContext} from "../context/UserContext";
 import axios from "axios";
 import "../styles/DetailProduct.css"
 import FooterNav from "../Components/FooterNav.jsx";
 
 const DetailProduct = () => {
-    const { user } = useContext(UserContext);
-
+    const {user} = useContext(UserContext);
     const {productId} = useParams(); //  URL에서 productId 가져오기
+
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedSize, setSelectedSize] = useState(""); //  선택한 사이즈
     const [quantity, setQuantity] = useState(1); //  선택한 수량 (기본값 1)
+    const [isFavorite, setIsFavorite] = useState(false); // 찜여부 상태 추가
 
     // 사용자 정보에서 cartId 가져오기
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -30,7 +31,22 @@ const DetailProduct = () => {
                 console.error("상품 상세 정보 불러오기 실패:", error);
                 setLoading(false);
             });
-    }, [productId]);
+        if (userId) {
+            checkIfFavorite(); // 로그인된 경우 찜 여부 확인
+        }
+    }, [productId, userId]);
+
+    // 사용자가 이미 찜을 하였는지 확인하기
+    const checkIfFavorite = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/favorite/check?userId=${userId}&productId=${productId}`);
+            setIsFavorite(response.data); // `true`면 이미 찜한 상태
+        } catch (error) {
+            console.error("찜 여부 확인 실패:", error);
+        }
+    };
+
+
 
     // 사이즈 변경 핸들러
     const handleSizeChange = (event) => {
@@ -94,13 +110,29 @@ const DetailProduct = () => {
                 productId: productId
             });
 
-
-            console.log("찜하기 성공!! ", response.data);
-            alert("찜목록 추가 되었습니다.");
+            setIsFavorite(true); //  (찜 상태 변경)
+            alert("찜 목록에 추가되었습니다.");
 
         } catch (error) {
-        console.error("찜하기 실패!", error);
-        alert(error.response?.data.message || "찜하기 실패!! ");
+            console.error("찜하기 실패!", error);
+            alert(error.response?.data.message || "찜하기 실패!! ");
+        }
+    };
+
+    // 찜하기 취소
+    const handleRemoveFromWishlist = async () => {
+        if (!userId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        try {
+            await axios.delete(`http://localhost:8080/favorite/remove?userId=${userId}&productId=${productId}`);
+            setIsFavorite(false); //  UI 업데이트 (찜 상태 변경)
+            alert("찜 목록에서 삭제되었습니다.");
+        } catch (error) {
+            console.error("찜 삭제 실패!", error);
+            alert(error.response?.data.message || "찜 삭제 실패!! ");
         }
     };
 
@@ -108,7 +140,7 @@ const DetailProduct = () => {
         console.log("로그인 상태 변경됨:", user);
     }, [user]);
 
-        if (loading) return <p>로딩 중...</p>;
+    if (loading) return <p>로딩 중...</p>;
     if (!product) return <p>상품을 찾을 수 없습니다.</p>;
 
     return (
@@ -133,18 +165,22 @@ const DetailProduct = () => {
             {/*수량 선택하기 */}
             <h3>수량 선택</h3>
             <input
-              type="number"
-              value={quantity}
-              onChange={handleQuantityChange}
-              min="1"
-              className="quantity-input"
+                type="number"
+                value={quantity}
+                onChange={handleQuantityChange}
+                min="1"
+                className="quantity-input"
             />
 
-        {/*구매, 장바구니,  찜버튼*/}
+            {/*구매, 장바구니,  찜버튼*/}
             <div className="button-group">
                 <button className="buy-button">구매하기</button>
                 <button className="cart-button" onClick={handleAddToCart}>장바구니</button>
-                <button className="wishlist-button">찜</button>
+                {isFavorite ? (
+                    <button className="wishlist-button remove" onClick={handleRemoveFromWishlist}>찜 취소</button>
+                ) : (
+                    <button className="wishlist-button" onClick={handleAddToWishlist}>찜</button>
+                )}
             </div>
             <FooterNav/>
         </div>
