@@ -62,7 +62,6 @@ public class CartService {
                     .itemPrice(product.getAmount()) // 상품 가격 저장
                     .discountAmount(0) // 기본 할인은 없음
                     .totalPrice(product.getAmount() * qty)
-
                     .build();
             cart.getCartItems().add(cartItem);
         } else {
@@ -71,7 +70,39 @@ public class CartService {
 
         // 장바구니 총 가격 업데이트 후 저장
         cart.updateCartTotals();
+    }
+
+    // 장바구니 총 가격 및 배송비 업데이트
+    @Transactional
+    public void updateCartTotals(Long cartId) {
+        // 장바구니 조회
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
+
+        // 총 가격 계산
+        int totalPrice = cart.getCartItems().stream()
+                .mapToInt(CartItem::getTotalPrice)
+                .sum();
+
+        int discountAmount = cart.getCartItems().stream()
+                .mapToInt(CartItem::getDiscountAmount)
+                .sum();
+
+        // 10만원 이상이면 배송비 무료 적용
+        int shippingFee = (totalPrice >= 100000) ? 0 : 3000;
+
+        // 최종 결제 금액 계산
+        int finalPrice = totalPrice - discountAmount + shippingFee;
+
+        // 장바구니 업데이트
+        cart.setTotalPrice(totalPrice);
+        cart.setDiscountAmount(discountAmount);
+        cart.setShippingFee(shippingFee);
+        cart.setFinalPrice(finalPrice);
+
+        // 변경사항 저장
         cartRepository.save(cart);
+
     }
 
     // 특정 유저 조회
@@ -92,9 +123,22 @@ public class CartService {
                 ))
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getCartId(), cartItems, cart.getTotalPrice(), cart.getFinalPrice());
+        return new CartResponseDto(cart.getCartId(), cartItems, cart.getTotalPrice(), cart.getShippingFee(),cart.getFinalPrice());
     }
 
+    // 장바구니 삭제
+    @Transactional
+    public void removeProductFromCart(Long cartId, Long productId) {
+        // 장바구니 조회
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
+
+        // 장바구니에서 해당 상품 제거
+        cart.getCartItems().removeIf(item -> item.getProduct().getProductId().equals(productId));
+
+        // 배송비 및 최정 결제 금액 재 업데이트
+        updateCartTotals(cartId);
+    }
 
     // 쿠폰적용하기
     @Transactional

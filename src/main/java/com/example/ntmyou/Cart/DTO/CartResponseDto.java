@@ -16,5 +16,6 @@ public class CartResponseDto {
     private Long cartId; // 장바구니 ID
     private List<CartItemDto> cartItems; // 장바구니에 담긴 상품 목록
     private Integer totalPrice; // 총 가격 (할인 전)
+    private Integer shippingFee; // 배송비
     private Integer finalPrice; // 최종 결제 금액 (할인 후)
 }
