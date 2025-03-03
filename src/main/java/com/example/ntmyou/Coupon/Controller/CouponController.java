@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +24,11 @@ public class CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // 내 쿠폰함 조회
-    @GetMapping("/master/coupon/findAll")
-    public ResponseEntity<List<CouponResponseDto>> getCoupon() {
-        return ResponseEntity.ok(couponService.getCoupon());
+
+     // 특정 유저의 쿠폰 조회 (사용자 ID 필요)
+    @GetMapping("/coupons/{userId}")
+    public ResponseEntity<List<CouponResponseDto>> getUserCoupons(@PathVariable Long userId) {
+        return ResponseEntity.ok(couponService.getUserCoupons(userId)); // 특정 유저의 쿠폰 조회
     }
+
 }
