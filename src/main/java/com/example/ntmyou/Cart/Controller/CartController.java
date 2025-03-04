@@ -48,6 +48,15 @@ public class CartController {
         return ResponseEntity.ok("장바구니에서 정상적으로 제거 되었습니다.");
     }
 
+    // 장바구니 쿠폰 취소
+    @DeleteMapping("/cart/{cartId}/remove-coupon")
+    public ResponseEntity<String> removeCouponFromCart(@PathVariable Long cartId) {
+        cartService.removeCouponFromCart(cartId);
+        return ResponseEntity.ok("쿠폰이 장바구니에서 제거되었습니다.");
+    }
+
+
+
     // 결제 API
     @PostMapping("/{cartId}/checkOut")
     public ResponseEntity<String> checkOut(@PathVariable Long cartId) {

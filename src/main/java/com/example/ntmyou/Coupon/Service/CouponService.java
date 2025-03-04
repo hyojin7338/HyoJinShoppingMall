@@ -88,4 +88,14 @@ public class CouponService {
                 .collect(Collectors.toList());
     }
 
+
+    // 쿠폰 적용하기
+    @Transactional(readOnly = true)
+    public List<CouponResponseDto> getAvailableCoupons(Long userId) {
+        List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserIdAndIsUsedFalse(userId);
+        return userCoupons.stream()
+                .map(userCoupon -> CouponMapper.toResponseDto(userCoupon.getCoupon()))
+                .collect(Collectors.toList());
+    }
+
 }
