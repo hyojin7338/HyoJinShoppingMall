@@ -31,4 +31,10 @@ public class CouponController {
         return ResponseEntity.ok(couponService.getUserCoupons(userId)); // 특정 유저의 쿠폰 조회
     }
 
+    // 사용 가능한 쿠폰 조회
+    @GetMapping("/coupons/available/{userId}")
+    public ResponseEntity<List<CouponResponseDto>> getAvailableCoupons(@PathVariable Long userId) {
+        return ResponseEntity.ok(couponService.getAvailableCoupons(userId));
+    }
+
 }

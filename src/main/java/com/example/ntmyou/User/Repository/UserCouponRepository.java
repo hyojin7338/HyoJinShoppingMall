@@ -14,4 +14,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
     boolean existsByUserAndCoupon(User user, Coupon coupon);
 
     List<UserCoupon> findByUser_UserId(Long userId);
+
+    //특정 유저가 보유한 사용 가능한 쿠폰 조회
+    List<UserCoupon> findByUser_UserIdAndIsUsedFalse(Long userId);
 }
