@@ -13,6 +13,7 @@ import MyPage from "./Components/MyPage.jsx";
 import Cart from "./Components/Cart.jsx";
 import Favorite from "./Components/Favorite.jsx";
 import MyCoupons from "./Components/MyCoupons.jsx"; // 쿠폰 페이지 추가
+import Checkout from "./Components/Checkout.jsx";
 import { UserContext  } from "./context/UserContext"; // 유저 정보 가져오기
 
 
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/Cart" element={<Cart />} />
                   <Route path="/Favorite" element={<Favorite />} />
                   <Route path="/MyCoupons" element={<MyCoupons />} />
+                  <Route path="/Checkout" element={<Checkout />} />
               </Route>
           </Routes>
       </Router>

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {UserContext} from "../context/UserContext";
 import axios from "axios";
 import "../styles/DetailProduct.css"
@@ -8,6 +8,7 @@ import FooterNav from "../Components/FooterNav.jsx";
 const DetailProduct = () => {
     const {user} = useContext(UserContext);
     const {productId} = useParams(); //  URL에서 productId 가져오기
+    const navigate = useNavigate();
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -46,8 +47,6 @@ const DetailProduct = () => {
         }
     };
 
-
-
     // 사이즈 변경 핸들러
     const handleSizeChange = (event) => {
         setSelectedSize(event.target.value);
@@ -67,9 +66,12 @@ const DetailProduct = () => {
             alert("사이즈를 선택해주세요.");
             return;
         }
-        console.log(`구매하기 - 상품ID: ${productId}, 사이즈: ${selectedSize}, 수량: ${quantity}`);
-        alert("구매가 완료되었습니다!");
+
+        navigate("/checkout", {
+            state: { product, selectedSize, quantity }
+        });
     };
+
 
 
     // 장바구니 추가 핸들러

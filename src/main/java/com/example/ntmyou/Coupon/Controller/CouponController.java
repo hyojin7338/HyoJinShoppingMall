@@ -24,7 +24,6 @@ public class CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-
      // 특정 유저의 쿠폰 조회 (사용자 ID 필요)
     @GetMapping("/coupons/{userId}")
     public ResponseEntity<List<CouponResponseDto>> getUserCoupons(@PathVariable Long userId) {
@@ -36,5 +35,7 @@ public class CouponController {
     public ResponseEntity<List<CouponResponseDto>> getAvailableCoupons(@PathVariable Long userId) {
         return ResponseEntity.ok(couponService.getAvailableCoupons(userId));
     }
+
+    //
 
 }
