@@ -5,6 +5,7 @@ import com.example.ntmyou.Coupon.DTO.CouponRequestDto;
 import com.example.ntmyou.Coupon.DTO.CouponResponseDto;
 import com.example.ntmyou.Master.Entity.Master;
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.User.Entity.UserCoupon;
 
 public class CouponMapper {
     // CouponRequestDto -> Entity
@@ -45,5 +46,24 @@ public class CouponMapper {
     }
 
 
+    public static CouponResponseDto toResponseDto(UserCoupon userCoupon) {
+        Coupon coupon = userCoupon.getCoupon();
+        return CouponResponseDto.builder()
+                .userCouponId(userCoupon.getUserCouponId()) // userCouponId 추가
+                .couponId(coupon.getCouponId())
+                .name(coupon.getName())
+                .discountType(coupon.getDiscountType())
+                .discountValue(coupon.getDiscountValue())
+                .minOrderAmount(coupon.getMinOrderAmount())
+                .maxDiscountAmount(coupon.getMaxDiscountAmount())
+                .issuedBy(coupon.getIssuedBy())
+                .masterName(coupon.getMaster() != null ? coupon.getMaster().getName() : "사이트 제공")
+                .productName(coupon.getProduct() != null ? coupon.getProduct().getName() : "모든 상품 적용")
+                .startDay(coupon.getStartDay())
+                .endDay(coupon.getEndDay())
+                .isUse(userCoupon.getIsUsed()) //  `userCoupon`의 사용 여부 유지
+                .isAutoIssued(coupon.getIsAutoIssued())
+                .build();
+    }
 
 }

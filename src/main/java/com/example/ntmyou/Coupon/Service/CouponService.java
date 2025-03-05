@@ -89,12 +89,13 @@ public class CouponService {
     }
 
 
-    // 쿠폰 적용하기
+    // 사용가능한 쿠폰 조회
     @Transactional(readOnly = true)
     public List<CouponResponseDto> getAvailableCoupons(Long userId) {
         List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserIdAndIsUsedFalse(userId);
+
         return userCoupons.stream()
-                .map(userCoupon -> CouponMapper.toResponseDto(userCoupon.getCoupon()))
+                .map(CouponMapper::toResponseDto) // `UserCoupon` 정보를 유지
                 .collect(Collectors.toList());
     }
 

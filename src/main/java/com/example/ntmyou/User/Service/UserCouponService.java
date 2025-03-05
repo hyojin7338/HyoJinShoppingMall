@@ -61,6 +61,7 @@ public class UserCouponService {
             userCouponRepository.save(userCoupon);
         }
     }
+
     // 특정 사용자에게 지급하는 쿠폰
     @Transactional
     public void issueCouponToUser(Long userId, Long couponId) {
