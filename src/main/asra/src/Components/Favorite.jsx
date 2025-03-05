@@ -2,57 +2,48 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import "../styles/Favorite.css"; // 스타일 파일 추가
+import "../styles/Favorite.css";
 import FooterNav from "../Components/FooterNav.jsx";
 
 const Favorite = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    const [favorites, setFavorites] = useState([]); // 찜한 상품 목록
+    const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
-    // 찜 목록 조회 함수
-    const fetchFavorites = async () => {
+    useEffect(() => {
         if (!user) {
             alert("로그인이 필요합니다.");
             navigate("/login");
             return;
         }
 
-        try {
-            const response = await axios.get(`http://localhost:8080/favorite/find/${user.userId}`);
-            console.log("찜 목록 데이터:", response.data);
-            setFavorites(response.data);
-        } catch (error) {
-            console.error("찜 목록 조회 실패:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        const fetchFavorites = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/favorite/find/${user.userId}`);
+                console.log("찜 목록 데이터:", response.data);
+                setFavorites(response.data);
+            } catch (error) {
+                console.error("찜 목록 조회 실패:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-
-    // useEffect에서 찜 목록 불러오기
-    useEffect(() => {
         fetchFavorites();
     }, [user, navigate]);
 
-
-    //  찜 목록에서 상품 삭제
     const handleRemoveFavorite = async (productId) => {
         try {
             await axios.delete(`http://localhost:8080/favorite/remove/${user.userId}/${productId}`);
             alert("찜 목록에서 삭제되었습니다.");
-            // 삭제 후 찜 목록 다시 불러오기 조회하기
-            fetchFavorites();
+            setFavorites(favorites.filter(item => item.favoriteId !== productId));
         } catch (error) {
             console.error("찜 삭제 실패:", error);
             alert("삭제 실패!");
         }
     };
 
-
-    // 찜 목록에서 장바구니로 추가
     const handleAddToCart = async (productId) => {
         try {
             const response = await axios.post(`http://localhost:8080/favorite/add-to-cart/${user.userId}/${productId}`);
@@ -76,19 +67,18 @@ const Favorite = () => {
                         <img src={favorite.mainImgUrl || "/default.jpg"} alt={favorite.productName} className="favorite-image" />
                         <div className="favorite-info">
                             <h3>{favorite.productName}</h3>
-                            <p><strong>찜한 날짜:</strong> {new Date(favorite.favoriteAt).toLocaleDateString()}</p>
+                            <p>찜한 날짜: {new Date(favorite.favoriteAt).toLocaleDateString()}</p>
                         </div>
                         <div className="favorite-actions">
-                            <button className="cart-button" onClick={() => handleAddToCart(favorite.favoriteId)}>장바구니 추가</button>
+                            <button className="cart-button" onClick={() => handleAddToCart(favorite.favoriteId)}>장바구니</button>
                             <button className="remove-button" onClick={() => handleRemoveFavorite(favorite.favoriteId)}>삭제</button>
                         </div>
                     </div>
                 ))}
             </div>
-            <FooterNav/>
+            <FooterNav />
         </div>
     );
 };
-
 
 export default Favorite;

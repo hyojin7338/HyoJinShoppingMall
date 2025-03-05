@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CouponResponseDto {
+    private Long userCouponId; // 추가 2025-03-05
     private Long couponId;
     private String name; // 쿠폰명
     private DiscountType discountType; // 할인방식 (퍼센트 or xxx 원)

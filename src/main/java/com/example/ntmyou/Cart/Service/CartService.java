@@ -5,16 +5,17 @@ import com.example.ntmyou.Cart.DTO.CartResponseDto;
 import com.example.ntmyou.Cart.Entity.Cart;
 import com.example.ntmyou.Cart.Entity.CartItem;
 import com.example.ntmyou.Cart.Repository.CartRepository;
+import com.example.ntmyou.Coupon.DTO.CouponResponseDto;
 import com.example.ntmyou.Coupon.Entity.Coupon;
 import com.example.ntmyou.Coupon.Enum.CouponIssuer;
 import com.example.ntmyou.Coupon.Enum.DiscountType;
+import com.example.ntmyou.Coupon.Mapper.CouponMapper;
 import com.example.ntmyou.Exception.*;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 import com.example.ntmyou.User.Entity.UserCoupon;
 import com.example.ntmyou.User.Repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -158,7 +159,20 @@ public class CartService {
                 ))
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getCartId(), cartItems, cart.getTotalPrice(), cart.getShippingFee(), cart.getFinalPrice());
+        CouponResponseDto appliedCouponDto = null;
+        if (cart.getAppliedCoupon() != null) {
+            appliedCouponDto = CouponMapper.toResponseDto(cart.getAppliedCoupon().getCoupon());
+        }
+
+        return new CartResponseDto(
+                cart.getCartId(),
+                cartItems,
+                cart.getTotalPrice(),
+                cart.getDiscountAmount(), //  할인 금액 추가
+                cart.getShippingFee(),
+                cart.getFinalPrice(),
+                appliedCouponDto //  적용된 쿠폰 정보 추가
+        );
     }
 
     // 장바구니 삭제
@@ -209,6 +223,17 @@ public class CartService {
         //  쿠폰 검증 // 사용한 쿠폰인지 확인
         if (userCoupon.getIsUsed()) {
             throw new UserCouponAlreadyUsed("이미 사용한 쿠폰입니다.");
+        }
+
+
+        //  userCouponId와 userCoupon.getUserCouponId()가 일치하지 않는지 확인
+        if (!userCoupon.getUserCouponId().equals(userCouponId)) {
+            throw new IllegalStateException("🚨 요청된 userCouponId와 조회된 UserCoupon ID가 다릅니다! DB 확인 필요");
+        }
+
+        //  userCoupon이 현재 userId(6)에게 속하는지 확인
+        if (!userCoupon.getUser().getUserId().equals(cart.getUser().getUserId())) {
+            throw new IllegalStateException("🚨 해당 쿠폰이 현재 로그인한 사용자에게 속하지 않습니다!");
         }
 
         //  쿠폰이 SITE or 특정 판매자 쿠폰인지 검증
