@@ -1,5 +1,6 @@
 package com.example.ntmyou.User.Entity;
 
+import com.example.ntmyou.Address.Addresses;
 import com.example.ntmyou.Cart.Entity.Cart;
 import com.example.ntmyou.Config.Enum.Gender;
 import com.example.ntmyou.Config.Enum.Role;
@@ -72,9 +73,13 @@ public class User {
     private String tel; // 전화번호
 
 
-    //
+    //장바구니 추가
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Cart cart;
+
+    // 주문확인 페이지에서 배송정보 변경가능하게 추가 //2025-03-06
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Addresses> addresses = new ArrayList<>();
 
     // 프로필 정보 부분 업데이트 메서드 // 기존 정보 데이터 유지와 롤백 방지
     public void updateProfileInfo(String zipCode, String address, String region, String tel) {
