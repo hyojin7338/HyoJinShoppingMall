@@ -1,0 +1,127 @@
+.detail-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    color: #111;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* 상품 이미지 */
+.detail-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+/* 제목 스타일 */
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* 일반 텍스트 */
+p {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #333;
+}
+
+/* 가격 및 판매자 강조 */
+strong {
+    font-weight: bold;
+}
+
+/* 옵션 선택 영역 */
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* 사이즈 & 수량 선택 */
+.size-dropdown, .quantity-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    text-align: center;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    gap: 5px;
+    margin-top: 15px;
+}
+
+/* 버튼 공통 스타일 */
+.buy-button, .cart-button, .wishlist-button {
+    flex: 1;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.2s ease;
+}
+
+/* 무신사 스타일 버튼 */
+.buy-button {
+    background: black;
+    color: white;
+}
+
+.buy-button:hover {
+    background: #222;
+}
+
+.cart-button {
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.cart-button:hover {
+    background: black;
+    color: white;
+}
+
+.wishlist-button {
+    background: #e0e0e0;
+    color: black;
+}
+
+.wishlist-button:hover {
+    background: black;
+    color: white;
+}
+
+/* 찜 취소 버튼 스타일 */
+.wishlist-button.remove {
+    background: red;
+    color: white;
+}
+
+.wishlist-button.remove:hover {
+    background: darkred;
+}
+
+.size-dropdown, .quantity-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    text-align: center;
+    color: black; /* 선택한 옵션이 보이도록 글자 색 변경 */
+}

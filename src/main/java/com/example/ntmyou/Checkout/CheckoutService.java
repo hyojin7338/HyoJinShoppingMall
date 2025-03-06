@@ -63,6 +63,7 @@ public class CheckoutService {
                 .region(user.getRegion())
                 .productId(product.getProductId())
                 .productName(product.getName())
+                .contents(product.getContents())
                 .amount(product.getAmount())
                 .cnt(totalStock)
                 .mainImgUrl(product.getMainImgUrl())
