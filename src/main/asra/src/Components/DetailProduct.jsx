@@ -67,7 +67,7 @@ const DetailProduct = () => {
             return;
         }
 
-        navigate("/checkout", {
+        navigate(`/checkout/${productId}`, {
             state: { product, selectedSize, quantity }
         });
     };
@@ -129,7 +129,7 @@ const DetailProduct = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:8080/favorite/remove?userId=${userId}&productId=${productId}`);
+            await axios.delete(`http://localhost:8080/favorite/remove/${userId}/${productId}`);
             setIsFavorite(false); //  UI 업데이트 (찜 상태 변경)
             alert("찜 목록에서 삭제되었습니다.");
         } catch (error) {
@@ -176,7 +176,7 @@ const DetailProduct = () => {
 
             {/*구매, 장바구니,  찜버튼*/}
             <div className="button-group">
-                <button className="buy-button">구매하기</button>
+                <button className="buy-button" onClick={handlePurchase}>구매하기</button>
                 <button className="cart-button" onClick={handleAddToCart}>장바구니</button>
                 {isFavorite ? (
                     <button className="wishlist-button remove" onClick={handleRemoveFromWishlist}>찜 취소</button>

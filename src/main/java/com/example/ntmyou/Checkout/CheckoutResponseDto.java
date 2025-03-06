@@ -21,6 +21,7 @@ public class CheckoutResponseDto {
     // 상품정보
     private Long productId;
     private String productName;
+    private String contents;
     private Integer amount;
     private Integer cnt;
     private String mainImgUrl;

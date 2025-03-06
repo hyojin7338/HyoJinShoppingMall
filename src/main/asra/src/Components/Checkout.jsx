@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import "../styles/Checkout.css";
@@ -9,9 +9,18 @@ const Checkout = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
 
+    const location = useLocation();
+    const { state } = location;
+
     const [checkoutData, setCheckoutData] = useState(null);
     const [selectedCoupon, setSelectedCoupon] = useState(null);
     const [discountAmount, setDiscountAmount] = useState(0);
+
+    // 선택한 사이즈와 수량을 가져옴
+    const selectedSize = state?.selectedSize || "선택 안됨";
+    const quantity = state?.quantity || 1;
+
+
 
     useEffect(() => {
         if (!user) {
@@ -52,7 +61,8 @@ const Checkout = () => {
     };
 
     // 최종 결제 금액 계산
-    const finalPrice = checkoutData ? checkoutData.amount - discountAmount : 0;
+    const finalPrice = checkoutData ? (checkoutData.amount * quantity) - discountAmount : 0;
+
 
     // 결제 처리
     const handlePayment = () => {
@@ -81,9 +91,12 @@ const Checkout = () => {
                     <img src={checkoutData.mainImgUrl} alt={checkoutData.productName} className="product-image" />
                     <div>
                         <p><strong>{checkoutData.productName}</strong></p>
+                        <p>상품 설명: {checkoutData.contents}</p>
                         <p>가격: {checkoutData.amount.toLocaleString()}원</p>
                         <p>판매자: {checkoutData.businessName}</p>
                         <p>재고 수량: {checkoutData.cnt}개</p>
+                        <p><strong>선택한 사이즈:</strong> {selectedSize}</p>
+                        <p><strong>선택한 수량:</strong> {quantity}개</p>
                     </div>
                 </div>
             </div>
