@@ -21,6 +21,8 @@ public class Addresses {
     private String receiverName; // 받는사람
     private String receiverTel; // 받는사람 전화번호
 
+    private boolean isDefault;  // 기본 배송지 여부
+
     @ManyToOne // 유저는 많은 배송정보를 가질 수 있다.
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
