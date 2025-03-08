@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    // 회원가입
+    // 회원가입 // 회원가입 시 기본 배송정보를 불러오고, 사용자가 변경할 수 있도록 수정 // 2025-03-06
     @PostMapping("/signup")
     public ResponseEntity<UserSignupResponseDto> createSignup
             (@RequestBody @Valid UserSignupRequestDto requestDto) {
