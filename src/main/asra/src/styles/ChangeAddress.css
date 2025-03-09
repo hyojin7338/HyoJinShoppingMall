@@ -1,0 +1,90 @@
+/* 전체 페이지 스타일 */
+.change-address-container {
+    max-width: 480px; /* 모바일에서도 잘 보이도록 너비 제한 */
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 타이틀 스타일 */
+.change-address-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 배송지 리스트 스타일 */
+.address-list {
+    list-style: none;
+    padding: 0;
+}
+
+.address-item {
+    background: #f8f8f8;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.address-item:hover {
+    background: #ededed;
+}
+
+/* 주소 정보 */
+.address-info {
+    flex: 1;
+}
+
+.address-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+}
+
+.address-detail {
+    font-size: 14px;
+    color: #555;
+}
+
+/* 버튼 스타일 */
+.change-button {
+    background: #000;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.change-button:hover {
+    background: #333;
+}
+
+/* 새로운 주소 추가 버튼 */
+.add-address-button {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.2s ease-in-out;
+}
+
+.add-address-button:hover {
+    background: #222;
+}

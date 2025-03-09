@@ -14,6 +14,8 @@ import Cart from "./Components/Cart.jsx";
 import Favorite from "./Components/Favorite.jsx";
 import MyCoupons from "./Components/MyCoupons.jsx"; // 쿠폰 페이지 추가
 import Checkout from "./Components/Checkout.jsx";
+import ChangeAddress from "./Components/ChangeAddress.jsx";
+import AddAddress from "./Components/AddAddress.jsx";
 import { UserContext  } from "./context/UserContext"; // 유저 정보 가져오기
 
 
@@ -39,6 +41,8 @@ function App() {
                   <Route path="/Favorite" element={<Favorite />} />
                   <Route path="/MyCoupons" element={<MyCoupons />} />
                   <Route path="/Checkout/:productId" element={<Checkout />} />
+                  <Route path="/ChangeAddress" element={<ChangeAddress />} />
+                  <Route path="/AddAddress" element={<AddAddress />} />
               </Route>
           </Routes>
       </Router>

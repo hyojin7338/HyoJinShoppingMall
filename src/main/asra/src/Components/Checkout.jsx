@@ -8,13 +8,13 @@ const Checkout = () => {
     const { user } = useContext(UserContext);
     const { productId } = useParams();
     const navigate = useNavigate();
-
     const location = useLocation();
     const { state } = location;
+    const { selectedAddress } = location.state || {};
 
-    const [checkoutData, setCheckoutData] = useState(null);
     const [selectedCoupon, setSelectedCoupon] = useState(null);
     const [discountAmount, setDiscountAmount] = useState(0);
+    const [checkoutData, setCheckoutData] = useState(null);
 
     // 선택한 사이즈와 수량을 가져옴
     const selectedSize = state?.selectedSize || "선택 안됨";
@@ -29,14 +29,14 @@ const Checkout = () => {
             return;
         }
 
-        // ✅ 백엔드에서 구매 전 정보 조회
+        //  백엔드에서 구매 전 정보 조회
         axios.get(`http://localhost:8080/product/${user.userId}/${productId}`)
             .then(response => {
-                console.log("✅ 구매 전 정보:", response.data);
+                console.log(" 구매 전 정보:", response.data);
                 setCheckoutData(response.data);
             })
             .catch(error => {
-                console.error("🚨 구매 전 정보 조회 실패:", error);
+                console.error(" 구매 전 정보 조회 실패:", error);
             });
     }, [user, productId, navigate]);
 
@@ -70,6 +70,19 @@ const Checkout = () => {
         navigate("/"); // 결제 완료 후 홈으로 이동
     };
 
+    // 선택한 배송지가 있으면 checkoutData 업데이트
+    useEffect(() => {
+        if (selectedAddress && checkoutData) {
+            setCheckoutData(prevData => ({
+                ...prevData,
+                name: selectedAddress.receiverName,
+                tel: selectedAddress.receiverTel,
+                address: selectedAddress.address,
+                region: selectedAddress.region
+            }));
+        }
+    }, [selectedAddress, checkoutData]);
+
     if (!checkoutData) return <p>로딩 중...</p>;
 
     return (
@@ -82,6 +95,13 @@ const Checkout = () => {
                 <p><strong>이름:</strong> {checkoutData.name}</p>
                 <p><strong>연락처:</strong> {checkoutData.tel}</p>
                 <p><strong>주소:</strong> {checkoutData.address}, {checkoutData.region}</p>
+
+                <button
+                    className="checkout-button"
+                    onClick={() => navigate('/ChangeAddress', { state: { userId: user.userId } })}
+                >
+                    배송지 변경
+                </button>
             </div>
 
             {/* 상품 정보 */}
