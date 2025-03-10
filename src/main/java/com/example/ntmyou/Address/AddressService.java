@@ -1,5 +1,6 @@
 package com.example.ntmyou.Address;
 
+import com.example.ntmyou.Exception.AddressNotFoundException;
 import com.example.ntmyou.Exception.UserCodeNotFoundException;
 import com.example.ntmyou.User.Entity.User;
 import com.example.ntmyou.User.Repository.UserRepository;
@@ -37,5 +38,13 @@ public class AddressService {
 
         Addresses saveAddress = addressesRepository.save(addresses);
         return AddressMapper.toResponseDto(saveAddress);
+    }
+
+    // 특정 유저의 특정 배송지
+    @Transactional(readOnly = true)
+    public AddressResponseDto getDetailAddress(Long addressId) {
+        Addresses addresses = addressesRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("존재하지 않는 배송지입니다."));
+        return AddressMapper.toResponseDto(addresses);
     }
 }

@@ -28,6 +28,27 @@ const Checkout = () => {
             navigate("/login");
             return;
         }
+        const addressId = state?.selectedAddress?.addressId || state?.newAddressId;
+
+        // 배송지 선택한 경우, 해당 배송지 정보 별도 조회
+        if (addressId) {
+            axios.get(`http://localhost:8080/address/detail/${addressId}`)
+                .then(res => {
+                    const addressData = res.data;
+                    console.log("새로운 배송지 정보:", addressData);
+
+                    setCheckoutData(prev => ({
+                        ...prev,
+                        name: addressData.receiverName,
+                        tel: addressData.receiverTel,
+                        address: addressData.address,
+                        region: addressData.region,
+                    }));
+                })
+                .catch(err => {
+                    console.error("배송지 조회 실패:", err);
+                });
+        }
 
         //  백엔드에서 구매 전 정보 조회
         axios.get(`http://localhost:8080/product/${user.userId}/${productId}`)
@@ -38,7 +59,22 @@ const Checkout = () => {
             .catch(error => {
                 console.error(" 구매 전 정보 조회 실패:", error);
             });
-    }, [user, productId, navigate]);
+    }, [user, productId,  state?.newAddressId]);
+
+    // 선택한 배송지가 있으면 checkoutData 업데이트
+    useEffect(() => {
+        if (selectedAddress && checkoutData) {
+            setCheckoutData(prevData => ({
+                ...prevData,
+                name: selectedAddress.receiverName,
+                tel: selectedAddress.receiverTel,
+                address: selectedAddress.address,
+                region: selectedAddress.region
+            }));
+        }
+    }, [selectedAddress]);
+
+
 
     // 쿠폰 적용 핸들러
     const handleCouponChange = (event) => {
@@ -63,25 +99,15 @@ const Checkout = () => {
     // 최종 결제 금액 계산
     const finalPrice = checkoutData ? (checkoutData.amount * quantity) - discountAmount : 0;
 
-
     // 결제 처리
     const handlePayment = () => {
         alert("결제가 완료되었습니다!");
         navigate("/"); // 결제 완료 후 홈으로 이동
     };
 
-    // 선택한 배송지가 있으면 checkoutData 업데이트
-    useEffect(() => {
-        if (selectedAddress && checkoutData) {
-            setCheckoutData(prevData => ({
-                ...prevData,
-                name: selectedAddress.receiverName,
-                tel: selectedAddress.receiverTel,
-                address: selectedAddress.address,
-                region: selectedAddress.region
-            }));
-        }
-    }, [selectedAddress, checkoutData]);
+    const formatPrice = (price) => {
+        return typeof price === "number" ? price.toLocaleString() : "0";
+    };
 
     if (!checkoutData) return <p>로딩 중...</p>;
 
@@ -92,13 +118,13 @@ const Checkout = () => {
             {/* 유저 정보 */}
             <div className="checkout-card">
                 <h3>배송 정보</h3>
-                <p><strong>이름:</strong> {checkoutData.name}</p>
-                <p><strong>연락처:</strong> {checkoutData.tel}</p>
-                <p><strong>주소:</strong> {checkoutData.address}, {checkoutData.region}</p>
+                <p><strong>이름:</strong> {checkoutData ? checkoutData.name : selectedAddress?.receiverName}</p>
+                <p><strong>연락처:</strong> {checkoutData ? checkoutData.tel : selectedAddress?.receiverTel}</p>
+                <p><strong>주소:</strong> {checkoutData ? checkoutData.address : selectedAddress?.address}, {checkoutData ? checkoutData.region : selectedAddress?.region}</p>
 
                 <button
                     className="checkout-button"
-                    onClick={() => navigate('/ChangeAddress', { state: { userId: user.userId } })}
+                    onClick={() => navigate('/ChangeAddress', { state: { userId: user.userId, productId } })}
                 >
                     배송지 변경
                 </button>
@@ -112,7 +138,7 @@ const Checkout = () => {
                     <div>
                         <p><strong>{checkoutData.productName}</strong></p>
                         <p>상품 설명: {checkoutData.contents}</p>
-                        <p>가격: {checkoutData.amount.toLocaleString()}원</p>
+                        <p>가격: {formatPrice(checkoutData.amount)}원</p>
                         <p>판매자: {checkoutData.businessName}</p>
                         <p>재고 수량: {checkoutData.cnt}개</p>
                         <p><strong>선택한 사이즈:</strong> {selectedSize}</p>
@@ -126,7 +152,7 @@ const Checkout = () => {
                 <h3>쿠폰 적용</h3>
                 <select className="coupon-select" value={selectedCoupon || ""} onChange={handleCouponChange}>
                     <option value="">쿠폰을 선택하세요</option>
-                    {checkoutData.availableCoupons.map(coupon => (
+                    {checkoutData.availableCoupons?.map(coupon => (
                         <option key={coupon.userCouponId} value={coupon.userCouponId}>
                             {coupon.name} ({coupon.discountValue}{coupon.discountType === "PERCENT" ? "%" : "원"} 할인)
                         </option>
@@ -137,10 +163,10 @@ const Checkout = () => {
             {/* 결제 금액 */}
             <div className="checkout-summary">
                 <h3>결제 금액</h3>
-                <p>상품 금액: {checkoutData.amount.toLocaleString()}원</p>
-                <p>할인 금액: -{discountAmount.toLocaleString()}원</p>
+                <p>상품 금액: {formatPrice(checkoutData.amount)}원</p>
+                <p>할인 금액: -{formatPrice(discountAmount)}원</p>
                 <hr />
-                <h3>최종 결제 금액: {finalPrice.toLocaleString()}원</h3>
+                <h3>최종 결제 금액: {formatPrice(finalPrice)}원</h3>
             </div>
 
             <button className="checkout-button" onClick={handlePayment}>결제하기</button>
