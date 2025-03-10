@@ -6,7 +6,7 @@ import "../styles/ChangeAddress.css"
 const ChangeAddress = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { userId } = location.state || {};
+    const { userId, productId, selectedSize, quantity, newAddressId } = location.state || {};
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
@@ -16,7 +16,14 @@ const ChangeAddress = () => {
 
         axios.get(`http://localhost:8080/address/${userId}`)
             .then(response => {
+                const fetchedAddresses = response.data;
                 setAddresses(response.data);
+
+                // 새로 추가된 주소 선택되도록 설정
+                if (newAddressId) {
+                    const newAddress = fetchedAddresses.find(addr => addr.addressId === newAddressId);
+                    if (newAddress) setSelectedAddress(newAddress);
+                }
             })
             .catch(error => {
                 console.error("배송지 목록 불러오기 실패:", error);
@@ -33,7 +40,18 @@ const ChangeAddress = () => {
             return;
         }
 
-        navigate("/Checkout", { state: { selectedAddress } }); // 선택한 주소를 Checkout으로 전달
+        console.log("선택한 주소:", selectedAddress);
+        console.log("전달할 newAddressId:", selectedAddress.addressId);
+
+        navigate(`/Checkout/${productId}`, {
+            state: {
+                selectedAddress,
+                selectedSize,
+                quantity,
+                productId,
+                newAddressId: selectedAddress.addressId
+            }
+        });
     };
 
 
@@ -51,12 +69,18 @@ const ChangeAddress = () => {
                         className={`address-item ${selectedAddress?.addressId === address.addressId ? "selected" : ""}`}
                         onClick={() => handleSelectAddress(address)}
                     >
-                        <p><strong>{address.receiverName}</strong></p>
-                        <p>{address.address}, {address.region}</p>
-                        <p>연락처: {address.receiverTel}</p>
+                        <div className="address-select-indicator">
+                            {selectedAddress?.addressId === address.addressId ? "✅" : "⬜"}
+                        </div>
+                        <div className="address-info">
+                            <p><strong>{address.receiverName}</strong></p>
+                            <p>{address.address}, {address.region}</p>
+                            <p>연락처: {address.receiverTel}</p>
+                        </div>
                     </li>
                 ))}
             </ul>
+
 
             <button className="confirm-button" onClick={handleConfirm}>배송지 선택</button>
             <button className="add-address-button" onClick={handleAddAddress}>+ 새 배송지 추가</button>

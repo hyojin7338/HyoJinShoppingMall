@@ -1,0 +1,86 @@
+/* AddAddress.css */
+
+.add-address-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    font-family: 'Pretendard', sans-serif;
+}
+
+.add-address-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: #111;
+    text-align: center;
+}
+
+.add-address-container form > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+}
+
+.add-address-container label {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.add-address-container input {
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+    color: #111;
+}
+
+.add-address-container input:focus {
+    outline: none;
+    border-color: #111;
+    background-color: #fff;
+}
+
+.add-address-container button[type="button"],
+.add-address-container button[type="submit"] {
+    margin-top: 12px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #111;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-address-container button[type="button"]:hover,
+.add-address-container button[type="submit"]:hover {
+    background-color: #333;
+}
+
+.add-address-container button[type="button"] {
+    background-color: #555;
+    margin-top: 10px;
+}
+
+.add-address-container button[type="button"]:hover {
+    background-color: #777;
+}
+
+@media (max-width: 480px) {
+    .add-address-container {
+        padding: 24px;
+    }
+
+    .add-address-container h2 {
+        font-size: 20px;
+    }
+}

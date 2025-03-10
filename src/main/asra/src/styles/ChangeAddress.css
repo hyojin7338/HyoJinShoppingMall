@@ -88,3 +88,33 @@
 .add-address-button:hover {
     background: #222;
 }
+.address-item {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.address-item:hover {
+    background-color: #f9f9f9;
+}
+
+.address-item.selected {
+    border: 2px solid #4caf50;
+    background-color: #e8f5e9;
+}
+
+.address-select-indicator {
+    font-size: 20px;
+    width: 30px;
+}
+
+.address-info {
+    flex: 1;
+}

@@ -23,4 +23,12 @@ public class AddressController {
             , @RequestBody AddressRequestDto requestDto)  {
         return ResponseEntity.ok(addressService.addAddress(userId, requestDto));
     }
+
+    // 특정 유저의 특정 배송지 조회
+    @GetMapping("/address/detail/{addressId}")
+    public ResponseEntity<AddressResponseDto> getDetailAddress(@PathVariable Long addressId) {
+        AddressResponseDto responseDto = addressService.getDetailAddress(addressId);
+        return ResponseEntity.ok(responseDto);
+    }
+
 }
