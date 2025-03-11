@@ -31,4 +31,12 @@ public class AddressController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 기본배송지로 설정하기
+    @PutMapping("/default/{userId}/{addressId}")
+    public ResponseEntity<String> updateDefaultAddress(@PathVariable Long userId
+            , @PathVariable Long addressId) {
+        addressService.updateDefaultAddress(userId, addressId);
+        return ResponseEntity.ok("기본 배송지가 변경되었습니다..!!");
+    }
+
 }

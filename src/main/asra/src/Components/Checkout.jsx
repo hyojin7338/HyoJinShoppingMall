@@ -48,6 +48,21 @@ const Checkout = () => {
                 .catch(err => {
                     console.error("배송지 조회 실패:", err);
                 });
+        } else {
+            axios.get(`http://localhost:8080/address/default/${user.userId}`)
+                .then(res => {
+                    const defaultAddress = res.data;
+                    console.log("기본 배송지 정보:", defaultAddress);
+                    setCheckoutData(prev => ({
+                        ...prev,
+                        name: defaultAddress.receiverName,
+                        tel: defaultAddress.receiverTel,
+                        address: defaultAddress.address,
+                        region: defaultAddress.region,
+                    }));
+                })
+                .catch(err => console.error("기본 배송지 조회 실패:", err));
+
         }
 
         //  백엔드에서 구매 전 정보 조회
@@ -118,15 +133,25 @@ const Checkout = () => {
             {/* 유저 정보 */}
             <div className="checkout-card">
                 <h3>배송 정보</h3>
-                <p><strong>이름:</strong> {checkoutData ? checkoutData.name : selectedAddress?.receiverName}</p>
-                <p><strong>연락처:</strong> {checkoutData ? checkoutData.tel : selectedAddress?.receiverTel}</p>
-                <p><strong>주소:</strong> {checkoutData ? checkoutData.address : selectedAddress?.address}, {checkoutData ? checkoutData.region : selectedAddress?.region}</p>
+                <p><strong>이름:</strong> {state?.selectedAddress ? state.selectedAddress.receiverName : checkoutData?.name}</p>
+                <p><strong>연락처:</strong> {state?.selectedAddress ? state.selectedAddress.receiverTel : checkoutData?.tel}</p>
+                <p><strong>주소:</strong> {state?.selectedAddress ? `${state.selectedAddress.address}, ${state.selectedAddress.region}` : `${checkoutData?.address}, ${checkoutData?.region}`}</p>
 
                 <button
                     className="checkout-button"
                     onClick={() => navigate('/ChangeAddress', { state: { userId: user.userId, productId } })}
                 >
                     배송지 변경
+                </button>
+
+                <button
+                    className="checkout-button reset-button"
+                    onClick={() => {
+                        setCheckoutData(null); // 기존 배송지 초기화
+                        navigate('/checkout', { state: {} }); // 현재 페이지 리로드
+                    }}
+                >
+                    기본 배송지로 변경
                 </button>
             </div>
 

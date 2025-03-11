@@ -1,7 +1,5 @@
 package com.example.ntmyou.Checkout;
-
 import com.example.ntmyou.Coupon.DTO.CouponResponseDto;
-import com.example.ntmyou.Coupon.Entity.Coupon;
 import com.example.ntmyou.Coupon.Mapper.CouponMapper;
 import com.example.ntmyou.Exception.ProductNotFoundException;
 import com.example.ntmyou.Exception.UserCodeNotFoundException;
@@ -32,6 +30,7 @@ public class CheckoutService {
         this.userCouponRepository = userCouponRepository;
     }
 
+    // 주문확인 시 정보조회
     @Transactional(readOnly = true)
     public CheckoutResponseDto getCheckoutInfo(Long userId, Long productId) {
         // 유저정보 조회
@@ -71,4 +70,6 @@ public class CheckoutService {
                 .availableCoupons(availableCoupons)
                 .build();
     }
+
+
 }

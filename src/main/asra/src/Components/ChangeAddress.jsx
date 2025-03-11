@@ -28,7 +28,7 @@ const ChangeAddress = () => {
             .catch(error => {
                 console.error("배송지 목록 불러오기 실패:", error);
             });
-    }, [userId]);
+    }, [userId, newAddressId]);
 
     const handleSelectAddress = (address) => {
         setSelectedAddress(address);
@@ -56,7 +56,7 @@ const ChangeAddress = () => {
 
 
     const handleAddAddress = () => {
-        navigate("/AddAddress", { state: { userId } }); // 배송지 추가 페이지로 이동
+        navigate("/AddAddress", { state: { userId, productId } }); // 배송지 추가 페이지로 이동
     };
 
     return (

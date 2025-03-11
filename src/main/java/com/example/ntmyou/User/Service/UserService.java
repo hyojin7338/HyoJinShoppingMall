@@ -1,5 +1,7 @@
 package com.example.ntmyou.User.Service;
 
+import com.example.ntmyou.Address.Addresses;
+import com.example.ntmyou.Address.AddressesRepository;
 import com.example.ntmyou.Cart.Entity.Cart;
 import com.example.ntmyou.Cart.Repository.CartRepository;
 import com.example.ntmyou.Config.JWT.JwtToken;
@@ -35,6 +37,7 @@ public class UserService {
     private final CartRepository cartRepository;
 
     private final UserCouponService userCouponService;
+    private final AddressesRepository addressesRepository;
 
     // 입력 값이 null 또는 공백이 있으면 오류 발생
     private void validateNotEmpty(String value, String fieldName) {
@@ -75,7 +78,7 @@ public class UserService {
 
         //  회원가입 후 장바구니 자동 생성
         Cart cart = Cart.builder()
-                .user(user) // ✅ 유저와 연결
+                .user(user) //  유저와 연결
                 .totalPrice(0) // 초기 총 가격 0
                 .discountAmount(0) // 초기 할인 금액 0
                 .finalPrice(0) // 초기 최종 가격 0
@@ -84,13 +87,28 @@ public class UserService {
                 .cartItems(new ArrayList<>()) // 빈 상품 리스트
                 .build();
 
-        cartRepository.save(cart); // ✅ 장바구니 저장
+        cartRepository.save(cart); //  장바구니 저장
+
+
+        // 기본 배송지도 저장하게 만들기
+        Addresses addresses = Addresses.builder()
+                .user(user)
+                .address(dto.getAddress())
+                .region(dto.getRegion())
+                .receiverName(dto.getName())
+                .receiverTel(dto.getTel())
+                .isDefault(true) // true 설정 시 기본배송지로 설정 됨
+                .build();
+
+        addressesRepository.save(addresses);
+
 
         userCouponService.issueSignupCouponToUser(user);
 
         // Entity → DTO 변환 후 반환
         return UserMapper.toResponseDTO(user);
     }
+
 
     // 프로필 수정
     @Transactional

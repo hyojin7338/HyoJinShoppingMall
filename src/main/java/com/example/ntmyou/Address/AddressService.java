@@ -47,4 +47,29 @@ public class AddressService {
                 .orElseThrow(() -> new AddressNotFoundException("존재하지 않는 배송지입니다."));
         return AddressMapper.toResponseDto(addresses);
     }
+
+    // 기본 배송지 변경하는 API 생성
+    @Transactional
+    public void updateDefaultAddress(Long userId, Long addressId) {
+        // 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 유저입니다."));
+        // 주소 조회
+        Addresses addresses = addressesRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("존재하지 않는 주소입니다."));
+
+        // 기존의 기본 배송지 찾기
+        List<Addresses> userAddresses = addressesRepository.findByUserAndIsDefault(user, true);
+        for (Addresses address : userAddresses) {
+            address.setDefault(false);
+        }
+
+        //  새로운 기본 배송지 설정
+        addresses.setDefault(true);
+
+        //  변경된 주소들 저장
+        addressesRepository.saveAll(userAddresses);
+        addressesRepository.save(addresses);
+
+    }
 }
