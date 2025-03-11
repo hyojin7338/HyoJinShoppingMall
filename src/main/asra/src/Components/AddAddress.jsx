@@ -6,7 +6,7 @@ import "../styles/AddAddress.css";
 const AddAddress = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { userId } = location.state || {};
+    const { userId, productId,selectedSize, quantity } = location.state || {};
 
 
     const [formData, setFormData] = useState({
@@ -77,9 +77,9 @@ const AddAddress = () => {
                 navigate("/ChangeAddress", {
                     userId,
                     productId,
-                    selectedSize,
-                    quantity,
-                    newAddressId: newAddressId
+                    ...(selectedSize && { selectedSize }),
+                    ...(quantity && { quantity }),
+                    newAddressId
                 }); // 이전 페이지(배송지 선택 페이지)로 돌아가기
             })
             .catch(error => {

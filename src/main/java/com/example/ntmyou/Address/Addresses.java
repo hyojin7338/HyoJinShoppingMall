@@ -26,4 +26,13 @@ public class Addresses {
     @ManyToOne // 유저는 많은 배송정보를 가질 수 있다.
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // 기본 배송지 설정 메서드
+    public void setAsDefault() {
+        this.isDefault = true;
+    }
+
+    public void unsetDefault() {
+        this.isDefault = false;
+    }
 }
