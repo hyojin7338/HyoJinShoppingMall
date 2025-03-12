@@ -73,12 +73,13 @@ const AddAddress = () => {
         axios.post(`http://localhost:8080/address/add/${userId}`, formData)
             .then(response => {
                 const newAddressId = response.data.addressId;
+                console.log("새로운 배송지 정보:", newAddressId);
                 alert("배송지가 성공적으로 추가되었습니다.");
                 navigate("/ChangeAddress", {
                     userId,
                     productId,
-                    ...(selectedSize && { selectedSize }),
-                    ...(quantity && { quantity }),
+                    selectedSize,
+                    quantity,
                     newAddressId
                 }); // 이전 페이지(배송지 선택 페이지)로 돌아가기
             })

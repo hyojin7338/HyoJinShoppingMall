@@ -28,6 +28,7 @@ public class CartController {
         CartResponseDto cart = cartService.getCartByUserId(userId);
         return ResponseEntity.ok(cart);
     }
+
     // 장바구니에 쿠폰 적용 API
     @PostMapping("/cart/{cartId}/apply-coupon/{userCouponId}")
     public ResponseEntity<String> applyCouponToCart(

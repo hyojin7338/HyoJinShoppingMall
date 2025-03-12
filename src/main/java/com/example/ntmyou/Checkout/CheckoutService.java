@@ -32,7 +32,7 @@ public class CheckoutService {
 
     // 주문확인 시 정보조회
     @Transactional(readOnly = true)
-    public CheckoutResponseDto getCheckoutInfo(Long userId, Long productId) {
+    public CheckoutResponseDto getCheckoutInfo(Long userId, Long productId, Integer qty) {
         // 유저정보 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserCodeNotFoundException("유저를 찾을 수 없습니다."));
@@ -54,6 +54,15 @@ public class CheckoutService {
                 .map(CouponMapper::toResponseDto)
                 .collect(Collectors.toList());
 
+        // 총 주문 금액 계산 -> 상품 가격 * 개수
+        int totalPrice = product.getAmount() * qty;
+
+        // 배송비 계산 -> 10만원 이상 구매 시 무료배달
+        int shippingFee = (totalPrice >= 100000) ? 0 : 3000;
+
+        // 최종 결제 금액
+        int finalPrice = totalPrice + shippingFee;
+
         return CheckoutResponseDto.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
@@ -68,6 +77,9 @@ public class CheckoutService {
                 .mainImgUrl(product.getMainImgUrl())
                 .businessName(businessName)
                 .availableCoupons(availableCoupons)
+                .totalPrice(totalPrice)
+                .shippingFee(shippingFee)
+                .finalPrice(finalPrice)
                 .build();
     }
 

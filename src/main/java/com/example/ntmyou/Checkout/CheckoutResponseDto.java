@@ -29,4 +29,11 @@ public class CheckoutResponseDto {
 
     // 사용가능한 쿠폰
     private List<CouponResponseDto> availableCoupons; // 사용 가능한 쿠폰 목록
+
+    // 총 주문금액, 배송비, 최종결제금액
+    private Integer totalPrice;
+    private Integer shippingFee;
+    private Integer finalPrice;
+
+
 }

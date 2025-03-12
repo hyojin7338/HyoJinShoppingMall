@@ -121,12 +121,6 @@ public class CartService {
         // 최종 결제 금액 계산
         int finalPrice = totalPrice - discountAmount + shippingFee;
 
-        System.out.println("✅ 장바구니 총 가격 (할인 전): " + totalPrice);
-        System.out.println("✅ 장바구니 할인 금액: " + discountAmount);
-        System.out.println("✅ 적용된 배송비: " + shippingFee);
-        System.out.println("✅ 최종 결제 금액: " + finalPrice);
-
-
         // 장바구니 업데이트
         cart.setTotalPrice(totalPrice);
         cart.setDiscountAmount(discountAmount);
