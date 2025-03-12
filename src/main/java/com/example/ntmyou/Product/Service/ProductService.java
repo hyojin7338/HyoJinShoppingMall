@@ -80,7 +80,7 @@ public class ProductService {
             try {
                 List<String> uploadedMainImage = awsS3Service.uploadFile(List.of(mainImage));
                 if (!uploadedMainImage.isEmpty()) {
-                    // ✅ 기존 대표 이미지가 존재할 때만 삭제 (불필요한 S3 파일 삭제)
+                    //  기존 대표 이미지가 존재할 때만 삭제 (불필요한 S3 파일 삭제)
                     if (newMainImgUrl != null && !newMainImgUrl.isEmpty()) {
                         awsS3Service.deleteFile(newMainImgUrl);
                     }
@@ -222,5 +222,7 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
         return new ProductMapper().toResponseDto(product);
     }
+
+
 
 }
