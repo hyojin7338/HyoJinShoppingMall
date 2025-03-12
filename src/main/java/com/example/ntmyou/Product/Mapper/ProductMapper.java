@@ -29,13 +29,13 @@ public class ProductMapper {
                 .master(masterId)
                 .build();
 
-        // 사이즈 매핑 추가
+        // 사이즈 매핑 추가 // 재고 수량
         if (productRequestDto.getSizes() != null) {
             List<ProductSize> sizeList = productRequestDto.getSizes().stream()
                     .map(sizeDto -> ProductSize.builder()
-                            .size(sizeDto.getSize())
-                            .cnt(sizeDto.getCnt())
-                            .product(product) // ✅ 사이즈가 속하는 상품 설정
+                            .size(sizeDto.getSize()) // 사이즈
+                            .cnt(sizeDto.getCnt()) // 현재고
+                            .product(product) //  사이즈가 속하는 상품 설정
                             .build())
                     .collect(Collectors.toList());
             product.setSizes(sizeList);
