@@ -13,12 +13,13 @@ public class CheckoutController {
     private final CheckoutService checkoutService;
 
     // 구매 전 정보 확인하는 API
-    @GetMapping("/product/{userId}/{productId}")
+    @GetMapping("/product/{userId}/{productId}/{qty}")
     public ResponseEntity<CheckoutResponseDto> getCheckoutInfo(
             @PathVariable Long userId,
-            @PathVariable Long productId) {
+            @PathVariable Long productId,
+            @PathVariable Integer qty) {
 
-        CheckoutResponseDto checkoutInfo = checkoutService.getCheckoutInfo(userId, productId);
+        CheckoutResponseDto checkoutInfo = checkoutService.getCheckoutInfo(userId, productId, qty);
         return ResponseEntity.ok(checkoutInfo);
     }
 }

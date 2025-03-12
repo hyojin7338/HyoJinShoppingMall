@@ -7,6 +7,7 @@ import "../styles/Checkout.css";
 const Checkout = () => {
     const { user } = useContext(UserContext);
     const { productId } = useParams();
+    const [product, setProduct] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
     const { state } = location;
@@ -48,25 +49,10 @@ const Checkout = () => {
                 .catch(err => {
                     console.error("배송지 조회 실패:", err);
                 });
-        } else {
-            axios.get(`http://localhost:8080/address/default/${user.userId}`)
-                .then(res => {
-                    const defaultAddress = res.data;
-                    console.log("기본 배송지 정보:", defaultAddress);
-                    setCheckoutData(prev => ({
-                        ...prev,
-                        name: defaultAddress.receiverName,
-                        tel: defaultAddress.receiverTel,
-                        address: defaultAddress.address,
-                        region: defaultAddress.region,
-                    }));
-                })
-                .catch(err => console.error("기본 배송지 조회 실패:", err));
-
         }
 
         //  백엔드에서 구매 전 정보 조회
-        axios.get(`http://localhost:8080/product/${user.userId}/${productId}`)
+        axios.get(`http://localhost:8080/product/${user.userId}/${productId}/${quantity}`)
             .then(response => {
                 console.log(" 구매 전 정보:", response.data);
                 setCheckoutData(response.data);
@@ -148,7 +134,7 @@ const Checkout = () => {
                     className="checkout-button reset-button"
                     onClick={() => {
                         setCheckoutData(null); // 기존 배송지 초기화
-                        navigate('/checkout', { state: {} }); // 현재 페이지 리로드
+                        navigate(`/checkout/${productId}`, {  state: { product, selectedSize, quantity } }); // 현재 페이지 리로드
                     }}
                 >
                     기본 배송지로 변경
@@ -188,7 +174,8 @@ const Checkout = () => {
             {/* 결제 금액 */}
             <div className="checkout-summary">
                 <h3>결제 금액</h3>
-                <p>상품 금액: {formatPrice(checkoutData.amount)}원</p>
+                <p>상품 금액: {formatPrice(checkoutData.totalPrice)}원</p>
+                <p>배송비: {formatPrice(checkoutData.shippingFee)}원</p>
                 <p>할인 금액: -{formatPrice(discountAmount)}원</p>
                 <hr />
                 <h3>최종 결제 금액: {formatPrice(finalPrice)}원</h3>

@@ -38,7 +38,7 @@ const Cart = () => {
         // 사용 가능한 쿠폰 가져오기
         axios.get(`http://localhost:8080/coupons/available/${user.userId}`)
             .then(response => {
-                console.log("✅ 사용 가능한 쿠폰 목록:", response.data);
+                console.log("사용 가능한 쿠폰 목록:", response.data);
                 // 저장
                 setCoupons(response.data);
             })
@@ -71,20 +71,20 @@ const Cart = () => {
         }
 
         try {
-            console.log(`✅ 실제 적용될 userCouponId: ${selectedCouponId}`);  // 디버깅 로그 추가
+            console.log(` 실제 적용될 userCouponId: ${selectedCouponId}`);  // 디버깅 로그 추가
 
             const response = await axios.post(
                 `http://localhost:8080/cart/${cart.cartId}/apply-coupon/${selectedCouponId}`
             );
 
-            console.log("✅ 쿠폰 적용 응답:", response.data);
+            console.log(" 쿠폰 적용 응답:", response.data);
             alert("쿠폰이 적용되었습니다!");
 
             // 최신 장바구니 데이터 다시 가져오기
             const updatedCart = await axios.get(`http://localhost:8080/cart/${user.userId}`);
             setCart(updatedCart.data);
         } catch (error) {
-            console.error("🚨 쿠폰 적용 실패:", error.response?.data || error);
+            console.error(" 쿠폰 적용 실패:", error.response?.data || error);
             alert(error.response?.data || "쿠폰 적용 실패");
         }
     };
