@@ -2,6 +2,7 @@ package com.example.ntmyou.Order.Entity;
 
 import com.example.ntmyou.Order.Entity.Order;
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.Product.Entity.ProductSize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,11 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    // 상품
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_size_id", nullable = false)
+    private ProductSize productSize;  // 선택한 사이즈 정보
 
     @Column(nullable = false)
     private Integer qty;

@@ -16,12 +16,4 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/orders/{userId}/create")
-    public ResponseEntity<Order> createOrder(
-            @PathVariable Long userId,
-            @RequestBody List<Long> productIds
-            )  {
-        Order createdOrder = orderService.createOrder(userId, productIds);
-        return ResponseEntity.ok(createdOrder);
-    }
 }
