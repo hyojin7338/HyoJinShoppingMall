@@ -6,65 +6,63 @@ import com.example.ntmyou.Order.Dto.OrderRequestDto;
 import com.example.ntmyou.Order.Dto.OrderResponseDto;
 import com.example.ntmyou.Order.Entity.Order;
 import com.example.ntmyou.Order.Entity.OrderItem;
-import com.example.ntmyou.Order.Enum.OrderStatus;
+
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.User.Entity.User;
 
-import java.util.List;
+import java.util.ArrayList;
+
 import java.util.stream.Collectors;
 
 public class OrderMapper {
     // Order request -> entity
-    public static Order toEntity(OrderRequestDto requestDto
-            , User user
-            , List<OrderItem> orderItems
-            , Integer totalPrice) {
+    public Order toEntity(OrderRequestDto dto, User user) {
         return Order.builder()
                 .user(user)
-                .orderItems(orderItems)
-                .totalPrice(totalPrice)
-                .shippingFee(requestDto.getShippingFee())
-                .orderStatus(OrderStatus.ORDERED) // 결제완료
-                .orderDate(requestDto.getOrderDate()) // 결제완료 날짜
+                .shippingFee(dto.getShippingFee())
+                .orderItems(new ArrayList<>())
+                .totalPrice(0)
                 .build();
     }
 
-    // OrderItem Request -> Entity
-    public static OrderItem toEntity(OrderItemRequestDto requestDto
-            , Product product
-            , Order order) {
-        return OrderItem.builder()
-                .product(product)
-                .order(order)
-                .qty(requestDto.getQty())
-                .itemPrice(requestDto.getItemPrice())
-                .totalPrice(requestDto.getItemPrice() * requestDto.getQty())
-                .build();
-    }
 
     // Entity -> ResponseDto
-    public static OrderResponseDto toDto(Order order) {
-        List<OrderItemResponseDto> orderItems = order.getOrderItems().stream()
-                .map(OrderMapper::toDto)
-                .collect(Collectors.toList());
-
+    public OrderResponseDto toDto(Order order) {
         return OrderResponseDto.builder()
                 .orderId(order.getOrderId())
                 .userId(order.getUser().getUserId())
-                .orderItems(orderItems)
                 .totalPrice(order.getTotalPrice())
                 .shippingFee(order.getShippingFee())
                 .orderStatus(order.getOrderStatus().name())
                 .orderDate(order.getOrderDate())
+                .orderItems(order.getOrderItems().stream()
+                        .map(this::toDto)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
-    public static OrderItemResponseDto toDto(OrderItem orderItem) {
+    public OrderItem toEntity(OrderItemRequestDto dto
+            , Product product
+            , ProductSize productSize
+            , Order order) {
+        return OrderItem.builder()
+                .product(product)
+                .productSize(productSize)
+                .order(order)
+                .qty(dto.getQty())
+                .itemPrice(dto.getItemPrices())
+                .totalPrice((dto.getItemPrices() != null ? dto.getItemPrices() : 0) * dto.getQty())
+                .build();
+    }
+
+    public OrderItemResponseDto toDto(OrderItem orderItem) {
         return OrderItemResponseDto.builder()
                 .orderItemId(orderItem.getOrderItemId())
                 .productId(orderItem.getProduct().getProductId())
+                .productSizeId(orderItem.getProductSize().getProductSizeId())
                 .qty(orderItem.getQty())
-                .itemPrice(orderItem.getItemPrice())
+                .itemPrices(orderItem.getItemPrice())
                 .totalPrice(orderItem.getTotalPrice())
                 .build();
     }
