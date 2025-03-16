@@ -11,6 +11,7 @@ const DetailProduct = () => {
     const navigate = useNavigate();
 
     const [product, setProduct] = useState(null);
+    const [productSize, setProductSize] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedSize, setSelectedSize] = useState(""); //  선택한 사이즈
     const [quantity, setQuantity] = useState(1); //  선택한 수량 (기본값 1)
