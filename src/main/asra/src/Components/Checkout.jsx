@@ -102,8 +102,28 @@ const Checkout = () => {
 
     // 결제 처리
     const handlePayment = () => {
-        alert("결제가 완료되었습니다!");
-        navigate("/"); // 결제 완료 후 홈으로 이동
+        const orderRequest = {
+            userId: user.userId,
+            orderItems: [
+                {
+                    productId: productId,
+                    productSizeId: selectedSize.sizeId, // 사이즈 선택 시 ID도 넘겨야 함
+                    qty: quantity,
+                    itemPrice: checkoutData.amount, // 개당 금액
+                }
+            ],
+            shippingFee: checkoutData.shippingFee,
+        };
+
+        axios.post(`http://localhost:8080/order/${user.userId}`, orderRequest)
+            .then(res => {
+                alert("결제가 완료되었습니다!");
+                navigate("/main"); // 결제 완료 후 홈 이동
+            })
+            .catch(err => {
+                console.error("결제 오류:", err);
+                alert("결제 중 오류가 발생했습니다.");
+            });
     };
 
     const formatPrice = (price) => {
