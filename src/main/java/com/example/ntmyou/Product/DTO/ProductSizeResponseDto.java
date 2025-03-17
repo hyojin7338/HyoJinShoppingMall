@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductSizeResponseDto {
+    private Long productSizeId;
     private String size;
     private Integer cnt;
 }

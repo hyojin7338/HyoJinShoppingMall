@@ -11,6 +11,10 @@ const Checkout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { state } = location;
+
+    console.log("Checkout state:", state);
+
+
     const { selectedAddress } = location.state || {};
 
     const [selectedCoupon, setSelectedCoupon] = useState(null);
@@ -20,6 +24,9 @@ const Checkout = () => {
     // 선택한 사이즈와 수량을 가져옴
     const selectedSize = state?.selectedSize || "선택 안됨";
     const quantity = state?.quantity || 1;
+
+    const selectedProductSizeId = state?.productSizeId || null;
+
 
 
 
@@ -83,14 +90,14 @@ const Checkout = () => {
         setSelectedCoupon(couponId);
 
         // 선택한 쿠폰이 있다면 할인 금액 계산
-        if (checkoutData) {
+        if (checkoutData && checkoutData.availableCoupons) {
             const coupon = checkoutData.availableCoupons.find(c => c.userCouponId === couponId);
             if (coupon) {
-                if (coupon.discountType === "PERCENT") {
-                    setDiscountAmount((checkoutData.amount * coupon.discountValue) / 100);
-                } else {
-                    setDiscountAmount(coupon.discountValue);
-                }
+                setDiscountAmount(
+                    coupon.discountType === "PERCENT"
+                        ? (checkoutData.amount * coupon.discountValue) / 100
+                        : coupon.discountValue
+                );
             } else {
                 setDiscountAmount(0);
             }
@@ -98,7 +105,9 @@ const Checkout = () => {
     };
 
     // 최종 결제 금액 계산
-    const finalPrice = checkoutData ? (checkoutData.amount * quantity) - discountAmount : 0;
+    const finalPrice = checkoutData
+        ? (checkoutData.amount * quantity) - discountAmount + (checkoutData.shippingFee || 0)
+        : 0;
 
     // 결제 처리
     const handlePayment = () => {
@@ -107,23 +116,19 @@ const Checkout = () => {
             orderItems: [
                 {
                     productId: productId,
-                    productSizeId: selectedSize.sizeId, // 사이즈 선택 시 ID도 넘겨야 함
+                    productSizeId: selectedProductSizeId,
                     qty: quantity,
-                    itemPrice: checkoutData.amount, // 개당 금액
+                    itemPrice: checkoutData.amount,
                 }
             ],
             shippingFee: checkoutData.shippingFee,
         };
 
+        console.log("🧾 주문요청 orderRequest:", orderRequest);
+
         axios.post(`http://localhost:8080/order/${user.userId}`, orderRequest)
-            .then(res => {
-                alert("결제가 완료되었습니다!");
-                navigate("/main"); // 결제 완료 후 홈 이동
-            })
-            .catch(err => {
-                console.error("결제 오류:", err);
-                alert("결제 중 오류가 발생했습니다.");
-            });
+            .then(response => console.log(" 결제 성공:", response))
+            .catch(error => console.error(" 결제 실패:", error));
     };
 
     const formatPrice = (price) => {

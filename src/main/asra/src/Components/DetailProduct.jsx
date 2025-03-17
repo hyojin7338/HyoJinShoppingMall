@@ -13,7 +13,7 @@ const DetailProduct = () => {
     const [product, setProduct] = useState(null);
     const [productSize, setProductSize] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [selectedSize, setSelectedSize] = useState(""); //  선택한 사이즈
+
     const [quantity, setQuantity] = useState(1); //  선택한 수량 (기본값 1)
     const [isFavorite, setIsFavorite] = useState(false); // 찜여부 상태 추가
 
@@ -22,11 +22,16 @@ const DetailProduct = () => {
     const cartId = userData?.cartId;
     const userId = userData?.userId;
 
+    const [selectedSize, setSelectedSize] = useState(""); //  선택한 사이즈
+    const [selectedProductSizeId, setSelectedProductSizeId] = useState(null); // 선택한 사이즈의 ID 추가
+
+
     useEffect(() => {
         axios.get(`http://localhost:8080/product/${productId}`)
             .then(response => {
                 console.log("상품 상세 데이터:", response.data);
                 setProduct(response.data);
+                setProductSize(response.data.sizes);
                 setLoading(false);
             })
             .catch(error => {
@@ -50,7 +55,22 @@ const DetailProduct = () => {
 
     // 사이즈 변경 핸들러
     const handleSizeChange = (event) => {
+        const selectedSizeValue = event.target.value;
         setSelectedSize(event.target.value);
+
+
+        console.log(" selectedSizeValue:", selectedSizeValue);
+        console.log(" productSize:", productSize);
+
+
+        const selectedProductSize = productSize?.find(size => size.size === selectedSizeValue);
+
+        if (selectedProductSize) {
+            console.log(" 선택된 productSize 객체:", selectedProductSize);
+            setSelectedProductSizeId(selectedProductSize.id);
+        } else {
+            console.log(" 일치하는 사이즈 없음 - productSizeId 못 찾음");
+        }
     };
 
     // 수량 변경 핸들러
@@ -68,8 +88,17 @@ const DetailProduct = () => {
             return;
         }
 
+        console.log(" 선택된 productSizeId:", selectedProductSizeId); // 콘솔 로그 추가
+        console.log(" 선택된 사이즈:", selectedSize);
+        console.log(" 선택한 수량:", quantity);
+
         navigate(`/checkout/${productId}`, {
-            state: { product, selectedSize, quantity }
+            state: {
+                product,
+                selectedSize,
+                quantity,
+                productSizeId: selectedProductSizeId
+            }
         });
     };
 
@@ -131,7 +160,7 @@ const DetailProduct = () => {
 
         try {
             await axios.delete(`http://localhost:8080/favorite/remove/${userId}/${productId}`);
-            setIsFavorite(false); //  UI 업데이트 (찜 상태 변경)
+            setIsFavorite(false);
             alert("찜 목록에서 삭제되었습니다.");
         } catch (error) {
             console.error("찜 삭제 실패!", error);

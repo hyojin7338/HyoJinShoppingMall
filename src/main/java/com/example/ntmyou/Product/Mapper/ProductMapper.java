@@ -55,7 +55,7 @@ public class ProductMapper {
                 .contents(product.getContents())
                 .amount(product.getAmount())
                 //.cnt(product.getCnt())
-                .sizes(product.getSizes().stream().map(size -> new ProductSizeResponseDto(size.getSize(), size.getCnt())).collect(Collectors.toList()))
+                .sizes(product.getSizes().stream().map(size -> new ProductSizeResponseDto(size.getProductSizeId(), size.getSize(), size.getCnt())).collect(Collectors.toList()))
                 .parentsCategoryName(product.getParentsCategory() != null ? product.getParentsCategory().getName() : null)
                 .childCategoryName(product.getChildCategory() != null ? product.getChildCategory().getName() : null)
                 .subCategoryName(product.getSubCategory() != null ? product.getSubCategory().getName() : null)
