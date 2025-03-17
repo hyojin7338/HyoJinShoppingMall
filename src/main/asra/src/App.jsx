@@ -16,6 +16,7 @@ import MyCoupons from "./Components/MyCoupons.jsx"; // 쿠폰 페이지 추가
 import Checkout from "./Components/Checkout.jsx";
 import ChangeAddress from "./Components/ChangeAddress.jsx";
 import AddAddress from "./Components/AddAddress.jsx";
+import Order from "./Components/Order.jsx"
 import { UserContext  } from "./context/UserContext"; // 유저 정보 가져오기
 
 
@@ -43,6 +44,7 @@ function App() {
                   <Route path="/Checkout/:productId" element={<Checkout />} />
                   <Route path="/ChangeAddress" element={<ChangeAddress />} />
                   <Route path="/AddAddress" element={<AddAddress />} />
+                  <Route path="/Orders" element={<Order />} />
               </Route>
           </Routes>
       </Router>

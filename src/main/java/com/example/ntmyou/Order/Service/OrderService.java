@@ -2,11 +2,8 @@ package com.example.ntmyou.Order.Service;
 
 
 import com.example.ntmyou.Exception.CntNotEnoughException;
-import com.example.ntmyou.Exception.OrderNotFoundException;
-import com.example.ntmyou.Exception.ProductNotFoundException;
 import com.example.ntmyou.Exception.UserCodeNotFoundException;
 import com.example.ntmyou.Order.Dto.OrderItemRequestDto;
-import com.example.ntmyou.Order.Dto.OrderItemResponseDto;
 import com.example.ntmyou.Order.Dto.OrderRequestDto;
 import com.example.ntmyou.Order.Dto.OrderResponseDto;
 import com.example.ntmyou.Order.Entity.Order;
@@ -25,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -39,6 +36,7 @@ public class OrderService {
 
     private final ProductSizeRepository productSizeRepository;
 
+    // 구매하기
     @Transactional
     public OrderResponseDto createOrder(Long userId, OrderRequestDto requestDto) {
         User user = userRepository.findById(userId)
@@ -79,12 +77,15 @@ public class OrderService {
 
     }
 
+    // 특정 유저가 구매한 모든 품목 (사이즈, 개수)까지 나와야 함
     @Transactional(readOnly = true)
-    public List<Order> getOrderByUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 회원입니다."));
+    public List<OrderResponseDto> getOrderByUser(Long userId) {
+        // 특정 유저가 구매한것들
+        List<Order> orders = orderRepository.findByUser_UserId(userId);
 
-        return orderRepository.findAllByUser(user);
+        return orders.stream()
+                .map(orderMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 

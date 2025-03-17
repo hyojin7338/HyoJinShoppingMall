@@ -88,6 +88,8 @@ const DetailProduct = () => {
             return;
         }
 
+        const productSizeId = productSize?.find(size => size.size === selectedSize)?.productSizeId;
+
         console.log(" 선택된 productSizeId:", selectedProductSizeId); // 콘솔 로그 추가
         console.log(" 선택된 사이즈:", selectedSize);
         console.log(" 선택한 수량:", quantity);
@@ -97,7 +99,7 @@ const DetailProduct = () => {
                 product,
                 selectedSize,
                 quantity,
-                productSizeId: selectedProductSizeId
+                productSizeId: productSizeId
             }
         });
     };
