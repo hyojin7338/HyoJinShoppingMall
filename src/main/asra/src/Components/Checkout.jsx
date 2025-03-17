@@ -127,8 +127,22 @@ const Checkout = () => {
         console.log("🧾 주문요청 orderRequest:", orderRequest);
 
         axios.post(`http://localhost:8080/order/${user.userId}`, orderRequest)
-            .then(response => console.log(" 결제 성공:", response))
-            .catch(error => console.error(" 결제 실패:", error));
+            .then(response => {
+                console.log("✅ 결제 성공:", response);
+
+                // 팝업 창 띄우기
+                alert(" 결제가 완료되었습니다!");
+
+                // 2초 후 메인 페이지로 이동
+                setTimeout(() => {
+                    navigate("/main");
+                }, 2000);
+            })
+
+            .catch(error => {
+                console.error(" 결제 실패:", error);
+                alert("결제에 실패했습니다. 다시 시도해주세요.");
+            });
     };
 
     const formatPrice = (price) => {

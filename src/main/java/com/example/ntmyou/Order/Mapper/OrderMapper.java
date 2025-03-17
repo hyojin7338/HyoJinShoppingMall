@@ -60,11 +60,14 @@ public class OrderMapper {
     }
 
     // OrderItem 엔티티 -> OrderItemResponseDto 변환
+    // productSIzeId, productName, size 등 추가 2025-03-18
     public OrderItemResponseDto toDto(OrderItem orderItem) {
         return OrderItemResponseDto.builder()
                 .orderItemId(orderItem.getOrderItemId())
                 .productId(orderItem.getProduct().getProductId())
                 .productSizeId(orderItem.getProductSize().getProductSizeId())
+                .productName(orderItem.getProduct().getName())
+                .size(orderItem.getProductSize().getSize())
                 .qty(orderItem.getQty())
                 .itemPrice(orderItem.getItemPrice()) // 네이밍 통일
                 .totalPrice(orderItem.getTotalPrice())

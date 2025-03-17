@@ -6,10 +6,9 @@ import com.example.ntmyou.Order.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -24,5 +23,12 @@ public class OrderController {
         OrderResponseDto orderResponseDto = orderService.createOrder(userId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
     }
+
+    @GetMapping("/order/getOrderByUser/{userId}")
+    public ResponseEntity<List<OrderResponseDto>> getUserOrders(@PathVariable Long userId) {
+        List<OrderResponseDto> orders = orderService.getOrderByUser(userId);
+        return ResponseEntity.ok(orders);
+    }
+
 
 }
