@@ -174,6 +174,22 @@ const DetailProduct = () => {
         console.log("로그인 상태 변경됨:", user);
     }, [user]);
 
+
+    const handleAskQuestion = () => {
+        if (!userId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        navigate(`/question/${productId}`, {
+            state: {
+                productId: productId,
+                userId: userId
+            }
+        });
+    };
+
+
     if (loading) return <p>로딩 중...</p>;
     if (!product) return <p>상품을 찾을 수 없습니다.</p>;
 
@@ -215,6 +231,8 @@ const DetailProduct = () => {
                 ) : (
                     <button className="wishlist-button" onClick={handleAddToWishlist}>찜</button>
                 )}
+
+                <button className="question-button" onClick={handleAskQuestion}>제품 문의하기</button>
             </div>
             <FooterNav/>
         </div>
