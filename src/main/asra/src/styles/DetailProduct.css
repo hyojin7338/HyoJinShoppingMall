@@ -125,3 +125,19 @@ strong {
     text-align: center;
     color: black; /* 선택한 옵션이 보이도록 글자 색 변경 */
 }
+
+.question-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.question-button:hover {
+    background-color: #45a049;
+}
+
