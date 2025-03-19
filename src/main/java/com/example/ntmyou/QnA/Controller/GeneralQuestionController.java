@@ -34,14 +34,14 @@ public class GeneralQuestionController {
     }
 
     // 내가 작성한 문의 전체 조회(USER)
-    @GetMapping("/general/question/{userId}")
+    @GetMapping("/general/userQuestion/{userId}")
     public ResponseEntity<List<GeneralQuestionResponseDto>> updateQuestionByUser(@PathVariable Long userId) {
         List<GeneralQuestionResponseDto> responseDto = generalQuestionService.getQuestionByUser(userId);
         return ResponseEntity.ok(responseDto);
     }
 
     // 내가 작성한 문의 전체 조회(Master)
-    @GetMapping("/general/question/{masterId}")
+    @GetMapping("/general/masterQuestion/{masterId}")
     public ResponseEntity<List<GeneralQuestionResponseDto>> updateQuestionByMaster(@PathVariable Long masterId) {
         List<GeneralQuestionResponseDto> responseDto = generalQuestionService.getQuestionByMaster(masterId);
         return ResponseEntity.ok(responseDto);

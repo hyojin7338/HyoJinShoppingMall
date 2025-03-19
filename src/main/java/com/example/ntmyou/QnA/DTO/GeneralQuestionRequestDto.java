@@ -18,7 +18,7 @@ public class GeneralQuestionRequestDto {
     private GeneralQuestionType questionType;
 
     // 일반 유저인지, 판매자인지 확인을 해야해
-    @NotNull(message = "Role을 확인해주세요")
+    //@NotNull(message = "Role을 확인해주세요")
     private Role role;
 
     // 작성자

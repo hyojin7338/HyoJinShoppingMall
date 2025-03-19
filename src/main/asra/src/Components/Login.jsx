@@ -44,14 +44,14 @@ const Login = () => {
             const response = await axios.post("http://localhost:8080/login", formData);
             console.log("로그인 API 응답 데이터:", response.data);
 
-            const {accessToken, refreshToken, userId, name, cartId} = response.data;
+            const {accessToken, refreshToken, userId, name, cartId, role} = response.data;
 
             if (!userId || !name || !cartId) {
                 console.error("로그인 응답에 user 정보가 없습니다!");
                 return;
             }
 
-            const userData = { userId, name, cartId };
+            const userData = { userId, name, cartId, role };
 
 
             // 이메일 기억하기

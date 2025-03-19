@@ -1,0 +1,74 @@
+/* 전체 컨테이너 */
+.admin-question-container {
+    background-color: #fff; /* 배경은 화이트 */
+    color: #111; /* 기본 글씨 색상 블랙 */
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 */
+.admin-question-container h2 {
+
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* 폼 요소 기본 스타일 */
+.admin-question-container label {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.admin-question-container input,
+.admin-question-container select,
+.admin-question-container textarea {
+    color: #111; /* 기본 글씨 색상 블랙 */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 입력 필드 & 셀렉트박스 호버 효과 */
+.admin-question-container input:focus,
+.admin-question-container select:focus,
+.admin-question-container textarea:focus {
+    border-color: #000;
+    background-color: #fff;
+    outline: none;
+}
+
+/* 버튼 */
+.admin-question-container button {
+    width: 100%;
+    background-color: #111;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border: none;
+}
+
+/* 버튼 호버 효과 */
+.admin-question-container button:hover {
+    background-color: #333;
+}
+
+/* textarea 높이 조절 */
+.admin-question-container textarea {
+    height: 120px;
+    resize: none;
+}

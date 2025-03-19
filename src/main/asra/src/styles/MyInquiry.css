@@ -60,3 +60,33 @@ h2 {
     line-height: 2;
     color: white; /* 강조 색 */
 }
+
+.inquiry-questionType{
+    font-size: 16px;
+    line-height: 2;
+    color: white; /* 강조 색 */
+}
+
+/* MyInquiry.css */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #eee;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.tabs button.active {
+    background-color: #333;
+    color: white;
+}
+
