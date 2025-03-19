@@ -220,7 +220,8 @@ public class UserService {
                 user.getName(),
                 cartId,
                 jwtToken.getAccessToken(),
-                jwtToken.getRefreshToken()
+                jwtToken.getRefreshToken(),
+                user.getRole()
         );
     }
 

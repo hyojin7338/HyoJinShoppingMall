@@ -12,7 +12,7 @@ public class GeneralQuestionMapper {
     , User user, Master master) {
         return GeneralQuestion.builder()
                 .questionType(requestDto.getQuestionType())
-                .role(requestDto.getRole())
+                .role(requestDto.getRole()) // 제거 해도 될듯 //2025-03-19
                 .user(user)
                 .master(master)
                 .title(requestDto.getTitle())

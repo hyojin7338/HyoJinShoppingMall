@@ -17,6 +17,8 @@ public enum GeneralQuestionType {
     ACCOUNT_VERIFICATION(" 판매자 계정 인증 및 승인 요청"),
     STORE_MANAGEMENT("스토어 관리 관련 문의"),
     ADVERTISEMENT("광고 및 마케팅 관련 문의"),
+
+
     OTHER(" 기타 문의");
 
     private final String description;

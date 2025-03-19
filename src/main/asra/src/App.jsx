@@ -19,6 +19,7 @@ import AddAddress from "./Components/AddAddress.jsx";
 import Order from "./Components/Order.jsx"
 import ProductQuestion from "./Components/ProductQuestion.jsx";
 import MyInquiry from "./Components/MyInquiry.jsx";
+import AdminByQuestion from "./Components/AdminByQuestion.jsx";
 import { UserContext  } from "./context/UserContext"; // 유저 정보 가져오기
 
 
@@ -49,6 +50,7 @@ function App() {
                   <Route path="/Orders" element={<Order />} />
                   <Route path="/question/:productId" element={<ProductQuestion />} />
                   <Route path="/MyInquiry" element={<MyInquiry />} />
+                  <Route path="/AdminByQuestion" element={<AdminByQuestion />} />
               </Route>
           </Routes>
       </Router>
