@@ -57,11 +57,18 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 특정 상품만 조회되는 로직도 필요했네..!
+    // 특정 상품만 조회되는 로직도 필요했네..! -> 상품상세페이지 들어갈 때
     // DetailProduct 상품상세 페이지로 들어갔을 때 필요한 API 있어야한다
     @GetMapping("/product/{productId}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long productId) {
         ProductResponseDto responseDto = productService.getProductById(productId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 특정 판매자가 올린 상품 조회
+    @GetMapping("/product/Master/{masterId}")
+    public ResponseEntity<List<ProductResponseDto>> getProductByMaster(@PathVariable Long masterId) {
+        List<ProductResponseDto> responseDto = productService.getProductByMaster(masterId);
         return ResponseEntity.ok(responseDto);
     }
 

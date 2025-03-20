@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
-import "../styles/MyCoupons.css";
-import FooterNav from "../Components/FooterNav.jsx";
+import { UserContext } from "../../context/UserContext.jsx";
+import "../../styles/MyCoupons.css";
+import FooterNav from "./FooterNav.jsx";
 
 const MyCoupons = () => {
     const { user } = useContext(UserContext);

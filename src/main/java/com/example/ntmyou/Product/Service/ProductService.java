@@ -20,6 +20,7 @@ import com.example.ntmyou.Product.Mapper.ProductUpdateMapper;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -215,12 +216,27 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    // 특정 상품만 조회
+    // 특정 상품만 조회 -> 상품 상세페이지
     @Transactional(readOnly = true)
     public ProductResponseDto getProductById(Long productId) {
         Product product = productRepository.findProductWithImages(productId)
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
         return new ProductMapper().toResponseDto(product);
+    }
+
+    // 특정판매자가 상품을 등록한 것을 확인하기 위해서 // 2025-03-30
+    @Transactional(readOnly = true)
+    public List<ProductResponseDto> getProductByMaster(Long masterId) {
+        List<Product> products = productRepository.findByMasterId(masterId);
+
+        // LAZY 필드 강제 초기화
+        for (Product product : products) {
+            Hibernate.initialize(product.getImageUrls());
+        }
+
+        return products.stream()
+                .map(ProductMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
 

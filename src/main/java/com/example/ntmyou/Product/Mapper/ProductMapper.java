@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ProductMapper {
 
     // 상품 생성 //  requestDto -> Entity
-    public Product toEntity(ProductRequestDto productRequestDto, ParentsCategory parentsId, ChildCategory childId, SubCategory subId, Master masterId) {
+    public static Product toEntity(ProductRequestDto productRequestDto, ParentsCategory parentsId, ChildCategory childId, SubCategory subId, Master masterId) {
         Product product = Product.builder()
                 .code(productRequestDto.getCode())
                 .name(productRequestDto.getName())
@@ -47,7 +47,7 @@ public class ProductMapper {
 
     // 상품 응답 // Entity -> ResponseDto
     // 삼항 연산자 사용 ->  조건식 ? 참일 때 반환할 값 : 거짓일 때 반환할 값;
-    public ProductResponseDto toResponseDto(Product product) {
+    public static ProductResponseDto toResponseDto(Product product) {
         return ProductResponseDto.builder()
                 .productId(product.getProductId())
                 .code(product.getCode())

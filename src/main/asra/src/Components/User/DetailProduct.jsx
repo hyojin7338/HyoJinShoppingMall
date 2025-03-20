@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useParams, useNavigate} from "react-router-dom";
-import {UserContext} from "../context/UserContext";
+import {UserContext} from "../../context/UserContext.jsx";
 import axios from "axios";
-import "../styles/DetailProduct.css"
-import FooterNav from "../Components/FooterNav.jsx";
+import "../../styles/DetailProduct.css"
+import FooterNav from "./FooterNav.jsx";
 
 const DetailProduct = () => {
     const {user} = useContext(UserContext);

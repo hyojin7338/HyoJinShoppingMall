@@ -183,10 +183,12 @@ public class MasterService {
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
 
         return new MasterLoginResponseDto(
+                master.getMasterId(),
                 master.getCode(),
                 master.getName(),
                 master.getBusinessNo(),
                 master.getBusinessName(),
+                master.getRole(),
                 jwtToken.getAccessToken(),
                 jwtToken.getRefreshToken()
         );

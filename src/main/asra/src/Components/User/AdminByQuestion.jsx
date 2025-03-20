@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
-import "../styles/AdminByQuestion.css"; // css 파일 import
+import { UserContext } from "../../context/UserContext.jsx";
+import "../../styles/AdminByQuestion.css"; // css 파일 import
 
 // 일반 유저 문의 유형 enum 리스트
 const userQuestionTypes = [

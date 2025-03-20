@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import "../styles/AddAddress.css";
+import "../../styles/AddAddress.css";
 
 const AddAddress = () => {
     const navigate = useNavigate();

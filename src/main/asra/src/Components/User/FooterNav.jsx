@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/FooterNav.css"; // 스타일 파일 추가
+import "../../styles/FooterNav.css"; // 스타일 파일 추가
 
 const FooterNav = () => {
     const navigate = useNavigate();
