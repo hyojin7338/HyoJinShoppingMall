@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
-import "../styles/MyInquiry.css"; // 스타일 추가
+import { UserContext } from "../../context/UserContext.jsx";
+import "../../styles/MyInquiry.css"; // 스타일 추가
 
 const MyInquiry = () => {
     const { user } = useContext(UserContext);

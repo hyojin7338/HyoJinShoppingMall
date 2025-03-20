@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext.jsx";
 import axios from "axios";
-import "../styles/Checkout.css";
+import "../../styles/Checkout.css";
 
 const Checkout = () => {
     const { user } = useContext(UserContext);

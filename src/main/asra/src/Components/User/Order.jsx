@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext.jsx";
 import axios from "axios";
-import "../styles/Order.css";
+import "../../styles/Order.css";
 
 const Order = () => {
     const { user } = useContext(UserContext);

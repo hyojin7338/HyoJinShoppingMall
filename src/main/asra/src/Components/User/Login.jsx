@@ -1,21 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import "../styles/Login.css"
+import {UserContext} from "../../context/UserContext.jsx";
+import "../../styles/Login.css"
 
-const MasterLogin = () => {
+const Login = () => {
     const [formData, setFormData] = useState({code: "", password: "",});
     const [rememberCode, setRememberCode] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
+    const {setUser} = useContext(UserContext);
 
-    // 로컬 스토리지에서 저장 된 이메일 불러오기
+    // 로컬 스토리지에서 저장 된 아이디(Code) 불러오기
     useEffect(() => {
-        const saveCode = localStorage.getItem("saveCode");
-        if (saveCode){
-            setFormData((prev) => ({ ...prev, code : saveCode }));
-            setRememberCode(true);
+        const savedCode = localStorage.getItem("savedCode"); // 저장된 아이디 가져오기
+        const savedRemember = localStorage.getItem("rememberCode") === "true"; // 저장된 체크 여부 확인
+
+        if (savedCode) {
+            setFormData((prev) => ({...prev, code: savedCode}));
+            setRememberCode(savedRemember); //  로그인 후에도 체크박스 상태 유지
         }
     }, []);
 
@@ -32,32 +36,50 @@ const MasterLogin = () => {
         setSuccess("");
 
         if (!formData.code || !formData.password) {
-            setError("이메일과 비밀번호를 입력해주세요. ");
+            setError("아이디와 비밀번호를 입력해주세요. ");
             return;
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/master/login", formData);
-            const { accessToken, refreshToken } = response.data;
+            const response = await axios.post("http://localhost:8080/login", formData);
+            console.log("로그인 API 응답 데이터:", response.data);
+
+            const {accessToken, refreshToken, userId, name, cartId, role} = response.data;
+
+            if (!userId || !name || !cartId) {
+                console.error("로그인 응답에 user 정보가 없습니다!");
+                return;
+            }
+
+            const userData = { userId, name, cartId, role };
+
 
             // 이메일 기억하기
             if (rememberCode) {
                 localStorage.setItem("savedCode", formData.code);
+                localStorage.setItem("rememberCode", "true"); // 체크 여부 저장
             } else {
                 localStorage.removeItem("savedCode");
+                localStorage.setItem("rememberCode", "false"); // 체크 해제 상태 저장
             }
 
             // JWT 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("user", JSON.stringify(userData));
 
-            setSuccess("로그인 성공적으로 완료되었습니다.");
-            setError("");
+            //  로그인한 유저 정보를 UserContext에 업데이트
+            setUser(userData);
+            console.log("로그인한 유저 정보:", userData);
+
+            alert(`환영합니다! ${name}님`);
+            navigate("/main"); //  메인 화면으로 이동
+
         } catch (err) {
             if (err.response) {
-                setError(err.response.data || "로그인에 실패하였습니다.");
+                alert(err.response.data.message || "로그인에 실패하였습니다."); // 실패 시 팝업
             } else {
-                setError("네트워크 오류가 발생하였습니다.");
+                alert("네트워크 오류가 발생하였습니다."); // 네트워크 오류
             }
         }
     };
@@ -70,9 +92,9 @@ const MasterLogin = () => {
     return (
         <div className="login-form">
             <div className="login-header">
-                <h2>관리자 로그인</h2>
+                <h2>로그인</h2>
                 <button
-                    onClick={() => navigate("/MasterSignup")}
+                    onClick={() => navigate("/Signup")}
                     className="register-button"
                 >
                     회원가입
@@ -118,4 +140,4 @@ const MasterLogin = () => {
         </div>
     )
 }
-export default MasterLogin;
+export default Login;

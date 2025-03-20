@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
-import "../styles/Favorite.css";
-import FooterNav from "../Components/FooterNav.jsx";
+import "../../styles/Favorite.css";
+import FooterNav from "./FooterNav.jsx";
 
 const Favorite = () => {
     const { user } = useContext(UserContext);

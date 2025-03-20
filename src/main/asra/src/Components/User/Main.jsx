@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import "../styles/Main.css"; // 스타일 적용을 위한 CSS 파일
+import "../../styles/Main.css";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import FooterNav from "../Components/FooterNav.jsx";
+import { UserContext } from "../../context/UserContext.jsx";
+import FooterNav from "./FooterNav.jsx";
 
 const Main = () => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
+    const { logout } = useContext(UserContext);
 
 
     const [categories, setCategories] = useState([]); // 대분류 카테고리
@@ -90,13 +91,22 @@ const Main = () => {
                     <input type="text" placeholder="검색어를 입력하세요" />
                     <button>검색</button>
                 </div>
+
+                <button
+                    onClick={() => {
+                        logout();         // 로그아웃 실행
+                        navigate("/login"); // 로그인 페이지로 이동
+                    }}
+                >
+                    로그아웃
+                </button>
             </nav>
 
             {/*  1. 대분류 선택 */}
             <div className="parents-category-bar">
                 {categories.map(parent => (
                     <button
-                        key={parent.parentsId} // ✅ index 제거하고 고유한 parentsId 사용
+                        key={parent.parentsId} //  index 제거하고 고유한 parentsId 사용
                         className={`category-item ${selectedParent?.parentsId === parent.parentsId ? "active" : ""}`}
                         onClick={() => {
                             console.log("대분류 버튼 클릭됨:", parent);
@@ -113,7 +123,7 @@ const Main = () => {
                 <div className="child-category-bar">
                     {children.map(child => (
                         <button
-                            key={child.childCategoryId} // ✅ index 제거하고 고유한 childCategoryId 사용
+                            key={child.childCategoryId} // index 제거하고 고유한 childCategoryId 사용
                             className={`sub-category-item ${selectedChild?.childCategoryId === child.childCategoryId ? "active" : ""}`}
                             onClick={() => {
                                 console.log("중분류 버튼 클릭됨:", child);
@@ -131,7 +141,7 @@ const Main = () => {
                 <div className="sub-category-bar">
                     {subCategories.map(sub => (
                         <button
-                            key={sub.subCategoryId} // ✅ index 제거하고 고유한 subCategoryId 사용
+                            key={sub.subCategoryId} //  index 제거하고 고유한 subCategoryId 사용
                             className={`sub-category-item ${selectedSub?.subCategoryId === sub.subCategoryId ? "active" : ""}`}
                             onClick={() => {
                                 console.log("소분류 버튼 클릭됨:", sub);

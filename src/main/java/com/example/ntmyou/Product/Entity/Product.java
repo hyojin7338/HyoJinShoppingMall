@@ -4,6 +4,7 @@ import com.example.ntmyou.Category.Child.ChildCategory;
 import com.example.ntmyou.Category.Parents.ParentsCategory;
 import com.example.ntmyou.Category.Sub.SubCategory;
 import com.example.ntmyou.Master.Entity.Master;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

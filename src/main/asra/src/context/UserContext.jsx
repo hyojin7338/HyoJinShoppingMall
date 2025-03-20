@@ -18,8 +18,13 @@ export const UserProvider = ({ children }) => {
         }
     }, [user]);
 
+    const logout = () => {
+        setUser(null); // user 상태 초기화
+        localStorage.removeItem("user"); // localStorage에서 삭제
+    };
+
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, logout }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/MyPage.css"; // 스타일 추가
-import { UserContext } from "../context/UserContext";
+import "../../styles/MyPage.css"; // 스타일 추가
+import { UserContext } from "../../context/UserContext.jsx";
 
 const MyPage = () => {
     const navigate = useNavigate();

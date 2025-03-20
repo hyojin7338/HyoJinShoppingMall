@@ -1,18 +1,18 @@
 import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {UserContext} from "../context/UserContext";
-import "../styles/Login.css"
+import {MasterContext} from "../../context/MasterContext.jsx";
+import "../../styles/Login.css"
 
-const Login = () => {
+const MasterLogin = () => {
     const [formData, setFormData] = useState({code: "", password: "",});
     const [rememberCode, setRememberCode] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
-    const {setUser} = useContext(UserContext);
+    const {setMaster} = useContext(MasterContext);
 
-    // 로컬 스토리지에서 저장 된 아이디(Code) 불러오기
+    // 로컬 스토리지에서 저장 된 이메일 불러오기
     useEffect(() => {
         const savedCode = localStorage.getItem("savedCode"); // 저장된 아이디 가져오기
         const savedRemember = localStorage.getItem("rememberCode") === "true"; // 저장된 체크 여부 확인
@@ -36,22 +36,17 @@ const Login = () => {
         setSuccess("");
 
         if (!formData.code || !formData.password) {
-            setError("이메일과 비밀번호를 입력해주세요. ");
+            setError("아이디와 비밀번호를 입력해주세요. ");
             return;
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/login", formData);
+            const response = await axios.post("http://localhost:8080/master/login", formData);
             console.log("로그인 API 응답 데이터:", response.data);
 
-            const {accessToken, refreshToken, userId, name, cartId, role} = response.data;
+            const { accessToken, refreshToken, masterId, name, businessName, role } = response.data;
 
-            if (!userId || !name || !cartId) {
-                console.error("로그인 응답에 user 정보가 없습니다!");
-                return;
-            }
-
-            const userData = { userId, name, cartId, role };
+            const masterData = {masterId, name, businessName, role}
 
 
             // 이메일 기억하기
@@ -63,23 +58,23 @@ const Login = () => {
                 localStorage.setItem("rememberCode", "false"); // 체크 해제 상태 저장
             }
 
+
             // JWT 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(masterData));
 
             //  로그인한 유저 정보를 UserContext에 업데이트
-            setUser(userData);
-            console.log("로그인한 유저 정보:", userData);
+            setMaster(masterData);
+            console.log("로그인한 유저 정보:", masterData);
 
             alert(`환영합니다! ${name}님`);
             navigate("/main"); //  메인 화면으로 이동
-
         } catch (err) {
             if (err.response) {
-                alert(err.response.data.message || "로그인에 실패하였습니다."); // 실패 시 팝업
+                setError(err.response.data || "로그인에 실패하였습니다.");
             } else {
-                alert("네트워크 오류가 발생하였습니다."); // 네트워크 오류
+                setError("네트워크 오류가 발생하였습니다.");
             }
         }
     };
@@ -92,9 +87,9 @@ const Login = () => {
     return (
         <div className="login-form">
             <div className="login-header">
-                <h2>로그인</h2>
+                <h2>관리자 로그인</h2>
                 <button
-                    onClick={() => navigate("/Signup")}
+                    onClick={() => navigate("/MasterSignup")}
                     className="register-button"
                 >
                     회원가입
@@ -140,4 +135,4 @@ const Login = () => {
         </div>
     )
 }
-export default Login;
+export default MasterLogin;

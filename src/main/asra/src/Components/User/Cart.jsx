@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
-import "../styles/Cart.css";
-import FooterNav from "../Components/FooterNav.jsx";
+import { UserContext } from "../../context/UserContext.jsx";
+import "../../styles/Cart.css";
+import FooterNav from "./FooterNav.jsx";
 
 const Cart = () => {
     const { user } = useContext(UserContext);  // 로그인한 유저 정보 가져오기
