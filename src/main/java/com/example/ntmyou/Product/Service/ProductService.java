@@ -10,15 +10,15 @@ import com.example.ntmyou.Config.S3.AwsS3Service;
 import com.example.ntmyou.Exception.*;
 import com.example.ntmyou.Master.Entity.Master;
 import com.example.ntmyou.Master.Repository.MasterRepository;
-import com.example.ntmyou.Product.DTO.ProductRequestDto;
-import com.example.ntmyou.Product.DTO.ProductResponseDto;
-import com.example.ntmyou.Product.DTO.ProductUpdateRequestDto;
-import com.example.ntmyou.Product.DTO.ProductUpdateResponseDto;
+import com.example.ntmyou.Product.DTO.*;
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.Product.Mapper.ProductMapper;
+import com.example.ntmyou.Product.Mapper.ProductSizeMapper;
 import com.example.ntmyou.Product.Mapper.ProductUpdateMapper;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 
+import com.example.ntmyou.Product.Repository.ProductSizeRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -44,6 +44,7 @@ public class ProductService {
     private final AwsS3Service awsS3Service;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private final ProductSizeRepository productSizeRepository;
 
     // 상품 생성
     @Transactional
@@ -132,11 +133,6 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다. 다시 확인해주세요"));
 
-        // 상품 가격이 0원 이상이여야한다  // ex) 가격이 마이너스 또는 0원이면 안됨
-        if (updateRequestDto.getAmount() == null || updateRequestDto.getAmount() <= 0 ||
-                updateRequestDto.getCnt() == null || updateRequestDto.getCnt() <= 0) {
-            throw new ProductAmountAndCntException("가격과 재고는 0 이상이어야 합니다.");
-        }
 
         // 변경할 정보가 있을 경우에만 업데이트
         if (updateRequestDto.getName() != null)product.setName(updateRequestDto.getName());
@@ -202,6 +198,23 @@ public class ProductService {
         // 수정 된 상품 응답
         return new ProductUpdateMapper().toUpdateResponseDto(product);
 
+    }
+
+    // 상품 현 재고 수정
+    @Transactional
+    public ProductSizeResponseDto updateSizeAndCnt(Long productSizeId, ProductSizeRequestDto requestDto) {
+
+        // 재고 검증
+        ProductSize productSize = productSizeRepository.findById(productSizeId)
+                .orElseThrow(() -> new ProductSizeAndCntNotFoundException("사이즈 및 재고를 찾을 수 없습니다."));
+
+        // 업데이트
+        productSize.setSize(requestDto.getSize());
+        productSize.setCnt(requestDto.getCnt());
+
+        productSizeRepository.save(productSize);
+
+        return ProductSizeMapper.toResponseDto(productSize);
     }
 
     // 선택한 카테고리에 맞는 상품이 조회가 되어야한다 // 2025-02-26

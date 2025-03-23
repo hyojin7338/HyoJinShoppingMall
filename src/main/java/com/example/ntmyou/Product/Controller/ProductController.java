@@ -1,10 +1,8 @@
 package com.example.ntmyou.Product.Controller;
 
-import com.example.ntmyou.Product.DTO.ProductRequestDto;
-import com.example.ntmyou.Product.DTO.ProductResponseDto;
-import com.example.ntmyou.Product.DTO.ProductUpdateRequestDto;
-import com.example.ntmyou.Product.DTO.ProductUpdateResponseDto;
+import com.example.ntmyou.Product.DTO.*;
 import com.example.ntmyou.Product.Service.ProductService;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,7 +35,7 @@ public class ProductController {
     }
 
     // 상품수정
-    @PatchMapping("/master/productUpdate/{productId}")
+    @PutMapping("/master/productUpdate/{productId}")
     public ResponseEntity<ProductUpdateResponseDto> updateProduct(
             @PathVariable Long productId,
             @RequestPart("updateRequestDto") @Valid ProductUpdateRequestDto updateRequestDto,
@@ -47,6 +45,14 @@ public class ProductController {
         ProductUpdateResponseDto updatedProduct = productService.updateProduct(productId
                 , updateRequestDto, updateMainUrl, updateImageUrl);
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    // 상품사이즈 수정
+    @PutMapping("/master/productSizeUpdate/{productSizeId}")
+    public ResponseEntity<ProductSizeResponseDto> updateProductSize(@PathVariable Long productSizeId
+            , @RequestBody @Valid ProductSizeRequestDto requestDto) {
+        ProductSizeResponseDto responseDto = productService.updateSizeAndCnt(productSizeId, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     // 카테고리에 맞는 상품이 조회를 하는 로직이 필요하네..!

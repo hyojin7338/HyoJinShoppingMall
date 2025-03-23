@@ -69,7 +69,7 @@ const MasterLogin = () => {
             console.log("로그인한 유저 정보:", masterData);
 
             alert(`환영합니다! ${name}님`);
-            navigate("/main"); //  메인 화면으로 이동
+            navigate("/MasterMain"); //  메인 화면으로 이동
         } catch (err) {
             if (err.response) {
                 setError(err.response.data || "로그인에 실패하였습니다.");

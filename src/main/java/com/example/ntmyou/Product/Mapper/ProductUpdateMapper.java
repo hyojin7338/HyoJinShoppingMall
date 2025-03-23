@@ -4,12 +4,14 @@ import com.example.ntmyou.Category.Child.ChildCategory;
 import com.example.ntmyou.Category.Parents.ParentsCategory;
 import com.example.ntmyou.Category.Sub.SubCategory;
 import com.example.ntmyou.Master.Entity.Master;
+import com.example.ntmyou.Product.DTO.ProductSizeResponseDto;
 import com.example.ntmyou.Product.DTO.ProductUpdateRequestDto;
 import com.example.ntmyou.Product.DTO.ProductUpdateResponseDto;
 import com.example.ntmyou.Product.Entity.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductUpdateMapper {
     // 상품수정  // updateRequestDto -> Entity
@@ -44,12 +46,12 @@ public class ProductUpdateMapper {
 
 
     // 상품 수정 응답 보내기 // Entity -> updateResponseDto
-    //
     public ProductUpdateResponseDto toUpdateResponseDto(Product product){
         return ProductUpdateResponseDto.builder()
                 .name(product.getName())
                 .contents(product.getContents())
                 .amount(product.getAmount())
+                //.sizes(product.getSizes().stream().map(size -> new ProductSizeResponseDto(size.getProductSizeId(), size.getSize(), size.getCnt())).collect(Collectors.toList()))
                 .parentsCategoryName(product.getParentsCategory() != null ? product.getParentsCategory().getName() : null)
                 .childCategoryName(product.getChildCategory() != null ? product.getChildCategory().getName() : null)
                 .subCategoryName(product.getSubCategory() != null ? product.getSubCategory().getName() : null)

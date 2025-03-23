@@ -13,7 +13,10 @@ public class ProductUpdateResponseDto {
     private String name; // 상품명
     private String contents; // 상품 설명
     private Integer amount; // 가격
-    private Integer cnt;  // 현 재고
+    // private Integer cnt;  // 현 재고
+
+    // productSize 엔티티 추가
+    // private List<ProductSizeResponseDto> sizes;
 
     private String parentsCategoryName; // 대분류 이름
     private String childCategoryName;   // 중분류 이름
