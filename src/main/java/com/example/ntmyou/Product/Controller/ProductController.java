@@ -48,10 +48,21 @@ public class ProductController {
     }
 
     // 상품사이즈 수정
-    @PutMapping("/master/productSizeUpdate/{productSizeId}")
-    public ResponseEntity<ProductSizeResponseDto> updateProductSize(@PathVariable Long productSizeId
-            , @RequestBody @Valid ProductSizeRequestDto requestDto) {
-        ProductSizeResponseDto responseDto = productService.updateSizeAndCnt(productSizeId, requestDto);
+    @PutMapping("/master/productSizeIncrease/{productSizeId}")
+    public ResponseEntity<ProductAdjustCntResponseDto> increaseProductSize(@PathVariable Long productSizeId,
+                                                                      @RequestBody @Valid ProductAdjustCntRequestDto requestDto) {
+        ProductAdjustCntResponseDto responseDto = productService.increaseProductSizeCnt(productSizeId, requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 상품사이즈 수량 감소
+    @PutMapping("/master/productSizeDecrease/{productSizeId}")
+    public ResponseEntity<ProductAdjustCntResponseDto> decreaseProductSize(@PathVariable Long productSizeId,
+                                                                      @RequestBody ProductAdjustCntRequestDto requestDto) {
+
+        System.out.println("컨트롤러에서 받은 adjustCnt: " + requestDto.getAdjustCnt());
+
+        ProductAdjustCntResponseDto responseDto = productService.decreaseProductSizeCnt(productSizeId, requestDto);
         return ResponseEntity.ok(responseDto);
     }
 
