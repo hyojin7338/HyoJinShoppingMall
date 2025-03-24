@@ -13,12 +13,15 @@ import com.example.ntmyou.Master.Repository.MasterRepository;
 import com.example.ntmyou.Product.DTO.*;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
+import com.example.ntmyou.Product.Mapper.ProductAdjustCntMapper;
 import com.example.ntmyou.Product.Mapper.ProductMapper;
 import com.example.ntmyou.Product.Mapper.ProductSizeMapper;
 import com.example.ntmyou.Product.Mapper.ProductUpdateMapper;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 
 import com.example.ntmyou.Product.Repository.ProductSizeRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -201,20 +204,42 @@ public class ProductService {
     }
 
     // 상품 현 재고 수정
-    @Transactional
-    public ProductSizeResponseDto updateSizeAndCnt(Long productSizeId, ProductSizeRequestDto requestDto) {
+    @PersistenceContext
+    private EntityManager em;
 
-        // 재고 검증
+    // 재고조정 재고 증가시키기
+    @Transactional
+    public ProductAdjustCntResponseDto increaseProductSizeCnt(Long productSizeId, ProductAdjustCntRequestDto requestDto) {
         ProductSize productSize = productSizeRepository.findById(productSizeId)
                 .orElseThrow(() -> new ProductSizeAndCntNotFoundException("사이즈 및 재고를 찾을 수 없습니다."));
 
-        // 업데이트
-        productSize.setSize(requestDto.getSize());
-        productSize.setCnt(requestDto.getCnt());
+        int currentCnt = productSize.getCnt() != null ? productSize.getCnt() : 0;
+        int adjustedCnt = requestDto.getAdjustCnt() != null ? requestDto.getAdjustCnt() : 0;
 
-        productSizeRepository.save(productSize);
+        System.out.println("상승 :" + currentCnt + "AND" + adjustedCnt );
 
-        return ProductSizeMapper.toResponseDto(productSize);
+        productSize.setCnt(currentCnt + adjustedCnt);
+
+        return ProductAdjustCntMapper.toResponseDto(productSize);
+    }
+
+    // 재고조정 재고 감소시키기
+    @Transactional
+    public ProductAdjustCntResponseDto decreaseProductSizeCnt(Long productSizeId, ProductAdjustCntRequestDto requestDto) {
+        ProductSize productSize = productSizeRepository.findById(productSizeId)
+                .orElseThrow(() -> new ProductSizeAndCntNotFoundException("사이즈 및 재고를 찾을 수 없습니다."));
+
+        int currentCnt = productSize.getCnt() != null ? productSize.getCnt() : 0;
+        int adjustedCnt = requestDto.getAdjustCnt() != null ? requestDto.getAdjustCnt() : 0;
+
+        System.out.println("하락 currentCnt :" + currentCnt + " AND adjustedCnt : " + adjustedCnt );
+
+        int newCnt = currentCnt - adjustedCnt;
+        if (newCnt < 0) newCnt = 0; // 음수 방지
+
+        productSize.setCnt(newCnt);
+
+        return ProductAdjustCntMapper.toResponseDto(productSize);
     }
 
     // 선택한 카테고리에 맞는 상품이 조회가 되어야한다 // 2025-02-26
@@ -237,12 +262,11 @@ public class ProductService {
         return new ProductMapper().toResponseDto(product);
     }
 
-    // 특정판매자가 상품을 등록한 것을 확인하기 위해서 // 2025-03-30
+    // 특정판매자가 상품을 등록한 것을 확인하기 위해서 // 2025-03-23
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getProductByMaster(Long masterId) {
         List<Product> products = productRepository.findByMasterId(masterId);
 
-        // LAZY 필드 강제 초기화
         for (Product product : products) {
             Hibernate.initialize(product.getImageUrls());
         }
