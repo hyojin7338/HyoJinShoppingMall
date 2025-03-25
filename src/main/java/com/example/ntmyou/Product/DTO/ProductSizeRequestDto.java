@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 public class ProductSizeRequestDto {
 
-    private String size; // "S", "M", "L",
+    private String size; // "S", "M", "L", "XL" , "XXL"
 
     private Integer cnt; // 사이즈별 재고 수량
 }
