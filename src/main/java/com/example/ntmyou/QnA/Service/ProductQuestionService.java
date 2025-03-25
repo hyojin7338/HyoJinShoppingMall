@@ -104,4 +104,11 @@ public class ProductQuestionService {
                 .collect(Collectors.toList());
     }
 
+    // 특정문의만 조회 -> 문의 상세페이지
+    @Transactional(readOnly = true)
+    public ProductQuestionResponseDto getProductQuestionById(Long productQuestionId) {
+        ProductQuestion productQuestion = productQuestionRepository.findByProductQuestionId(productQuestionId)
+                .orElseThrow(() -> new ProductQuestionNotFoundException("존재하지 않는 문의입니다."));
+        return new ProductQuestionMapper().toResponseDto(productQuestion);
+    }
 }
