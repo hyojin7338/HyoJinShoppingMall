@@ -20,6 +20,7 @@ import Order from "./Components/User/Order.jsx"
 import ProductQuestion from "./Components/User/ProductQuestion.jsx";
 import MyInquiry from "./Components/User/MyInquiry.jsx";
 import AdminByQuestion from "./Components/User/AdminByQuestion.jsx";
+import CreateProduct from "./Components/Master/CreateProduct.jsx";
 import {UserContext} from "./context/UserContext"; // 유저 정보 가져오기
 import {MasterContext} from "./context/MasterContext.jsx";
 
@@ -56,6 +57,7 @@ function App() {
                 {/*쇼핑몰 판매자가 로그인후 접근 가능 */}
                 <Route>
                     <Route path="/MasterMain" element={<MasterMain/>}/>
+                    <Route path="/CreateProduct" element={<CreateProduct/>}/>
                 </Route>
 
             </Routes>

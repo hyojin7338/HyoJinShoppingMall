@@ -22,6 +22,10 @@ const MasterMain = () => {
         }
     }, [master]);
 
+    useEffect(() => {
+        console.log("로그인 상태:", master);
+    }, [master]);
+
     const handleLogout = async () => {
         try {
             await logout();
@@ -37,10 +41,21 @@ const MasterMain = () => {
             <nav className="flex justify-between items-center py-4 border-b border-gray-600">
                 <div className="text-2xl font-bold text-white">Asra</div>
                 <button className="btn" onClick={handleLogout}>로그아웃</button>
+
+                {/* 상품 등록 버튼 */}
+                <div className="Create-Product">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => navigate("/createProduct")}
+                    >
+                        ➕ 상품 등록
+                    </button>
+                </div>
             </nav>
 
             {/* 페이지 제목 */}
             <h1 className="text-2xl font-bold my-6 text-center">📦 판매자 상품 목록</h1>
+
 
             {/* 로딩 상태 메시지 */}
             {loading && <div className="text-message">⏳ 상품을 불러오는 중입니다...</div>}

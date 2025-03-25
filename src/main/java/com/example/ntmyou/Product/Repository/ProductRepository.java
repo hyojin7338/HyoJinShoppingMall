@@ -22,4 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // 특정 판매자가 등록한 상품 찾기
     @Query("SELECT p FROM Product p WHERE p.master.masterId = :masterId")
     List<Product> findByMasterId(@Param("masterId")Long masterId);
+
+    boolean existsByCode(String code);
 }

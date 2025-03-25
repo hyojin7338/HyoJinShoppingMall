@@ -1,6 +1,7 @@
 package com.example.ntmyou.Product.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -22,23 +23,18 @@ public class ProductRequestDto {
     @Size(max = 500)
     private String contents; // 상품 설명
 
-
     private Integer amount; // 가격
-
 
     //private Integer cnt;  // 현 재고 productSize 추가 후 주석처리
     private List<ProductSizeRequestDto> sizes; // 여라 상품 등록
 
+    private Long parentsCategoryId;
 
-    private Long parentsCategoryId; // 대분류 ID
+    private Long childCategoryId;
 
+    private Long subCategoryId;
 
-    private Long childCategoryId;   // 중분류 ID
-
-
-    private Long subCategoryId;     // 소분류 ID
-
-    private Long masterId;          // 판매자 ID
+    private Long masterId;
 
     private String mainImg;  // 대표 이미지
     private List<String > imageUrls; // 서브 이미지

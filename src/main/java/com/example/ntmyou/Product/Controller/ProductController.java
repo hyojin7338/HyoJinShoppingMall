@@ -1,10 +1,12 @@
 package com.example.ntmyou.Product.Controller;
 
 import com.example.ntmyou.Product.DTO.*;
+import com.example.ntmyou.Product.Repository.ProductRepository;
 import com.example.ntmyou.Product.Service.ProductService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    // 상품생성
+    // 상품등록
     @PostMapping("/master/createProduct")
     public ResponseEntity<ProductResponseDto> createProduct(
             @RequestPart("requestDto") @Valid ProductRequestDto requestDto,  // JSON 데이터 받기
@@ -32,6 +35,16 @@ public class ProductController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    // 상품코드 중복 허용 체크
+    @GetMapping("/Product/codeCheck")
+    public ResponseEntity<?> codeCheck(@RequestParam String code) {
+        boolean exists = productRepository.existsByCode(code);
+        if (exists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 상품 코드 입니다.");
+        }
+        return ResponseEntity.ok("SUCCESS");
     }
 
     // 상품수정
@@ -60,7 +73,8 @@ public class ProductController {
     public ResponseEntity<ProductAdjustCntResponseDto> decreaseProductSize(@PathVariable Long productSizeId,
                                                                       @RequestBody ProductAdjustCntRequestDto requestDto) {
 
-        System.out.println("컨트롤러에서 받은 adjustCnt: " + requestDto.getAdjustCnt());
+        System.out.println("💬 [컨트롤러] 받은 requestDto: " + requestDto);
+        System.out.println("💬 [컨트롤러] 받은 adjustCnt: " + requestDto.getAdjustCnt());
 
         ProductAdjustCntResponseDto responseDto = productService.decreaseProductSizeCnt(productSizeId, requestDto);
         return ResponseEntity.ok(responseDto);
@@ -88,5 +102,13 @@ public class ProductController {
         List<ProductResponseDto> responseDto = productService.getProductByMaster(masterId);
         return ResponseEntity.ok(responseDto);
     }
+
+    @PostMapping("/testDto")
+    public ResponseEntity<String> testDto(@RequestBody ProductAdjustCntRequestDto requestDto) {
+        System.out.println("📌 test-dto에서 받은 requestDto: " + requestDto);
+        System.out.println("📌 test-dto에서 받은 adjustCnt: " + requestDto.getAdjustCnt());
+        return ResponseEntity.ok("adjustCnt = " + requestDto.getAdjustCnt());
+    }
+
 
 }
