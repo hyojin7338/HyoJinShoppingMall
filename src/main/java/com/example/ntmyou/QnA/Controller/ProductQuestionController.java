@@ -50,4 +50,11 @@ public class ProductQuestionController {
         List<ProductQuestionResponseDto> masterQuestions = productQuestionService.getQuestionByMaster(masterId);
         return ResponseEntity.ok(masterQuestions);
     }
+
+    // 판매자가 특정 문의 내용 들어가기
+    @GetMapping("/master/question/{productQuestionId}")
+    public ResponseEntity<ProductQuestionResponseDto> getQuestionId(@PathVariable Long productQuestionId) {
+        ProductQuestionResponseDto responseDto = productQuestionService.getProductQuestionById(productQuestionId);
+        return ResponseEntity.ok(responseDto);
+    }
 }

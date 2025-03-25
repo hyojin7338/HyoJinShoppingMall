@@ -49,8 +49,21 @@ const MasterMain = () => {
                         onClick={() => navigate("/createProduct")}
                     >
                         ➕ 상품 등록
+
                     </button>
                 </div>
+
+                <div className="QnA">
+                    <button
+                        className="QnA-btn"
+                        onClick={() => navigate("/MasterQuestion")}
+                        >
+
+                        ❓문의사항 확인하기
+
+                    </button>
+                </div>
+
             </nav>
 
             {/* 페이지 제목 */}
