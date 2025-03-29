@@ -79,7 +79,7 @@ const MasterMain = () => {
                 {products.map((product) => (
                     <div key={product.productId}
                          className="product-card"
-                         onClick={() => navigate(`/productSetting/${product.productId}`)}
+                         onClick={() => navigate(`/updateProduct/${product.productId}`)}
                     >
                         <div className="product-image">
                             <img src={product.mainImg || "/no-image.png"} alt={product.name} />
@@ -104,6 +104,7 @@ const MasterMain = () => {
                     </div>
                 ))}
             </div>
+
 
             {/* 상품 없음 메시지 */}
             {!loading && products.length === 0 && <div className="text-message">📭 등록된 상품이 없습니다.</div>}

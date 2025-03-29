@@ -8,11 +8,13 @@ import com.example.ntmyou.Product.DTO.ProductSizeResponseDto;
 import com.example.ntmyou.Product.DTO.ProductUpdateRequestDto;
 import com.example.ntmyou.Product.DTO.ProductUpdateResponseDto;
 import com.example.ntmyou.Product.Entity.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class ProductUpdateMapper {
     // 상품수정  // updateRequestDto -> Entity
     public void toUpdateEntity ( Product product ,

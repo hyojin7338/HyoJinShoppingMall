@@ -49,6 +49,8 @@ public class ProductService {
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final ProductSizeRepository productSizeRepository;
 
+    private final ProductUpdateMapper productUpdateMapper;
+
     // 상품 생성
     @Transactional
     public ProductResponseDto createProduct(
@@ -189,17 +191,23 @@ public class ProductService {
             }
         }
 
-        // toUpdateEntity 호출하여 Product Entity 수정하기
-        new ProductUpdateMapper().toUpdateEntity(product
-                , updateRequestDto
-                , newParentsCategory
-                , newChildCategory
-                , newSubCategory
-                , newMaster
-                , newMainImgUrl, newImageUrls);
+        // 상품 사이즈 넣는곳 
+        if (updateRequestDto.getSizes() != null) {
+            for (ProductSizeResponseDto sizeDto : updateRequestDto.getSizes()) {
+                ProductSize productSize = productSizeRepository.findById(sizeDto.getProductSizeId())
+                        .orElseThrow(() -> new ProductSizeAndCntNotFoundException("해당 사이즈 정보가 존재하지 않습니다."));
 
-        // 수정 된 상품 응답
-        return new ProductUpdateMapper().toUpdateResponseDto(product);
+                productSize.setSize(sizeDto.getSize());
+                productSize.setCnt(sizeDto.getCnt()); // 재고 업데이트
+                productSizeRepository.save(productSize);
+            }
+        }
+
+        // **상품 엔티티 업데이트**
+        productUpdateMapper.toUpdateEntity(product, updateRequestDto, newParentsCategory, newChildCategory, newSubCategory, newMaster, newMainImgUrl, newImageUrls);
+
+        // **수정된 상품 정보 반환**
+        return productUpdateMapper.toUpdateResponseDto(product);
 
     }
 

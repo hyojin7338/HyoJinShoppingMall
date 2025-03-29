@@ -2,10 +2,10 @@
     max-width: 500px;
     margin: 20px auto;
     padding: 20px;
-    background: #f9f9f9;
+    background: #e0e0e0; /* 더 진한 회색 배경 */
     color: #111;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
@@ -15,25 +15,28 @@
     max-width: 400px;
     border-radius: 8px;
     margin: 15px 0;
+    background: #ddd; /* 이미지 배경색 추가 */
 }
 
 /* 제목 스타일 */
 h2 {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
     margin-bottom: 8px;
+    color: #111;
 }
 
 /* 일반 텍스트 */
 p {
     font-size: 14px;
     margin: 4px 0;
-    color: #333;
+    color: #111;
 }
 
 /* 가격 및 판매자 강조 */
 strong {
     font-weight: bold;
+    color: #111;
 }
 
 /* 옵션 선택 영역 */
@@ -47,12 +50,13 @@ strong {
 /* 사이즈 & 수량 선택 */
 .size-dropdown, .quantity-input {
     flex: 1;
-    padding: 8px;
+    padding: 10px;
     font-size: 14px;
-    border: 1px solid #ddd;
+    border: 1px solid #aaa; /* 더 진한 테두리 */
     border-radius: 5px;
-    background: white;
+    background: #f5f5f5; /* 연한 회색 */
     text-align: center;
+    color: black;
 }
 
 /* 버튼 그룹 */
@@ -63,7 +67,7 @@ strong {
 }
 
 /* 버튼 공통 스타일 */
-.buy-button, .cart-button, .wishlist-button {
+.buy-button, .cart-button, .wishlist-button, .question-button {
     flex: 1;
     padding: 12px;
     font-size: 14px;
@@ -72,16 +76,17 @@ strong {
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.2s ease;
+    color: black;
 }
 
 /* 무신사 스타일 버튼 */
 .buy-button {
-    background: black;
+    background: #222;
     color: white;
 }
 
 .buy-button:hover {
-    background: #222;
+    background: black;
 }
 
 .cart-button {
@@ -96,7 +101,7 @@ strong {
 }
 
 .wishlist-button {
-    background: #e0e0e0;
+    background: #bdbdbd; /* 더 진한 회색 */
     color: black;
 }
 
@@ -115,19 +120,9 @@ strong {
     background: darkred;
 }
 
-.size-dropdown, .quantity-input {
-    flex: 1;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: white;
-    text-align: center;
-    color: black; /* 선택한 옵션이 보이도록 글자 색 변경 */
-}
-
+/* 문의하기 버튼 */
 .question-button {
-    background-color: #4CAF50;
+    background-color: #333;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -138,6 +133,5 @@ strong {
 }
 
 .question-button:hover {
-    background-color: #45a049;
+    background-color: black;
 }
-
