@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { MasterContext } from "../../context/MasterContext.jsx";
 import { useNavigate } from "react-router-dom";
+import "../../styles/MasterMain.css"
 
 const MasterMain = () => {
     const { master, logout } = useContext(MasterContext);

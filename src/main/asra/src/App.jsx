@@ -22,6 +22,7 @@ import MyInquiry from "./Components/User/MyInquiry.jsx";
 import AdminByQuestion from "./Components/User/AdminByQuestion.jsx";
 import CreateProduct from "./Components/Master/CreateProduct.jsx";
 import MasterQuestion from "./Components/Master/MasterQuestion.jsx";
+import MasterQuestionDetail from "./Components/Master/MasterQuestionDetail.jsx";
 import {UserContext} from "./context/UserContext"; // 유저 정보 가져오기
 import {MasterContext} from "./context/MasterContext.jsx";
 
@@ -60,6 +61,7 @@ function App() {
                     <Route path="/MasterMain" element={<MasterMain/>}/>
                     <Route path="/CreateProduct" element={<CreateProduct/>}/>
                     <Route path="/MasterQuestion" element={<MasterQuestion/>} />
+                    <Route path="/master/question/:productQuestionId" element={<MasterQuestionDetail />} />
                 </Route>
 
             </Routes>
