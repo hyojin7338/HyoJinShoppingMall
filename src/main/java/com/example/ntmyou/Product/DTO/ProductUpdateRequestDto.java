@@ -12,8 +12,9 @@ public class ProductUpdateRequestDto {
     private String name; // 상품명
     private String contents; // 상품 설명
     private Integer amount; // 가격
-    //private Integer cnt;  // 현 재고
-    //private List<ProductSizeResponseDto> sizes;
+
+
+    private List<ProductSizeResponseDto> sizes;
 
     private Long parentsCategoryId; // 대분류 ID
     private Long childCategoryId;   // 중분류 ID

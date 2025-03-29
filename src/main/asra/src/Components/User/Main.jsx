@@ -175,7 +175,7 @@ const Main = () => {
                         );
                     })
                 ) : (
-                    <p>선택한 카테고리에 맞는 상품이 없습니다.</p>
+                    <p className="product-NotFound">선택한 카테고리에 맞는 상품이 없습니다.</p>
                 )}
 
             </div>

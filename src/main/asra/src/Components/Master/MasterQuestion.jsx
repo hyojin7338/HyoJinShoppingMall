@@ -40,6 +40,7 @@ const MasterQuestion = () => {
     return (
         <div>
             <h2>고객 문의 목록</h2>
+            <button onClick={() => navigate(-1)}>뒤로가기</button>
             {Array.isArray(questions) && questions.length === 0 ? (
                 <p>문의가 없습니다.</p>
             ) : Array.isArray(questions) ? (
