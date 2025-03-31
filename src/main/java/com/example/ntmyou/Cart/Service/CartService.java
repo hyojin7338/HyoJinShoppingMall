@@ -12,7 +12,9 @@ import com.example.ntmyou.Coupon.Enum.DiscountType;
 import com.example.ntmyou.Coupon.Mapper.CouponMapper;
 import com.example.ntmyou.Exception.*;
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.Product.Repository.ProductRepository;
+import com.example.ntmyou.Product.Repository.ProductSizeRepository;
 import com.example.ntmyou.User.Entity.UserCoupon;
 import com.example.ntmyou.User.Repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +30,11 @@ public class CartService {
     private final CartRepository cartRepository;
     private final UserCouponRepository userCouponRepository;
     private final ProductRepository productRepository;
+    private final ProductSizeRepository productSizeRepository;
 
-    // 장바구니에 상품 추가하는 메서드
+    // 장바구니에 상품 추가하는 메서드1
     @Transactional
-    public void addProductToCart(Long cartId, Long productId, int qty) {
+    public void addProductToCart(Long cartId, Long productId, Long productSizeId ,int qty) {
         // 장바구니 조회
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
@@ -39,6 +42,10 @@ public class CartService {
         // 상품 조회
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+
+        // 상품 사이즈 조회
+        ProductSize productSize = productSizeRepository.findById(productSizeId)
+                .orElseThrow(() -> new ProductSizeAndCntNotFoundException("존재하지 않는 사이즈 및 재고입니다."));
 
         // qty 검증 (0 이하이면 예외 발생)
         if (qty <= 0) {
@@ -62,6 +69,7 @@ public class CartService {
             cartItem = CartItem.builder()
                     .cart(cart)
                     .product(product)
+                    .productSize(productSize)
                     .qty(qty)
                     .itemPrice(product.getAmount()) // 상품 가격 저장
                     .discountAmount(0) // 기본 할인은 없음
@@ -147,6 +155,8 @@ public class CartService {
                 .map(item -> new CartItemDto(
                         item.getCartItemId(),
                         item.getProduct().getProductId(),
+                        item.getProductSize().getProductSizeId(),
+                        item.getProductSize().getSize(),
                         item.getProduct().getName(),
                         item.getProduct().getAmount(),
                         item.getQty()

@@ -26,6 +26,7 @@ import MasterQuestionDetail from "./Components/Master/MasterQuestionDetail.jsx";
 import {UserContext} from "./context/UserContext"; // 유저 정보 가져오기
 import {MasterContext} from "./context/MasterContext.jsx";
 import UpdateProduct from "./Components/Master/UpdateProduct.jsx";
+import CartCheckout from "./Components/User/CartCheckout.jsx";
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
                     <Route path="/question/:productId" element={<ProductQuestion/>}/>
                     <Route path="/MyInquiry" element={<MyInquiry/>}/>
                     <Route path="/AdminByQuestion" element={<AdminByQuestion/>}/>
+                    <Route path="/CartCheckout/:cartId" element={<CartCheckout/>} />
                 </Route>
                 {/*쇼핑몰 판매자가 로그인후 접근 가능 */}
                 <Route>

@@ -13,12 +13,13 @@ public class CartController {
     private final CartService cartService;
 
     // 장바구니에 상품 추가 API
-    @PostMapping("/{cartId}/add-product/{productId}")
+    @PostMapping("/{cartId}/add-product/{productId}/{productSizeId}")
     public ResponseEntity<String> addProductToCart(
             @PathVariable Long cartId,
             @PathVariable Long productId,
+            @PathVariable Long productSizeId,
             @RequestParam int qty) {
-        cartService.addProductToCart(cartId, productId, qty);
+        cartService.addProductToCart(cartId, productId, productSizeId ,qty);
         return ResponseEntity.ok("상품이 장바구니에 추가되었습니다.");
     }
 
@@ -62,4 +63,10 @@ public class CartController {
         cartService.checkOut(cartId);
         return ResponseEntity.ok("결제가 완료되었습니다.");
     }
+
+    // 장바구니에서 넘어온 전체 결제 API
+
+    // 장바구니(Cart)페이지에서 넘어온 CartCheckout 페이지 조회
+
+
 }

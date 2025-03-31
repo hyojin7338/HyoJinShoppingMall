@@ -1,6 +1,10 @@
 package com.example.ntmyou.Order.Service;
 
 
+import com.example.ntmyou.Cart.Entity.Cart;
+import com.example.ntmyou.Cart.Repository.CartRepository;
+import com.example.ntmyou.Exception.CartItemEmpty;
+import com.example.ntmyou.Exception.CartNotFoundException;
 import com.example.ntmyou.Exception.CntNotEnoughException;
 import com.example.ntmyou.Exception.UserCodeNotFoundException;
 import com.example.ntmyou.Order.Dto.OrderItemRequestDto;
@@ -35,8 +39,9 @@ public class OrderService {
     private final OrderMapper orderMapper;
 
     private final ProductSizeRepository productSizeRepository;
+    private final CartRepository cartRepository;
 
-    // 구매하기
+    // 상세페이지에서 구매하기
     @Transactional
     public OrderResponseDto createOrder(Long userId, OrderRequestDto requestDto) {
         User user = userRepository.findById(userId)
@@ -74,6 +79,51 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
 
         return orderMapper.toDto(savedOrder);
+
+    }
+
+    // 장바구니에서 전체 구매하기
+    @Transactional
+    public OrderResponseDto createCartOrder(Long userId) {
+        // 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 유저입니다."));
+
+        // 장바구니 조회 // 유저 하나당 하나의 장바구니를 가지기 때문에 user 삽입
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
+
+        // 장바구니 비어있는지 확인
+        if (cart.getCartItems().isEmpty()) {
+            throw new CartItemEmpty("장바구니가 비어있습니다.");
+        }
+
+        // 장바구니에 담긴 CartItems들을 order orderItems로 변환 시작
+        List<OrderItemRequestDto> orderItems = cart.getCartItems().stream()
+                .map(cartItem -> new OrderItemRequestDto(
+                        cartItem.getProduct().getProductId(),
+                        cartItem.getProductSize().getProductSizeId(),
+                        cartItem.getQty(),
+                        cartItem.getItemPrice()
+                ))
+                .collect(Collectors.toList());
+
+        // 주문요청  DTO 생성
+        OrderRequestDto orderRequestDto = new OrderRequestDto();
+        orderRequestDto.setOrderItems(orderItems);
+        orderRequestDto.setShippingFee(cart.getShippingFee());
+
+
+        // 기존 주문 생성 로직 재사용
+        OrderResponseDto orderResponseDto = createOrder(userId, orderRequestDto);
+
+        // 주문 완료 후 장바구니 비우기
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
+
+
+        return orderResponseDto;
+
 
     }
 
