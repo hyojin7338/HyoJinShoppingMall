@@ -14,8 +14,7 @@
 /* 하단 메뉴 버튼 그룹 */
 .footer-nav .button-group {
     display: flex;
-    gap: 15px; /* 버튼 간격 */
-    max-width: 400px; /* 버튼 최대 너비 */
+    gap: 30px; /* 버튼 간격 */
     width: 100%; /* 버튼이 부모 요소를 차지하도록 */
     justify-content: space-between; /* 버튼 간격 균등하게 */
 }

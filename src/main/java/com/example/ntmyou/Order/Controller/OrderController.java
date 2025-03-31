@@ -16,11 +16,19 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
 
+    // 단일 상품 결제
     @PostMapping("/order/{userId}")
     public ResponseEntity<OrderResponseDto> createOrder(
             @PathVariable Long userId,
             @RequestBody OrderRequestDto requestDto) {
         OrderResponseDto orderResponseDto = orderService.createOrder(userId, requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
+    }
+
+    // 장바구니에서 상품 결제
+    @PostMapping("/order/cart/{userId}")
+    public ResponseEntity<OrderResponseDto> createOrderFromCart(@PathVariable Long userId) {
+        OrderResponseDto orderResponseDto = orderService.createCartOrder(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
     }
 

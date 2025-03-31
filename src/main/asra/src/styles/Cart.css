@@ -17,6 +17,16 @@
     color: #333;
 }
 
+.cart-summary{
+    background-color: #fff;
+}
+
+.available-coupon{
+    background-color: #fff;
+}
+
+
+
 /* 장바구니 리스트 */
 .cart-list {
     display: flex;
@@ -24,6 +34,7 @@
     gap: 15px;
     margin-bottom: 20px;
 }
+
 
 /* 개별 상품 항목 */
 .cart-item {
@@ -36,7 +47,7 @@
     border: 1px solid #ddd;
 }
 
-/* 🛍️ 상품 이름 */
+/*  상품 이름 */
 .cart-item h3 {
     font-size: 18px;
     font-weight: bold;

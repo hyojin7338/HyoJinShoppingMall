@@ -1,6 +1,7 @@
 package com.example.ntmyou.Cart.Entity;
 
 import com.example.ntmyou.Product.Entity.Product;
+import com.example.ntmyou.Product.Entity.ProductSize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,10 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;  // 어떤 상품인지
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productSize_id", nullable = false)
+    private ProductSize productSize; // 특정 사이즈 선택 가능하도록 변경 // 2025-03-30 추가
 
     @Column(nullable = false)
     private Integer qty;  // 상품 개수

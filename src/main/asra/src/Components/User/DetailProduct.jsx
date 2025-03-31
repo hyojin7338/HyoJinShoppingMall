@@ -4,6 +4,7 @@ import {UserContext} from "../../context/UserContext.jsx";
 import axios from "axios";
 import "../../styles/DetailProduct.css"
 
+
 const DetailProduct = () => {
     const {user} = useContext(UserContext);
     const {productId} = useParams(); //  URL에서 productId 가져오기
@@ -66,7 +67,7 @@ const DetailProduct = () => {
 
         if (selectedProductSize) {
             console.log(" 선택된 productSize 객체:", selectedProductSize);
-            setSelectedProductSizeId(selectedProductSize.id);
+            setSelectedProductSizeId(selectedProductSize.productSizeId);
         } else {
             console.log(" 일치하는 사이즈 없음 - productSizeId 못 찾음");
         }
@@ -115,10 +116,14 @@ const DetailProduct = () => {
             alert("장바구니가 없습니다.");
             return;
         }
+        if (!selectedProductSizeId) {
+            alert("상품 사이즈가 올바르게 선택되지 않았습니다.");
+            return;
+        }
 
         try {
             const response = await axios.post(
-                `http://localhost:8080/${cartId}/add-product/${productId}?qty=${quantity}`
+                `http://localhost:8080/${cartId}/add-product/${productId}/${selectedProductSizeId}?qty=${quantity}`
             );
 
             console.log("장바구니 추가 성공:", response.data);
@@ -194,6 +199,7 @@ const DetailProduct = () => {
 
     return (
         <div className="detail-container">
+            <button onClick={() => navigate("/Main")} className="btn">뒤로 가기</button>
             <h2>{product.name}</h2>
             <img src={product.mainImgUrl} alt={product.name} className="detail-image"/>
             <p>{product.contents}</p>
@@ -233,7 +239,6 @@ const DetailProduct = () => {
 
                 <button className="question-button" onClick={handleAskQuestion}>제품 문의하기</button>
             </div>
-            <FooterNav/>
         </div>
     );
 };
