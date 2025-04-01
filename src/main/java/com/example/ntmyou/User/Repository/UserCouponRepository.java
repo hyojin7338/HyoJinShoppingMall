@@ -6,8 +6,9 @@ import com.example.ntmyou.User.Entity.User;
 import com.example.ntmyou.User.Entity.UserCoupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.Optional;
 
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
@@ -17,4 +18,6 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 
     //특정 유저가 보유한 사용 가능한 쿠폰 조회
     List<UserCoupon> findByUser_UserIdAndIsUsedFalse(Long userId);
+
+    Optional findByUser(User user);
 }

@@ -25,13 +25,25 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
     }
 
-    // 장바구니에서 상품 결제
+    // 장바구니에 담은 상품 전체 결제
     @PostMapping("/order/cart/{userId}")
     public ResponseEntity<OrderResponseDto> createOrderFromCart(@PathVariable Long userId) {
         OrderResponseDto orderResponseDto = orderService.createCartOrder(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
     }
 
+    // 장바구니에 담은 체크된 상품만 결제
+    @PostMapping("/order/cart/{userId}/selected")
+    public ResponseEntity<OrderResponseDto> createOrderFromSelectedCartItems(
+            @PathVariable Long userId,
+            @RequestBody List<Long> selectedCartItemIds) {
+
+        OrderResponseDto orderResponseDto = orderService.createCartSelectOrder(userId, selectedCartItemIds);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
+    }
+
+
+    // 내가 구매한 목록 조회
     @GetMapping("/order/getOrderByUser/{userId}")
     public ResponseEntity<List<OrderResponseDto>> getUserOrders(@PathVariable Long userId) {
         List<OrderResponseDto> orders = orderService.getOrderByUser(userId);
