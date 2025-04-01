@@ -1,5 +1,7 @@
 package com.example.ntmyou.Cart.Service;
 
+import com.example.ntmyou.Cart.DTO.CartCheckoutResponseDto;
+import com.example.ntmyou.Cart.DTO.CartItemCheckDto;
 import com.example.ntmyou.Cart.DTO.CartItemDto;
 import com.example.ntmyou.Cart.DTO.CartResponseDto;
 import com.example.ntmyou.Cart.Entity.Cart;
@@ -10,17 +12,21 @@ import com.example.ntmyou.Coupon.Entity.Coupon;
 import com.example.ntmyou.Coupon.Enum.CouponIssuer;
 import com.example.ntmyou.Coupon.Enum.DiscountType;
 import com.example.ntmyou.Coupon.Mapper.CouponMapper;
+import com.example.ntmyou.Coupon.Repository.CouponRepository;
 import com.example.ntmyou.Exception.*;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 import com.example.ntmyou.Product.Repository.ProductSizeRepository;
+import com.example.ntmyou.User.Entity.User;
 import com.example.ntmyou.User.Entity.UserCoupon;
 import com.example.ntmyou.User.Repository.UserCouponRepository;
+import com.example.ntmyou.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +37,8 @@ public class CartService {
     private final UserCouponRepository userCouponRepository;
     private final ProductRepository productRepository;
     private final ProductSizeRepository productSizeRepository;
+    private final UserRepository userRepository;
+    private final CouponRepository couponRepository;
 
     // 장바구니에 상품 추가하는 메서드1
     @Transactional
@@ -275,4 +283,6 @@ public class CartService {
         cart.setIsCheckedOut(true);
         cartRepository.save(cart);
     }
+
+
 }

@@ -57,7 +57,7 @@ function App() {
                     <Route path="/question/:productId" element={<ProductQuestion/>}/>
                     <Route path="/MyInquiry" element={<MyInquiry/>}/>
                     <Route path="/AdminByQuestion" element={<AdminByQuestion/>}/>
-                    <Route path="/CartCheckout/:cartId" element={<CartCheckout/>} />
+                    <Route path="/CartCheckout" element={<CartCheckout/>} />
                 </Route>
                 {/*쇼핑몰 판매자가 로그인후 접근 가능 */}
                 <Route>

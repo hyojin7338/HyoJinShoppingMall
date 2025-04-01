@@ -1,8 +1,10 @@
 package com.example.ntmyou.Cart.Controller;
 
+import com.example.ntmyou.Cart.DTO.CartCheckoutResponseDto;
 import com.example.ntmyou.Cart.DTO.CartResponseDto;
 import com.example.ntmyou.Cart.Service.CartService;
 
+import com.example.ntmyou.Coupon.Service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
+
+    private final CouponService couponService;
 
     // 장바구니에 상품 추가 API
     @PostMapping("/{cartId}/add-product/{productId}/{productSizeId}")
@@ -64,9 +68,11 @@ public class CartController {
         return ResponseEntity.ok("결제가 완료되었습니다.");
     }
 
-    // 장바구니에서 넘어온 전체 결제 API
-
-    // 장바구니(Cart)페이지에서 넘어온 CartCheckout 페이지 조회
-
+    // Cart 페이지에서 CartCheckout페이지로 넘어온 데이터 조회
+    @GetMapping("/cart/checkout/{userId}")
+    public ResponseEntity<CartCheckoutResponseDto> getCartCheckoutData(@PathVariable Long userId) {
+        CartCheckoutResponseDto checkoutData = couponService.getCartCheckoutData(userId);
+        return ResponseEntity.ok(checkoutData);
+    }
 
 }

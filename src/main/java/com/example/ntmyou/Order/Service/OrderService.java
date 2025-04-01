@@ -2,11 +2,9 @@ package com.example.ntmyou.Order.Service;
 
 
 import com.example.ntmyou.Cart.Entity.Cart;
+import com.example.ntmyou.Cart.Entity.CartItem;
 import com.example.ntmyou.Cart.Repository.CartRepository;
-import com.example.ntmyou.Exception.CartItemEmpty;
-import com.example.ntmyou.Exception.CartNotFoundException;
-import com.example.ntmyou.Exception.CntNotEnoughException;
-import com.example.ntmyou.Exception.UserCodeNotFoundException;
+import com.example.ntmyou.Exception.*;
 import com.example.ntmyou.Order.Dto.OrderItemRequestDto;
 import com.example.ntmyou.Order.Dto.OrderRequestDto;
 import com.example.ntmyou.Order.Dto.OrderResponseDto;
@@ -125,6 +123,51 @@ public class OrderService {
         return orderResponseDto;
 
 
+    }
+
+    // 장바구니에서 부분 구매하기
+    @Transactional
+    public OrderResponseDto createCartSelectOrder(Long userId, List<Long> selectCartItemIds) {
+        // 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 유저입니다."));
+
+        // 유저는 하나의 장바구니만 가지고 있다.
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
+
+        // 사용자가 선택한 CartItem만 필터링 됨
+        List<CartItem> selectedCartItems = cart.getCartItems().stream()
+                .filter(cartItem  -> selectCartItemIds.contains(cartItem.getCartItemId()))
+                .collect(Collectors.toList());
+
+        // 선택 된 상품이 없을 때
+        if (selectedCartItems.isEmpty()) {
+            throw new SelectedCartItemsNotFoundException("선택된 상품이 없습니다.");
+        }
+
+        // 장바구니에 담긴 CartItems들을 order orderItems로 변환 시작
+        List<OrderItemRequestDto> orderItems = selectedCartItems.stream()
+                .map(cartItem -> new OrderItemRequestDto(
+                        cartItem.getProduct().getProductId(),
+                        cartItem.getProductSize().getProductSizeId(),
+                        cartItem.getQty(),
+                        cartItem.getItemPrice()
+                ))
+                .collect(Collectors.toList());
+
+        // 주문요청  DTO 생성
+        OrderRequestDto orderRequestDto = new OrderRequestDto();
+        orderRequestDto.setOrderItems(orderItems);
+        orderRequestDto.setShippingFee(cart.getShippingFee());
+
+        OrderResponseDto orderResponseDto = createOrder(userId, orderRequestDto);
+
+        // 주문 완료된 상품만 장바구니에서 삭제
+        cart.getCartItems().removeAll(selectedCartItems);
+        cartRepository.save(cart);
+
+        return orderResponseDto;
     }
 
     // 특정 유저가 구매한 모든 품목 (사이즈, 개수)까지 나와야 함
