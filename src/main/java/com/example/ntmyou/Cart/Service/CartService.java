@@ -237,7 +237,6 @@ public class CartService {
             throw new UserCouponAlreadyUsed("이미 사용한 쿠폰입니다.");
         }
 
-
         //  userCouponId와 userCoupon.getUserCouponId()가 일치하지 않는지 확인
         if (!userCoupon.getUserCouponId().equals(userCouponId)) {
             throw new IllegalStateException("🚨 요청된 userCouponId와 조회된 UserCoupon ID가 다릅니다! DB 확인 필요");
@@ -283,6 +282,5 @@ public class CartService {
         cart.setIsCheckedOut(true);
         cartRepository.save(cart);
     }
-
 
 }
