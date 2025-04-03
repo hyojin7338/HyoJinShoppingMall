@@ -129,6 +129,7 @@ public class CouponService {
         List<CartItemCheckDto> cartItems = cart.getCartItems().stream()
                 .map(cartItem -> new CartItemCheckDto(
                         cartItem.getCartItemId(),
+                        cartItem.getProduct().getProductId(),
                         cartItem.getProduct().getName(),
                         cartItem.getProductSize().getSize(),
                         cartItem.getQty(),

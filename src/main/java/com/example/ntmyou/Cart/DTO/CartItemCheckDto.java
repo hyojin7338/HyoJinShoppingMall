@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CartItemCheckDto {
     private Long cartItemId;
+    private Long productId;
     private String productName;
     private String size;
     private int qty;
