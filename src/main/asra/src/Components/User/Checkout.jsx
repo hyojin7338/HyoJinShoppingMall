@@ -10,9 +10,9 @@ const Checkout = () => {
     const [product, setProduct] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+
     const { state } = location;
 
-    console.log("Checkout state:", state);
 
 
     const { selectedAddress } = location.state || {};
@@ -154,6 +154,10 @@ const Checkout = () => {
     return (
         <div className="checkout-container">
             <h2>주문 확인</h2>
+
+            <div>
+                <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
+            </div>
 
             {/* 유저 정보 */}
             <div className="checkout-card">
