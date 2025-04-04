@@ -149,6 +149,13 @@ public class CouponService {
         int shippingFee = (totalPrice >= 100000) ? 0 : 3000;
 
         CartCheckoutResponseDto responseDto = new CartCheckoutResponseDto();
+        // 유저정보 추가 //2025-04-04
+        responseDto.setUserId(user.getUserId());
+        responseDto.setName(user.getName());
+        responseDto.setTel(user.getTel());
+        responseDto.setAddress(user.getAddress());
+        responseDto.setRegion(user.getRegion());
+
         responseDto.setCartId(cart.getCartId());
         responseDto.setCartItems(cartItems);
         responseDto.setTotalPrice(totalPrice);

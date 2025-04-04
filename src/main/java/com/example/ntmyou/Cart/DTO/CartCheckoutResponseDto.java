@@ -9,6 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 public class CartCheckoutResponseDto {
+    // 유저정보 // 2025-04-04
+    private Long userId;
+    private String name;
+    private String tel;
+    private String address;
+    private String region;
+
+    // Cart 정보
     private Long cartId;
     private List<CartItemCheckDto> cartItems; // 장바구니에 담긴 상품 목록
     private int totalPrice; // 상품총가격

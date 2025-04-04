@@ -71,10 +71,6 @@ public class ProductController {
     @PutMapping("/master/productSizeDecrease/{productSizeId}")
     public ResponseEntity<ProductAdjustCntResponseDto> decreaseProductSize(@PathVariable Long productSizeId,
                                                                       @RequestBody ProductAdjustCntRequestDto requestDto) {
-
-        System.out.println("💬 [컨트롤러] 받은 requestDto: " + requestDto);
-        System.out.println("💬 [컨트롤러] 받은 adjustCnt: " + requestDto.getAdjustCnt());
-
         ProductAdjustCntResponseDto responseDto = productService.decreaseProductSizeCnt(productSizeId, requestDto);
         return ResponseEntity.ok(responseDto);
     }
