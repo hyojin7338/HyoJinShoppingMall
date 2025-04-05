@@ -11,7 +11,7 @@ const CartCheckout = () => {
     const navigate = useNavigate();
     const selectedProducts = location.state?.selectedProducts || [];
 
-    const { selectedAddress } = location.state || {};
+    const { selectedAddress, productId, quantity } = state || {};
 
     const [checkoutData, setCheckoutData] = useState(null);
     const [availableCoupons, setAvailableCoupons] = useState([]);
@@ -28,9 +28,6 @@ const CartCheckout = () => {
 
         const addressId = state?.selectedAddress?.addressId || state?.newAddressId;
 
-        // console.log("1. AddressID 유무 : ", addressId)
-
-        // 배송지 선택한 경우, 해당 배송지 정보 별도 조회
         if (addressId) {
             axios.get(`http://localhost:8080/address/detail/${addressId}`)
                 .then(res => {
@@ -50,22 +47,35 @@ const CartCheckout = () => {
                 });
         }
 
-        const fetchCartData = async () => {
-            try {
-                const cartResponse = await axios.get(`http://localhost:8080/cart/checkout/${user.userId}`);
-                console.log("장바구니 결제 정보:", cartResponse.data);
-                setCheckoutData(cartResponse.data);
-
-                const couponResponse = await axios.get(`http://localhost:8080/coupons/${user.userId}`);
-                console.log("사용 가능한 쿠폰:", couponResponse.data);
-                setAvailableCoupons(couponResponse.data);
-            } catch (error) {
-                console.error("데이터 불러오기 실패:", error);
-            }
-        };
-
         fetchCartData();
-    }, [user, state?.newAddressId]);
+    }, [user, productId, quantity, state?.newAddressId]);
+
+
+    const fetchCartData = async () => {
+        try {
+            let response;
+
+            if (selectedProducts.length > 0) {
+                // ✅ 선택된 상품만 POST로 요청
+                const selectedIds = selectedProducts.map(item => item.cartItemId);
+
+                response = await axios.post(
+                    `http://localhost:8080/cart/checkout/selected?userId=${user.userId}`,
+                    selectedIds
+                );
+            }
+
+            console.log("✅ 결제 정보:", response.data);
+            setCheckoutData(response.data);
+
+            // 쿠폰 정보 가져오기 (유지)
+            const couponResponse = await axios.get(`http://localhost:8080/coupons/${user.userId}`);
+            console.log("✅ 사용 가능한 쿠폰:", couponResponse.data);
+            setAvailableCoupons(couponResponse.data);
+        } catch (error) {
+            console.error("❌ 데이터 불러오기 실패:", error);
+        }
+    };
 
 
     // 선택한 배송지가 있으면 checkoutData 업데이트
@@ -85,22 +95,22 @@ const CartCheckout = () => {
     // 쿠폰 적용 핸들러
     const handleSelectCoupon = (event) => {
         const couponId = event.target.value ? Number(event.target.value) : null;
-        setSelectedCoupon(couponId);
+        setSelectedCouponId(couponId);
 
-        // 선택한 쿠폰이 있다면 할인 금액 계산
-        if (checkoutData && checkoutData.availableCoupons) {
-            const coupon = checkoutData.availableCoupons.find(c => c.userCouponId === couponId);
-            if (coupon) {
+        if (checkoutData?.availableCoupons) {
+            const selectedCoupon = checkoutData.availableCoupons.find(c => c.userCouponId === couponId);
+            if (selectedCoupon) {
                 setDiscountAmount(
-                    coupon.discountType === "PERCENT"
-                        ? (checkoutData.amount * coupon.discountValue) / 100
-                        : coupon.discountValue
+                    selectedCoupon.discountType === "PERCENT"
+                        ? (checkoutData.totalPrice * selectedCoupon.discountValue) / 100
+                        : selectedCoupon.discountValue
                 );
             } else {
                 setDiscountAmount(0);
             }
         }
     };
+
 
     // 쿠폰 적용
     const handleApplyCoupon = async () => {
@@ -187,11 +197,10 @@ const CartCheckout = () => {
 
     return (
         <div className="checkout-container">
+            <h2>결제 페이지</h2>
             <div>
                 <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
             </div>
-            <h2>결제 페이지</h2>
-
             {/* 유저 정보 */}
             <div className="checkout-card">
                 <h3>배송 정보</h3>
