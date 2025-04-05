@@ -62,6 +62,9 @@ const ChangeAddress = () => {
     return (
         <div className="change-address-container">
             <h2>배송지 변경 리스트</h2>
+            <div>
+                <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
+            </div>
             <ul className="address-list">
                 {addresses.map(address => (
                     <li

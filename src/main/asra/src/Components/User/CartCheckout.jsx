@@ -51,29 +51,31 @@ const CartCheckout = () => {
     }, [user, productId, quantity, state?.newAddressId]);
 
 
-        const fetchCartData = async () => {
-            try {
-                let response;
+    const fetchCartData = async () => {
+        try {
+            let response;
 
-                if (selectedProducts.length > 0) {
-                    // 장바구니에서 결제하는 경우
-                    response = await axios.get(`http://localhost:8080/cart/checkout/${user.userId}`);
-                } else {
-                    // 개별 상품 구매하는 경우
-                    response = await axios.get(`http://localhost:8080/product/${user.userId}/${productId}/${quantity}`);
-                }
+            if (selectedProducts.length > 0) {
+                // ✅ 선택된 상품만 POST로 요청
+                const selectedIds = selectedProducts.map(item => item.cartItemId);
 
-                console.log("✅ 결제 정보:", response.data);
-                setCheckoutData(response.data);
-
-                // 사용 가능한 쿠폰 조회
-                const couponResponse = await axios.get(`http://localhost:8080/coupons/${user.userId}`);
-                console.log("✅ 사용 가능한 쿠폰:", couponResponse.data);
-                setAvailableCoupons(couponResponse.data);
-            } catch (error) {
-                console.error("❌ 데이터 불러오기 실패:", error);
+                response = await axios.post(
+                    `http://localhost:8080/cart/checkout/selected?userId=${user.userId}`,
+                    selectedIds
+                );
             }
-        };
+
+            console.log("✅ 결제 정보:", response.data);
+            setCheckoutData(response.data);
+
+            // 쿠폰 정보 가져오기 (유지)
+            const couponResponse = await axios.get(`http://localhost:8080/coupons/${user.userId}`);
+            console.log("✅ 사용 가능한 쿠폰:", couponResponse.data);
+            setAvailableCoupons(couponResponse.data);
+        } catch (error) {
+            console.error("❌ 데이터 불러오기 실패:", error);
+        }
+    };
 
 
     // 선택한 배송지가 있으면 checkoutData 업데이트
@@ -195,11 +197,10 @@ const CartCheckout = () => {
 
     return (
         <div className="checkout-container">
+            <h2>결제 페이지</h2>
             <div>
                 <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
             </div>
-            <h2>결제 페이지</h2>
-
             {/* 유저 정보 */}
             <div className="checkout-card">
                 <h3>배송 정보</h3>

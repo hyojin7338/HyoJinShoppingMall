@@ -93,10 +93,10 @@ const Cart = () => {
 
     return (
         <div className="cart-container">
+            <h2>장바구니</h2>
             <div>
                 <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
             </div>
-            <h2>장바구니</h2>
 
             {/* 전체 선택 체크박스 */}
             <div className="select-all-container">

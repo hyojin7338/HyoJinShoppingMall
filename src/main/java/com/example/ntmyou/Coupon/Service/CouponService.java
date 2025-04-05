@@ -3,6 +3,7 @@ package com.example.ntmyou.Coupon.Service;
 import com.example.ntmyou.Cart.DTO.CartCheckoutResponseDto;
 import com.example.ntmyou.Cart.DTO.CartItemCheckDto;
 import com.example.ntmyou.Cart.Entity.Cart;
+import com.example.ntmyou.Cart.Entity.CartItem;
 import com.example.ntmyou.Cart.Repository.CartRepository;
 import com.example.ntmyou.Coupon.Entity.Coupon;
 import com.example.ntmyou.Coupon.DTO.CouponRequestDto;
@@ -110,23 +111,24 @@ public class CouponService {
 
 
     // Cart 페이지에서 CartCheckout페이지로 넘어온 데이터 조회
-    @Transactional(readOnly = true)
-    public CartCheckoutResponseDto getCartCheckoutData(Long userId) {
-        //  유저 조회
+    @Transactional
+    public CartCheckoutResponseDto getSelectedCartCheckoutData(Long userId, List<Long> selectedCartItemIds) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 유저입니다."));
 
-        // 장바구니 조회
         Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(() -> new CartNotFoundException("존재하지 않는 장바구니입니다."));
+                .orElseThrow(() -> new CartNotFoundException("장바구니가 없습니다."));
 
-        // 장바구니가 비어 있는지 체크하기
-        if (cart.getCartItems().isEmpty()) {
-            throw new CartItemEmpty("장바구니가 비어있습니다.");
+        // 선택된 CartItem만 필터링
+        List<CartItem> selectedItems = cart.getCartItems().stream()
+                .filter(item -> selectedCartItemIds.contains(item.getCartItemId()))
+                .collect(Collectors.toList());
+
+        if (selectedItems.isEmpty()) {
+            throw new CartItemEmpty("선택한 장바구니 항목이 없습니다.");
         }
 
-        // 장바구니 상품 목록 조회
-        List<CartItemCheckDto> cartItems = cart.getCartItems().stream()
+        List<CartItemCheckDto> cartItems = selectedItems.stream()
                 .map(cartItem -> new CartItemCheckDto(
                         cartItem.getCartItemId(),
                         cartItem.getProduct().getProductId(),
@@ -137,35 +139,30 @@ public class CouponService {
                 ))
                 .collect(Collectors.toList());
 
-        // 사용 가능한 쿠폰 조회 (기존 서비스 메서드 활용)
-        List<CouponResponseDto> availableCoupons = getAvailableCoupons(userId);
-
-        // 장바구니 총 가격 계산 (상품 가격 * 수량 합산)
-        int totalPrice = cart.getCartItems().stream()
-                .mapToInt(cartItem -> cartItem.getItemPrice() * cartItem.getQty())
+        int totalPrice = selectedItems.stream()
+                .mapToInt(item -> item.getItemPrice() * item.getQty())
                 .sum();
 
-        // 할인전 가격 기준으로 10만원 이상이면 배송비 무료 적용
         int shippingFee = (totalPrice >= 100000) ? 0 : 3000;
 
-        CartCheckoutResponseDto responseDto = new CartCheckoutResponseDto();
-        // 유저정보 추가 //2025-04-04
-        responseDto.setUserId(user.getUserId());
-        responseDto.setName(user.getName());
-        responseDto.setTel(user.getTel());
-        responseDto.setAddress(user.getAddress());
-        responseDto.setRegion(user.getRegion());
+        List<CouponResponseDto> availableCoupons = getAvailableCoupons(userId);
 
-        responseDto.setCartId(cart.getCartId());
-        responseDto.setCartItems(cartItems);
-        responseDto.setTotalPrice(totalPrice);
-        responseDto.setShippingFee(shippingFee);
-        responseDto.setDiscountAmount(0); // 기본적으로 쿠폰 미적용 상태
-        responseDto.setFinalPrice(totalPrice + shippingFee);
-        responseDto.setAvailableCoupons(availableCoupons);
+        CartCheckoutResponseDto dto = new CartCheckoutResponseDto();
+        dto.setUserId(user.getUserId());
+        dto.setName(user.getName());
+        dto.setTel(user.getTel());
+        dto.setAddress(user.getAddress());
+        dto.setRegion(user.getRegion());
+        dto.setCartId(cart.getCartId());
+        dto.setCartItems(cartItems);
+        dto.setTotalPrice(totalPrice);
+        dto.setShippingFee(shippingFee);
+        dto.setDiscountAmount(0);
+        dto.setFinalPrice(totalPrice + shippingFee);
+        dto.setAvailableCoupons(availableCoupons);
 
-        return responseDto;
-
+        return dto;
     }
+
 
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class CartController {
@@ -68,11 +70,24 @@ public class CartController {
         return ResponseEntity.ok("결제가 완료되었습니다.");
     }
 
-    // Cart 페이지에서 CartCheckout페이지로 넘어온 데이터 조회
-    @GetMapping("/cart/checkout/{userId}")
-    public ResponseEntity<CartCheckoutResponseDto> getCartCheckoutData(@PathVariable Long userId) {
-        CartCheckoutResponseDto checkoutData = couponService.getCartCheckoutData(userId);
+    // Cart 페이지에서 CartCheckout페이지로 넘어온 데이터 조회 -> 전체조회가 되버리네
+//    @GetMapping("/cart/checkout/{userId}")
+//    public ResponseEntity<CartCheckoutResponseDto> getCartCheckoutData(@PathVariable Long userId) {
+//        CartCheckoutResponseDto checkoutData = couponService.getCartCheckoutData(userId);
+//        return ResponseEntity.ok(checkoutData);
+//    }
+
+    // 장바구니에서 선택 된 상품만 결제페이지에서 조회가 가능하게 수정
+    // GET방식에서 POST방식으로 요청방식 변경 함 //2025-04-05
+    @PostMapping("/cart/checkout/selected")
+    public ResponseEntity<CartCheckoutResponseDto> getSelectedCartCheckoutData(
+            @RequestBody List<Long> selectedCartItemIds,
+            @RequestParam Long userId
+    ) {
+        CartCheckoutResponseDto checkoutData = couponService.getSelectedCartCheckoutData(userId, selectedCartItemIds);
         return ResponseEntity.ok(checkoutData);
     }
+
+
 
 }

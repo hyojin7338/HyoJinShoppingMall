@@ -24,7 +24,7 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 유저 장바구니?
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart",  fetch = FetchType.LAZY ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>(); // 여러 개의 상품을 담을 수 있음
 
     @Column(nullable = false)

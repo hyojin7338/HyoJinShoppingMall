@@ -93,6 +93,9 @@ const AddAddress = () => {
     return (
         <div className="add-address-container">
             <h2>배송지 추가</h2>
+            <div>
+                <button onClick={() => navigate(-1)} className="back-button">← 뒤로가기</button>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>수령인</label>
