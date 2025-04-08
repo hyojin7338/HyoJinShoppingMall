@@ -92,8 +92,17 @@ const CartCheckout = () => {
     }, [selectedAddress]);
 
     // 쿠폰 적용 핸들러
-    const handleSelectCoupon = (event) => {
-        const couponId = event.target.value ? Number(event.target.value) : null;
+    const handleSelectCoupon = async (event) => {
+        const value = event.target.value;
+
+        // "쿠폰 사용 안 함" 선택 시
+        if (value === "none") {
+            await handleRemoveCoupon(); // 쿠폰 취소 처리
+            setSelectedCouponId(null);
+            return;
+        }
+
+        const couponId = value ? Number(value) : null;
         setSelectedCouponId(couponId);
 
         if (availableCoupons && couponId) {
@@ -109,31 +118,6 @@ const CartCheckout = () => {
         }
     };
 
-
-    // 쿠폰 적용
-    const handleApplyCoupon = async () => {
-        if (!checkoutData || !selectedCouponId || isNaN(Number(selectedCouponId))) {
-            alert("쿠폰을 선택해주세요.");
-            return;
-        }
-
-        try {
-            const cartItemIds = selectedProducts?.map(item => item.cartItemId) || [];
-
-            const updatedCheckoutData = await axios.post(
-                `http://localhost:8080/order/cart/${user.userId}/selected`,
-                 cartItemIds
-            );
-
-            console.log("✅ 쿠폰 적용 후 데이터:", updatedCheckoutData.data);
-            setCheckoutData(updatedCheckoutData.data);
-            setDiscountAmount(updatedCheckoutData.data.discountAmount || 0);
-        } catch (error) {
-            console.error("❌ 쿠폰 적용 실패:", error.response?.data || error);
-            alert(error.response?.data || "쿠폰 적용 실패");
-        }
-    };
-
     // 쿠폰 취소
     const handleRemoveCoupon = async () => {
         if (!checkoutData) return;
@@ -142,15 +126,6 @@ const CartCheckout = () => {
             await axios.delete(`http://localhost:8080/cart/${checkoutData.cartId}/remove-coupon`);
             alert("쿠폰이 취소되었습니다!");
 
-            // 최신 결제 정보 가져오기
-            const updatedCheckoutData = await axios.post(
-                `http://localhost:8080/order/cart/${user.userId}/selected`,
-                selectedProducts.map(item => item.cartItemId)
-            );
-
-            console.log("✅ 쿠폰 적용 후 데이터:", updatedCheckoutData.data);
-
-            setCheckoutData(updatedCheckoutData.data);
             setDiscountAmount(0); // 할인 금액 초기화
             setSelectedCouponId(null);
         } catch (error) {
@@ -169,7 +144,7 @@ const CartCheckout = () => {
     const handlePayment = async () => {
         try {
             const { data } = await axios.post(
-                `http://localhost:8080/order/cart/${user.userId}`,
+                `http://localhost:8080/order/cart/${user.userId}/selected`,
                 selectedProducts.map(item => item.cartItemId)
             );
 
@@ -254,6 +229,7 @@ const CartCheckout = () => {
                 <h3>쿠폰 적용</h3>
                 <select value={selectedCouponId || ""} onChange={handleSelectCoupon}>
                     <option value="">쿠폰 선택</option>
+                    <option value="none">쿠폰 사용 안 함</option>
                     {availableCoupons
                         .filter(coupon => coupon.userCouponId !== null) // null 값 제거
                         .map((coupon, index) => (

@@ -11,6 +11,7 @@ import com.example.ntmyou.Order.Enum.OrderStatus;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.User.Entity.User;
+import com.example.ntmyou.User.Entity.UserCoupon;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class OrderMapper {
     // Order request -> entity
-    public Order toEntity(OrderRequestDto dto, User user) {
+    public Order toEntity(OrderRequestDto dto, User user, UserCoupon userCoupon) {
         return Order.builder()
                 .user(user)
                 .shippingFee(dto.getShippingFee())
@@ -29,6 +30,7 @@ public class OrderMapper {
                 .totalPrice(0) // 초기값 설정
                 .orderStatus(OrderStatus.ORDERED) // 명확하게 설정
                 .orderDate(LocalDateTime.now()) // 주문 날짜 설정
+                .appliedCoupon(userCoupon) // 쿠폰
                 .build();
     }
 
@@ -44,6 +46,9 @@ public class OrderMapper {
                 .orderItems(order.getOrderItems().stream()
                         .map(this::toDto)
                         .collect(Collectors.toList()))
+                .userCouponName(
+                        order.getAppliedCoupon() != null ? order.getAppliedCoupon().getCoupon().getName() : null
+                )
                 .build();
     }
 

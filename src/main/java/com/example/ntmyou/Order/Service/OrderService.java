@@ -17,9 +17,14 @@ import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 import com.example.ntmyou.Product.Repository.ProductSizeRepository;
+import com.example.ntmyou.Product.Service.ProductService;
 import com.example.ntmyou.User.Entity.User;
+import com.example.ntmyou.User.Entity.UserCoupon;
+import com.example.ntmyou.User.Repository.UserCouponRepository;
 import com.example.ntmyou.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +43,10 @@ public class OrderService {
 
     private final ProductSizeRepository productSizeRepository;
     private final CartRepository cartRepository;
+    private final UserCouponRepository userCouponRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
 
     // 상세페이지에서 구매하기
     @Transactional
@@ -45,8 +54,23 @@ public class OrderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 코드입니다,"));
 
+        // 쿠폰을 사용하지 않을 수 있으니까 // 단일 결제건도 쿠폰 사용 추가  // 쿠폰 사용 처리 // 2025-04-08
+        UserCoupon userCoupon = null;
+        if (requestDto.getUserCouponId() != null) {
+            userCoupon = userCouponRepository.findById(requestDto.getUserCouponId())
+                    .orElseThrow(() -> new UserCouponNotFoundException("쿠폰을 찾을 수 없습니다."));
+
+            if (!userCoupon.getUser().getUserId().equals(userId)) {
+                throw new IllegalArgumentException("해당 쿠폰은 사용자의 쿠폰이 아닙니다.");
+            }
+
+            if (userCoupon.getIsUsed()) {
+                throw new IllegalArgumentException("이미 사용한 쿠폰입니다.");
+            }
+        }
+
         // 새로운 주문 생성
-        Order order = orderMapper.toEntity(requestDto, user);
+        Order order = orderMapper.toEntity(requestDto, user, userCoupon);
 
         int totalOrderPrice = 0;
 
@@ -75,6 +99,13 @@ public class OrderService {
         // 총 가격 및 주문 저장
         order.setTotalPrice(totalOrderPrice + requestDto.getShippingFee());
         Order savedOrder = orderRepository.save(order);
+
+
+        // 쿠폰 사용 처리 // 2025-04-08
+        if (userCoupon != null) {
+            userCoupon.useCoupon();
+            userCouponRepository.save(userCoupon);
+        }
 
         return orderMapper.toDto(savedOrder);
 
@@ -125,9 +156,12 @@ public class OrderService {
 
     }
 
-    // 장바구니에서 부분 구매하기
+    // 장바구니에서 부분 구매하기 // 쿠폰 적용하게 되면 사용한 쿠폰은 True로 처리 됨
+    // Cart 엔티티에서 userCouponId가 지속적으로 변경이 되어야한다
     @Transactional
-    public OrderResponseDto createCartSelectOrder(Long userId, List<Long> selectCartItemIds) {
+    public OrderResponseDto createCartSelectOrder(Long userId
+            , List<Long> selectCartItemIds
+           ) {
         // 유저 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserCodeNotFoundException("존재하지 않는 유저입니다."));
@@ -146,6 +180,9 @@ public class OrderService {
             throw new SelectedCartItemsNotFoundException("선택된 상품이 없습니다.");
         }
 
+        // 사용자가 선택한 쿠폰 적용
+
+
         // 장바구니에 담긴 CartItems들을 order orderItems로 변환 시작
         List<OrderItemRequestDto> orderItems = selectedCartItems.stream()
                 .map(cartItem -> new OrderItemRequestDto(
@@ -161,14 +198,20 @@ public class OrderService {
         orderRequestDto.setOrderItems(orderItems);
         orderRequestDto.setShippingFee(cart.getShippingFee());
 
+        // 주문생성
         OrderResponseDto orderResponseDto = createOrder(userId, orderRequestDto);
 
         // 주문 완료된 상품만 장바구니에서 삭제
         cart.getCartItems().removeAll(selectedCartItems);
+
+        // 쿠폰 True 처리
+
+        // 저장
         cartRepository.save(cart);
 
         return orderResponseDto;
     }
+
 
     // 특정 유저가 구매한 모든 품목 (사이즈, 개수)까지 나와야 함
     @Transactional(readOnly = true)
