@@ -127,7 +127,10 @@ const DetailProduct = () => {
             );
 
             console.log("장바구니 추가 성공:", response.data);
-            alert("장바구니에 추가되었습니다!");
+            const goToCart = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
+            if (goToCart) {
+                navigate("/cart");
+            }
         } catch (error) {
             console.error("장바구니 추가 실패:", error);
             alert("장바구니 추가에 실패했습니다.");

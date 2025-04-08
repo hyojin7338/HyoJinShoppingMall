@@ -56,7 +56,7 @@ public class Coupon {
     private LocalDateTime endDay; // 쿠폰 만료일
 
     @Column(nullable = false)
-    private Boolean isUse;  // 쿠폰 사용 가능 여부 // true면 사용 가능
+    private Boolean isUse;  // 쿠폰 사용 가능 여부 // false면 사용 가능
 
     @Column(nullable = false)
     private Boolean isAutoIssued; // true 지급완료

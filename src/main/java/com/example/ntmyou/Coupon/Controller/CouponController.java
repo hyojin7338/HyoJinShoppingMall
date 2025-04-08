@@ -36,6 +36,5 @@ public class CouponController {
         return ResponseEntity.ok(couponService.getAvailableCoupons(userId));
     }
 
-    //
 
 }

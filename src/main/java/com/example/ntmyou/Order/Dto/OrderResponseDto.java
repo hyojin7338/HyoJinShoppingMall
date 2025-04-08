@@ -20,4 +20,5 @@ public class OrderResponseDto {
     private String orderStatus;  // 주문 상태
     private LocalDateTime orderDate;  // 주문 생성 날짜
     private List<OrderItemResponseDto> orderItems;  // 주문 상품 목록
+    private String userCouponName; // 유저가 사용한 쿠폰 이름
 }

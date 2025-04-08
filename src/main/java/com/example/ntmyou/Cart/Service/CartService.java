@@ -244,7 +244,7 @@ public class CartService {
 
         //  userCoupon이 현재 userId(6)에게 속하는지 확인
         if (!userCoupon.getUser().getUserId().equals(cart.getUser().getUserId())) {
-            throw new IllegalStateException("🚨 해당 쿠폰이 현재 로그인한 사용자에게 속하지 않습니다!");
+            throw new IllegalStateException(" 해당 쿠폰이 현재 로그인한 사용자에게 속하지 않습니다!");
         }
 
         //  쿠폰이 SITE or 특정 판매자 쿠폰인지 검증

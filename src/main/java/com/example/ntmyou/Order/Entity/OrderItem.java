@@ -1,6 +1,5 @@
 package com.example.ntmyou.Order.Entity;
 
-import com.example.ntmyou.Order.Entity.Order;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
 import jakarta.persistence.*;

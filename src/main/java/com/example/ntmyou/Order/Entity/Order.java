@@ -2,6 +2,7 @@ package com.example.ntmyou.Order.Entity;
 
 import com.example.ntmyou.Order.Enum.OrderStatus;
 import com.example.ntmyou.User.Entity.User;
+import com.example.ntmyou.User.Entity.UserCoupon;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,6 +48,10 @@ public class Order {
     // 구매 날짜
     @Column(nullable = false)
     private LocalDateTime orderDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userCoupon_id")
+    private UserCoupon appliedCoupon;  // 적용된 쿠폰 (사용자가 선택한 쿠폰)
 
     @PrePersist
     public void prePersist() {
