@@ -14,4 +14,6 @@ public class OrderRequestDto {
     private List<OrderItemRequestDto> orderItems;  // 주문 상품 목록
     private Integer shippingFee; // 배송비
     private Long userCouponId; // 유저가 지급 받은 쿠폰 ID
+
+    private List<Long> selectedCartItemIds; // 선택한 장바구니 아이템 ID 목록
 }

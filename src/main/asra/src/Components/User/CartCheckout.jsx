@@ -145,7 +145,10 @@ const CartCheckout = () => {
         try {
             const { data } = await axios.post(
                 `http://localhost:8080/order/cart/${user.userId}/selected`,
-                selectedProducts.map(item => item.cartItemId)
+                {
+                    selectedCartItemIds: selectedProducts.map(item => item.cartItemId),
+                    userCouponId: selectedCouponId
+                }
             );
 
             console.log("🛒 결제 완료:", data);

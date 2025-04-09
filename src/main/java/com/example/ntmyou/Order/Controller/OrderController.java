@@ -36,9 +36,9 @@ public class OrderController {
     @PostMapping("/order/cart/{userId}/selected")
     public ResponseEntity<OrderResponseDto> createOrderFromSelectedCartItems(
             @PathVariable Long userId,
-            @RequestBody List<Long> selectedCartItemIds) {
+            @RequestBody OrderRequestDto requestDto) {
 
-        OrderResponseDto orderResponseDto = orderService.createCartSelectOrder(userId, selectedCartItemIds);
+        OrderResponseDto orderResponseDto = orderService.createCartSelectOrder(userId, requestDto.getSelectedCartItemIds(), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDto);
     }
 

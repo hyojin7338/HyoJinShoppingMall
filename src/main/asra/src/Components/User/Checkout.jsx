@@ -122,6 +122,7 @@ const Checkout = () => {
                 }
             ],
             shippingFee: checkoutData.shippingFee,
+            userCouponId: selectedCoupon,
         };
 
         console.log("🧾 주문요청 orderRequest:", orderRequest);
