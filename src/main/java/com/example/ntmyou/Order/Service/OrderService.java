@@ -72,6 +72,13 @@ public class OrderService {
         // 새로운 주문 생성
         Order order = orderMapper.toEntity(requestDto, user, userCoupon);
 
+        logger.info("주문 생성 확인 >> orderId={}, 쿠폰ID={}, 쿠폰명={}, 사용여부={}",
+                order.getOrderId(),
+                order.getAppliedCoupon() != null ? order.getAppliedCoupon().getUserCouponId() : "없음",
+                order.getAppliedCoupon() != null ? order.getAppliedCoupon().getCoupon().getName() : "없음",
+                order.getAppliedCoupon() != null ? order.getAppliedCoupon().getIsUsed() : "N/A"
+        );
+
         int totalOrderPrice = 0;
 
         // 주문 아이템 처리
@@ -96,16 +103,16 @@ public class OrderService {
             order.getOrderItems().add(orderItem);
         }
 
-        // 총 가격 및 주문 저장
-        order.setTotalPrice(totalOrderPrice + requestDto.getShippingFee());
-        Order savedOrder = orderRepository.save(order);
-
-
         // 쿠폰 사용 처리 // 2025-04-08
         if (userCoupon != null) {
             userCoupon.useCoupon();
             userCouponRepository.save(userCoupon);
         }
+
+
+        // 총 가격 및 주문 저장
+        order.setTotalPrice(totalOrderPrice + requestDto.getShippingFee());
+        Order savedOrder = orderRepository.save(order);
 
         return orderMapper.toDto(savedOrder);
 
@@ -161,6 +168,7 @@ public class OrderService {
     @Transactional
     public OrderResponseDto createCartSelectOrder(Long userId
             , List<Long> selectCartItemIds
+            , OrderRequestDto requestDto
            ) {
         // 유저 조회
         User user = userRepository.findById(userId)
@@ -180,8 +188,20 @@ public class OrderService {
             throw new SelectedCartItemsNotFoundException("선택된 상품이 없습니다.");
         }
 
-        // 사용자가 선택한 쿠폰 적용
+        // 쿠폰 유효성 검사 시작 //2025-04-09
+        UserCoupon userCoupon = null;
+        if (requestDto.getUserCouponId() != null) {
+            userCoupon = userCouponRepository.findById(requestDto.getUserCouponId())
+                    .orElseThrow(() -> new UserCouponNotFoundException("쿠폰을 찾을 수 없습니다."));
 
+            if (!userCoupon.getUser().getUserId().equals(userId)) {
+                throw new CouponNotApplicableException("해당 쿠폰은 사용자 쿠폰이 아닙니다.");
+            }
+
+            if (userCoupon.getIsUsed()) {
+                throw new CouponNotApplicableException("이미 사용한 쿠폰입니다.");
+            }
+        }
 
         // 장바구니에 담긴 CartItems들을 order orderItems로 변환 시작
         List<OrderItemRequestDto> orderItems = selectedCartItems.stream()
@@ -193,20 +213,16 @@ public class OrderService {
                 ))
                 .collect(Collectors.toList());
 
-        // 주문요청  DTO 생성
-        OrderRequestDto orderRequestDto = new OrderRequestDto();
-        orderRequestDto.setOrderItems(orderItems);
-        orderRequestDto.setShippingFee(cart.getShippingFee());
+        // 주문 요청 DTO 구성
+        requestDto.setOrderItems(orderItems);
+        requestDto.setShippingFee(cart.getShippingFee());
+        requestDto.setUserId(userId);
 
-        // 주문생성
-        OrderResponseDto orderResponseDto = createOrder(userId, orderRequestDto);
+        // 주문 생성
+        OrderResponseDto orderResponseDto = createOrder(userId, requestDto);
 
-        // 주문 완료된 상품만 장바구니에서 삭제
+        // 장바구니에서 해당 아이템 삭제
         cart.getCartItems().removeAll(selectedCartItems);
-
-        // 쿠폰 True 처리
-
-        // 저장
         cartRepository.save(cart);
 
         return orderResponseDto;

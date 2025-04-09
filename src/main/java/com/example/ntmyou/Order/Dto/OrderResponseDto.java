@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OrderResponseDto {
-
     private Long orderId;  // 주문 ID
     private Long userId;  // 구매자 ID
     private Integer totalPrice;  // 총 가격
