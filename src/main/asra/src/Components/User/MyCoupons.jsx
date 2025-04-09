@@ -15,7 +15,7 @@ const MyCoupons = () => {
             return;
         }
 
-        axios.get(`http://localhost:8080/coupons/${user.userId}`) // API 수정됨 (유저별 쿠폰 조회)
+        axios.get(`http://localhost:8080/coupons/available/${user.userId}`) // API 수정됨 (유저별 쿠폰 조회)
             .then(response => {
                 console.log("내 쿠폰 목록:", response.data);
                 setCoupons(response.data);
