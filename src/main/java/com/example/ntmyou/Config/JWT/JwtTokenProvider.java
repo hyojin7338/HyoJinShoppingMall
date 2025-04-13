@@ -1,6 +1,6 @@
 package com.example.ntmyou.Config.JWT;
 
-import io.github.cdimascio.dotenv.Dotenv;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -23,15 +23,15 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private final Key key;
 
-    public JwtTokenProvider(Dotenv dotenv) { //  환경 변수 주입
-        String secretKey = dotenv.get("JWT_SECRET"); //  .env에서 jwt.secret 로드
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         if (secretKey == null || secretKey.isEmpty()) {
-            throw new IllegalArgumentException("JWT_SECRET 값이 설정되지 않았습니다.");
+            throw new IllegalArgumentException("jwt.secret 값이 설정되지 않았습니다.");
         }
 
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey); // Base64로 디코딩
-        this.key = Keys.hmacShaKeyFor(keyBytes); // Secret Key 객체 생성
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
+
 
     // 유저 정보를 이용하여 accessToken 과 refreshToken를 생성하는 메서드
     public JwtToken generateToken(Authentication authentication) {
