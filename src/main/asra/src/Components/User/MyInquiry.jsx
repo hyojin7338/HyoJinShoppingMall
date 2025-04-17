@@ -22,7 +22,7 @@ const MyInquiry = () => {
         console.log("운영자에게 문의 유저 정보 :", user);
 
         axios
-            .get(`http://localhost:8080/product/productQuestion/${userId}`)
+            .get(`http://15.164.216.15:8080/product/productQuestion/${userId}`)
             .then((res) => setProductInquiries(res.data))
             .catch((err) => {
                 console.error("상품 문의 오류:", err);
@@ -31,7 +31,7 @@ const MyInquiry = () => {
 
         // 운영자 문의 조회
         axios
-            .get(`http://localhost:8080/general/userQuestion/${userId}`)
+            .get(`http://15.164.216.15:8080/general/userQuestion/${userId}`)
             .then((res) => setAdminInquiries(res.data))
             .catch((err) => {
                 console.error("운영자 문의 오류:", err);

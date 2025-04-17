@@ -28,7 +28,7 @@ const Cart = () => {
             return;
         }
 
-        axios.get(`http://localhost:8080/cart/${user.userId}`)
+        axios.get(`http://15.164.216.15:8080/cart/${user.userId}`)
             .then(response => {
                 console.log("장바구니 데이터:", response.data);
                 setCart(response.data);

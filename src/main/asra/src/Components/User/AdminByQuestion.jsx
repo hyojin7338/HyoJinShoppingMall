@@ -42,7 +42,7 @@ const AdminByQuestion = () => {
         };
 
         try {
-            await axios.post("http://localhost:8080/general/question", requestData);
+            await axios.post("http://15.164.216.15:8080/general/question", requestData);
             alert("문의가 등록되었습니다.");
             setQuestionType("");
             setTitle("");

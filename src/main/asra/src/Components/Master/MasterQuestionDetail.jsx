@@ -26,7 +26,7 @@ const MasterQuestionDetail = () => {
     useEffect(() => {
         const fetchQuestionDetail = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/master/question/${productQuestionId}`);
+                const response = await axios.get(`http://15.164.216.15:8080/master/question/${productQuestionId}`);
                 setQuestion(response.data);
             } catch (err) {
                 console.error("문의 상세 조회 중 오류 발생:", err);
@@ -38,7 +38,7 @@ const MasterQuestionDetail = () => {
 
         const fetchAnswers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/product/answerCreate/${productQuestionId}`);
+                const response = await axios.get(`http://15.164.216.15:8080/product/answerCreate/${productQuestionId}`);
                 setAnswers(response.data);
             } catch (err) {
                 console.error("답변 조회 오류:", err);
@@ -58,7 +58,7 @@ const MasterQuestionDetail = () => {
 
 
         try {
-            await axios.post("http://localhost:8080/product/answerCreate", {
+            await axios.post("http://15.164.216.15:8080/product/answerCreate", {
                 productQuestionId,
                 masterId: master.masterId,
                 answerContents: answerText
@@ -68,7 +68,7 @@ const MasterQuestionDetail = () => {
             setShowAnswerForm(false); // 입력 폼 닫기
 
             // 답변 목록 다시 불러오기
-            const response = await axios.get(`http://localhost:8080/product/answerCreate/${productQuestionId}`);
+            const response = await axios.get(`http://15.164.216.15:8080/product/answerCreate/${productQuestionId}`);
             setAnswers(response.data);
 
         } catch (err) {

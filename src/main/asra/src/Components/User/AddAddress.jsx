@@ -70,7 +70,7 @@ const AddAddress = () => {
             return;
         }
 
-        axios.post(`http://localhost:8080/address/add/${userId}`, formData)
+        axios.post(`http://15.164.216.15:8080/address/add/${userId}`, formData)
             .then(response => {
                 const newAddressId = response.data.addressId;
                 console.log("새로운 배송지 정보:", newAddressId);

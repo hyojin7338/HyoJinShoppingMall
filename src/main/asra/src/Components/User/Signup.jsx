@@ -32,7 +32,8 @@ const Signup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/codeCheck?code=${formData.code}`);
+            const response = await axios.get(`http://15.164.216.15:8080/codeCheck?code=${formData.code}`);
+
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 이메일입니다.");
                 setIsCheckCodeFirst(true);
@@ -59,7 +60,7 @@ const Signup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/nameCheck?name=${formData.name}`);
+            const response = await axios.get(`http://15.164.216.15:8080/nameCheck?name=${formData.name}`);
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 닉네임 입니다.");
                 setIsCheckNameFirst(true);
@@ -130,8 +131,8 @@ const Signup = () => {
 
         try {
             // 서버와 통신
-            // const response = await axios.post("http://localhost:8080/signUp", formData);
-            await axios.post("http://localhost:8080/signup", formData);
+            // const response = await axios.post("http://15.164.216.15:8080/signUp", formData);
+            await axios.post("http://15.164.216.15:8080/signup", formData);
             setSuccess("회원가입이 완료되었습니다!");
             setError("");
         } catch (error) {

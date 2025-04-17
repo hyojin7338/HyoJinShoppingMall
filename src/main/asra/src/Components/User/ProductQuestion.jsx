@@ -20,7 +20,7 @@ const ProductQuestion = () => {
         }
 
         try {
-            await axios.post("http://localhost:8080/product/questionCreate", {
+            await axios.post("http://15.164.216.15:8080/product/questionCreate", {
                 productId,
                 userId,
                 questionType,
