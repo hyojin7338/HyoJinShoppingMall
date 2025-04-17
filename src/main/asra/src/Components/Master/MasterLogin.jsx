@@ -41,7 +41,7 @@ const MasterLogin = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/master/login", formData);
+            const response = await axios.post("http://15.164.216.15:8080/master/login", formData);
             console.log("로그인 API 응답 데이터:", response.data);
 
             const { accessToken, refreshToken, masterId, name, businessName, role } = response.data;

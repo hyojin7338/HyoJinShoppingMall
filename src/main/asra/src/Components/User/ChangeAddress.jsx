@@ -14,7 +14,7 @@ const ChangeAddress = () => {
     useEffect(() => {
         if (!userId) return;
 
-        axios.get(`http://localhost:8080/address/${userId}`)
+        axios.get(`http://15.164.216.15:8080/address/${userId}`)
             .then(response => {
                 const fetchedAddresses = response.data;
                 setAddresses(response.data);

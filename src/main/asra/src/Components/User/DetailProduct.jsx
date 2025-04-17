@@ -27,7 +27,7 @@ const DetailProduct = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/product/${productId}`)
+        axios.get(`http://15.164.216.15:8080/product/${productId}`)
             .then(response => {
                 console.log("상품 상세 데이터:", response.data);
                 setProduct(response.data);
@@ -46,7 +46,7 @@ const DetailProduct = () => {
     // 사용자가 이미 찜을 하였는지 확인하기
     const checkIfFavorite = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/favorite/check?userId=${userId}&productId=${productId}`);
+            const response = await axios.get(`http://15.164.216.15:8080/favorite/check?userId=${userId}&productId=${productId}`);
             setIsFavorite(response.data); // `true`면 이미 찜한 상태
         } catch (error) {
             console.error("찜 여부 확인 실패:", error);
@@ -123,7 +123,7 @@ const DetailProduct = () => {
 
         try {
             const response = await axios.post(
-                `http://localhost:8080/${cartId}/add-product/${productId}/${selectedProductSizeId}?qty=${quantity}`
+                `http://15.164.216.15:8080/${cartId}/add-product/${productId}/${selectedProductSizeId}?qty=${quantity}`
             );
 
             console.log("장바구니 추가 성공:", response.data);
@@ -146,7 +146,7 @@ const DetailProduct = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/favorite/add", {
+            const response = await axios.post("http://15.164.216.15:8080/favorite/add", {
                 userId: userId,
                 productId: productId
             });
@@ -168,7 +168,7 @@ const DetailProduct = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:8080/favorite/remove/${userId}/${productId}`);
+            await axios.delete(`http://15.164.216.15:8080/favorite/remove/${userId}/${productId}`);
             setIsFavorite(false);
             alert("찜 목록에서 삭제되었습니다.");
         } catch (error) {

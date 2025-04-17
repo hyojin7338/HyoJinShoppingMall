@@ -40,7 +40,7 @@ const Checkout = () => {
 
         // 배송지 선택한 경우, 해당 배송지 정보 별도 조회
         if (addressId) {
-            axios.get(`http://localhost:8080/address/detail/${addressId}`)
+            axios.get(`http://15.164.216.15:8080/address/detail/${addressId}`)
                 .then(res => {
                     const addressData = res.data;
                     console.log("새로운 배송지 정보:", addressData);
@@ -59,7 +59,7 @@ const Checkout = () => {
         }
 
         //  백엔드에서 구매 전 정보 조회
-        axios.get(`http://localhost:8080/product/${user.userId}/${productId}/${quantity}`)
+        axios.get(`http://15.164.216.15:8080/product/${user.userId}/${productId}/${quantity}`)
             .then(response => {
                 console.log(" 구매 전 정보:", response.data);
                 setCheckoutData(response.data);
@@ -127,7 +127,7 @@ const Checkout = () => {
 
         console.log("🧾 주문요청 orderRequest:", orderRequest);
 
-        axios.post(`http://localhost:8080/order/${user.userId}`, orderRequest)
+        axios.post(`http://15.164.216.15:8080/order/${user.userId}`, orderRequest)
             .then(response => {
                 console.log("✅ 결제 성공:", response);
 

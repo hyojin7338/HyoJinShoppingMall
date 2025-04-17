@@ -30,7 +30,7 @@ const MasterSignup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/codeCheck?code=${formData.code}`);
+            const response = await axios.get(`http://15.164.216.15:8080/codeCheck?code=${formData.code}`);
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 아이디입니다.");
                 setIsCheckCodeFirst(true);
@@ -56,7 +56,7 @@ const MasterSignup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/nameCheck?name=${formData.name}`);
+            const response = await axios.get(`http://15.164.216.15:8080/nameCheck?name=${formData.name}`);
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 닉네임 입니다.");
                 setIsCheckNameFirst(true);
@@ -82,7 +82,7 @@ const MasterSignup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/codeCheck?code=${formData.code}`);
+            const response = await axios.get(`http://15.164.216.15:8080/codeCheck?code=${formData.code}`);
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 사업자명입니다.");
                 setIsCheckbusinessNameFirst(true);
@@ -107,7 +107,7 @@ const MasterSignup = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:8080/codeCheck?code=${formData.code}`);
+            const response = await axios.get(`http://15.164.216.15:8080/codeCheck?code=${formData.code}`);
             if (response.data === "SUCCESS") {
                 alert("사용 가능한 사업자번호입니다.");
                 setIsCheckbusinessNoFirst(true);
@@ -192,8 +192,8 @@ const MasterSignup = () => {
 
         try {
             // 서버와 통신
-            // const response = await axios.post("http://localhost:8080/signUp", formData);
-            await axios.post("http://localhost:8080/master/signup", formData);
+            // const response = await axios.post("http://15.164.216.15:8080/signUp", formData);
+            await axios.post("http://15.164.216.15:8080/master/signup", formData);
             setSuccess("관리자 회원가입이 완료되었습니다!");
             setError("");
         } catch (error) {

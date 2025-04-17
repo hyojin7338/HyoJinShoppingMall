@@ -22,7 +22,7 @@ const Main = () => {
 
     //  1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
     useEffect(() => {
-        axios.get("http://localhost:8080/master/category/parents/find")
+        axios.get("http://15.164.216.15:8080/master/category/parents/find")
             .then(response => {
                 console.log("대분류 데이터:", response.data);
                 setCategories(response.data);
@@ -36,7 +36,7 @@ const Main = () => {
 
         console.log("선택된 대분류 ID:", selectedParent.parentsId);
 
-        axios.get(`http://localhost:8080/master/categoryChild/find/${selectedParent.parentsId}`)
+        axios.get(`http://15.164.216.15:8080/master/categoryChild/find/${selectedParent.parentsId}`)
             .then(response => {
                 console.log("중분류 데이터:", response.data);
                 setChildren(response.data);
@@ -52,7 +52,7 @@ const Main = () => {
 
         console.log("선택된 중분류 ID:", selectedChild.childCategoryId);
 
-        axios.get(`http://localhost:8080/master/categorySub/find/${selectedChild.childCategoryId}`)
+        axios.get(`http://15.164.216.15:8080/master/categorySub/find/${selectedChild.childCategoryId}`)
             .then(response => {
                 console.log("소분류 데이터:", response.data);
                 setSubCategories(response.data);
@@ -64,7 +64,7 @@ const Main = () => {
     //  4. 선택한 소분류에 맞는 상품 목록 가져오기
     useEffect(() => {
         if (!selectedSub) return;
-        axios.get(`http://localhost:8080/products/findByProductAndSubCategory?subCategoryId=${selectedSub.subCategoryId}`)
+        axios.get(`http://15.164.216.15:8080/products/findByProductAndSubCategory?subCategoryId=${selectedSub.subCategoryId}`)
             .then(response => {
                 setProducts(response.data);
             })
