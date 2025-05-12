@@ -29,7 +29,9 @@ const CartCheckout = () => {
         const addressId = state?.selectedAddress?.addressId || state?.newAddressId;
 
         if (addressId) {
-            axios.get(`http://15.164.216.15:8080/address/detail/${addressId}`)
+            axios.get(`http://15.164.216.15/api/address/detail/${addressId}`,{
+                withCredentials: true,
+            })
                 .then(res => {
                     const addressData = res.data;
                     console.log("새로운 배송지 정보:", addressData);
@@ -59,8 +61,11 @@ const CartCheckout = () => {
                 const selectedIds = selectedProducts.map(item => item.cartItemId);
 
                 response = await axios.post(
-                    `http://15.164.216.15:8080/cart/checkout/selected?userId=${user.userId}`,
+                    `http://15.164.216.15/api/cart/checkout/selected?userId=${user.userId}`,
                     selectedIds
+                    ,{
+                        withCredentials: true,
+                    }
                 );
             }
 
@@ -68,7 +73,9 @@ const CartCheckout = () => {
             setCheckoutData(response.data);
 
             // 쿠폰 정보 가져오기 (유지)
-            const couponResponse = await axios.get(`http://15.164.216.15:8080/coupons/available/${user.userId}`);
+            const couponResponse = await axios.get(`http://15.164.216.15/api/coupons/available/${user.userId}`,{
+                withCredentials: true,
+            });
             console.log("✅ 사용 가능한 쿠폰:", couponResponse.data);
             setAvailableCoupons(couponResponse.data);
         } catch (error) {
@@ -123,7 +130,9 @@ const CartCheckout = () => {
         if (!checkoutData) return;
 
         try {
-            await axios.delete(`http://15.164.216.15:8080/cart/${checkoutData.cartId}/remove-coupon`);
+            await axios.delete(`http://15.164.216.15/api/cart/${checkoutData.cartId}/remove-coupon`,{
+                withCredentials: true,
+            });
             alert("쿠폰이 취소되었습니다!");
 
             setDiscountAmount(0); // 할인 금액 초기화
@@ -144,10 +153,13 @@ const CartCheckout = () => {
     const handlePayment = async () => {
         try {
             const { data } = await axios.post(
-                `http://15.164.216.15:8080/order/cart/${user.userId}/selected`,
+                `http://15.164.216.15/api/order/cart/${user.userId}/selected`,
                 {
                     selectedCartItemIds: selectedProducts.map(item => item.cartItemId),
                     userCouponId: selectedCouponId
+                }
+                ,{
+                    withCredentials: true,
                 }
             );
 

@@ -20,13 +20,16 @@ const ProductQuestion = () => {
         }
 
         try {
-            await axios.post("http://15.164.216.15:8080/product/questionCreate", {
+            await axios.post("http://15.164.216.15/api/product/questionCreate", {
                 productId,
                 userId,
                 questionType,
                 title,
                 contents
-            });
+            }
+            ,{
+                    withCredentials: true,
+                });
 
             alert("문의가 등록되었습니다.");
             navigate(`/product/${productId}`);
