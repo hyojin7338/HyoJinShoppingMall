@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class GeneralQuestionController {
 
     // 운영자에게 문의하기

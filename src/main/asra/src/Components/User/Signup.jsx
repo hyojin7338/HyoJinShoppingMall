@@ -75,7 +75,6 @@ const Signup = () => {
             }
         }
     };
-    // Name 중복처리 END
 
     //우편번호 찾기 다음 무료 api 사용
     useEffect(() => {
@@ -133,8 +132,11 @@ const Signup = () => {
             // 서버와 통신
             // const response = await axios.post("http://15.164.216.15:8080/signUp", formData);
             await axios.post("http://15.164.216.15:8080/signup", formData);
+            alert("회원가입이 완료되었습니다!");
             setSuccess("회원가입이 완료되었습니다!");
             setError("");
+
+            navigate("/login");
         } catch (error) {
             setError(error.response?.data?.message || "회원가입 중 오류가 발생했습니다.");
             setSuccess("");
