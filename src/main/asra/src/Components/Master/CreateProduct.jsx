@@ -43,7 +43,9 @@ const CreateProduct = () => {
 
     // 1. 대분류 가져오기
     useEffect(() => {
-        axios.get("http://15.164.216.15:8080/master/category/parents/find")
+        axios.get("http://15.164.216.15/api/master/category/parents/find",{
+            withCredentials: true,
+        })
             .then(response => setCategories(response.data))
             .catch(error => console.error("대분류 불러오기 실패:", error));
     }, []);
@@ -55,7 +57,9 @@ const CreateProduct = () => {
     // 2. 선택한 대분류에 맞는 중분류 가져오기
     useEffect(() => {
         if (!selectedParent) return;
-        axios.get(`http://15.164.216.15:8080/master/categoryChild/find/${selectedParent}`)
+        axios.get(`http://15.164.216.15/api/master/categoryChild/find/${selectedParent}`,{
+            withCredentials: true,
+        })
             .then(response => {
                 setChildren(response.data);
                 setSelectedChild(null);
@@ -67,7 +71,9 @@ const CreateProduct = () => {
     // 3. 선택한 중분류에 맞는 소분류 가져오기
     useEffect(() => {
         if (!selectedChild) return;
-        axios.get(`http://15.164.216.15:8080/master/categorySub/find/${selectedChild}`)
+        axios.get(`http://15.164.216.15/api/master/categorySub/find/${selectedChild}`,{
+            withCredentials: true,
+        })
             .then(response => {
                 setSubCategories(response.data);
                 setSelectedSub(null);
@@ -82,7 +88,9 @@ const CreateProduct = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://15.164.216.15:8080/Product/codeCheck?code=${productCode}`);
+            const response = await axios.get(`http://15.164.216.15/api/Product/codeCheck?code=${productCode}`,{
+                withCredentials: true,
+            });
             if (response.status === 200) {
                 alert("사용 가능한 상품 코드입니다.");
                 setIsCodeValid(true);
@@ -124,7 +132,8 @@ const CreateProduct = () => {
         subImages.forEach((image) => formData.append("subImages", image));
 
         try {
-            const response = await axios.post("http://15.164.216.15:8080/master/createProduct", formData, {
+            const response = await axios.post("http://15.164.216.15/api/master/createProduct", formData, {
+                withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" }
             });
             alert("상품이 등록되었습니다!");
