@@ -41,7 +41,9 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post("http://15.164.216.15:8080/login", formData);
+            const response = await axios.post("http://15.164.216.15/api/login", formData,{
+                withCredentials: true,
+            });
             console.log("로그인 API 응답 데이터:", response.data);
 
             const {accessToken, refreshToken, userId, name, cartId, role} = response.data;

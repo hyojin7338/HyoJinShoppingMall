@@ -20,7 +20,9 @@ const Favorite = () => {
 
         const fetchFavorites = async () => {
             try {
-                const response = await axios.get(`http://15.164.216.15:8080/favorite/find/${user.userId}`);
+                const response = await axios.get(`http://15.164.216.15/api/favorite/find/${user.userId}`,{
+                    withCredentials: true,
+                });
                 console.log("찜 목록 데이터:", response.data);
                 setFavorites(response.data);
             } catch (error) {
@@ -35,7 +37,9 @@ const Favorite = () => {
 
     const handleRemoveFavorite = async (productId) => {
         try {
-            await axios.delete(`http://15.164.216.15:8080/favorite/remove/${user.userId}/${productId}`);
+            await axios.delete(`http://15.164.216.15/api/favorite/remove/${user.userId}/${productId}`,{
+                withCredentials: true,
+            });
             alert("찜 목록에서 삭제되었습니다.");
             setFavorites(favorites.filter(item => item.favoriteId !== productId));
         } catch (error) {
@@ -46,7 +50,9 @@ const Favorite = () => {
 
     const handleAddToCart = async (productId) => {
         try {
-            const response = await axios.post(`http://15.164.216.15:8080/favorite/add-to-cart/${user.userId}/${productId}`);
+            const response = await axios.post(`http://15.164.216.15/api/favorite/add-to-cart/${user.userId}/${productId}`,{},{
+                withCredentials: true,
+            });
             console.log("장바구니 추가 성공:", response.data);
             alert("장바구니에 추가되었습니다.");
         } catch (error) {

@@ -9,7 +9,9 @@ const Order = () => {
 
     useEffect(() => {
         if (user) {
-            axios.get(`http://15.164.216.15:8080/order/getOrderByUser/${user.userId}`)
+            axios.get(`http://15.164.216.15/api/order/getOrderByUser/${user.userId}`,{
+                withCredentials: true,
+            })
                 .then(response => {
                     setOrders(response.data);
                 })
