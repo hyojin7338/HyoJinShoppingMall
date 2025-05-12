@@ -36,12 +36,19 @@ const MasterLogin = () => {
         setSuccess("");
 
         if (!formData.code || !formData.password) {
-            setError("아이디와 비밀번호를 입력해주세요. ");
+            setError("아이디와 비밀번호를 입력해주세요.");
             return;
         }
 
         try {
-            const response = await axios.post("http://15.164.216.15:8080/master/login", formData);
+            const response = await axios.post(
+                "http://15.164.216.15/api/master/login"
+                , formData
+                , {
+                    withCredentials : true,
+                }
+
+            );
             console.log("로그인 API 응답 데이터:", response.data);
 
             const { accessToken, refreshToken, masterId, name, businessName, role } = response.data;
