@@ -13,7 +13,9 @@ const MasterMain = () => {
     useEffect(() => {
         if (master?.masterId) {
             setLoading(true);
-            axios.get(`http://15.164.216.15:8080/product/Master/${master.masterId}`)
+            axios.get(`http://15.164.216.15/api/product/Master/${master.masterId}`, {
+                withCredentials: true,
+            })
                 .then((res) => {
                     console.log("📌 API 응답:", res.data);
                     setProducts(Array.isArray(res.data) ? res.data : []);

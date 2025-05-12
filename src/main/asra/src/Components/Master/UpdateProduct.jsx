@@ -27,7 +27,9 @@ const UpdateProduct = () => {
 
     // 상품 데이터 가져오기
     useEffect(() => {
-        axios.get(`http://15.164.216.15:8080/product/${productId}`)
+        axios.get(`http://15.164.216.15/api/product/${productId}`,{
+            withCredentials: true,
+        })
             .then((res) => {
                 console.log("📌 상품 데이터:", res.data);
                 setProduct(res.data);
@@ -61,7 +63,8 @@ const UpdateProduct = () => {
         }
 
         try {
-            await axios.put(`http://15.164.216.15:8080/master/productUpdate/${productId}`, formData, {
+            await axios.put(`http://15.164.216.15/api/master/productUpdate/${productId}`, formData, {
+                withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

@@ -20,7 +20,9 @@ const MasterQuestion = () => {
 
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get(`http://15.164.216.15:8080/product/product_MasterQuestion/${master.masterId}`);
+                const response = await axios.get(`http://15.164.216.15/api/product/product_MasterQuestion/${master.masterId}`,{
+                    withCredentials: true,
+                });
                 setQuestions(Array.isArray(response.data) ? response.data : []); // 응답이 배열인지 확인 후 저장
             } catch (err) {
                 console.error("API 요청 중 오류 발생:", err);
