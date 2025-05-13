@@ -6,4 +6,4 @@ COPY build/libs/*.jar app.jar
 #컨테이너가 실행될 때 자바 애플리케이션을 실행
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 
-# 젠킨스 TEST 진행
+
