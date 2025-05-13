@@ -79,7 +79,7 @@ const Login = () => {
 
         } catch (err) {
             if (err.response) {
-                alert(err.response.data.message || "로그인에 실패하였습니다."); // 실패 시 팝업
+                alert(err.response.data.message || "아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요"); // 실패 시 팝업
             } else {
                 alert("네트워크 오류가 발생하였습니다."); // 네트워크 오류
             }
