@@ -94,7 +94,7 @@ const Main = () => {
         <div className="main-container">
 
             <nav className="navbar">
-                <div className="logo">Asra</div> {/* 왼쪽 상단 로고 */}
+                <div className="logo">@Asra@</div> {/* 왼쪽 상단 로고 */}
                 <div className="search-bar">
                     <input type="text" placeholder="검색어를 입력하세요" />
                     <button>검색</button>
