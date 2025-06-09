@@ -89,6 +89,14 @@ public class CouponService {
         }
     }
 
+    // 생일인 달이 되면 자동적으로 쿠폰이 생성 된다
+    // 1만원 이상 주문 시 사용 가능
+    // 최대 2만원 할인 가능
+    // 10% 할인
+    // 사이트 발급
+    // 3개월 후 만료
+
+
     // 쿠폰 조회
     @Transactional(readOnly = true)
     public List<CouponResponseDto> getUserCoupons(Long userId) {
