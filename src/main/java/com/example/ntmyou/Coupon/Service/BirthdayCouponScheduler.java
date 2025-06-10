@@ -27,7 +27,7 @@ public class BirthdayCouponScheduler {
     private final CouponRepository couponRepository;
 
     @Transactional
-    @Scheduled(cron = "0 0 0 1 * *") // 매달 1일 00:00:00 실행
+    @Scheduled(cron = "0 0 0 * * *") // 매일 00시 실행
     //@Scheduled(cron = "0 * * * * *") // 매 1분마다 실행 (테스트용)
     public void issueBirthdayCoupons() {
         System.out.println("🎉 Birthday coupon scheduler triggered");
