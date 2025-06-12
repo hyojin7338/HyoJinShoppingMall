@@ -94,7 +94,7 @@ const Login = () => {
     return (
         <div className="login-form">
             <div className="login-header">
-                <h2>로그인</h2>
+                <h2>로그인 수정 완료</h2>
                 <button
                     onClick={() => navigate("/Signup")}
                     className="register-button"

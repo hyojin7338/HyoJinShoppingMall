@@ -60,6 +60,7 @@
     background-color: #222; /* 검정색 배경 */
     padding: 10px 0;
     gap: 10px;
+
 }
 
 .category-item {
@@ -71,24 +72,24 @@
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
-
-.category-item.active {
-    border-bottom: 3px solid #fff; /* 선택된 항목은 흰색 밑줄 */
-    font-weight: bold;
-}
+/*선택된 항목 밑줄 제거 2025-06-12*/
+/*.category-item.active {*/
+/*    border-bottom: 3px solid #fff; !* 선택된 항목은 흰색 밑줄 *!*/
+/*    font-weight: bold;*/
+/*}*/
 
 /*  중분류(ChildCategory) 및 소분류(SubCategory) 스타일 */
 .child-category-bar, .sub-category-bar {
     display: flex;
     justify-content: center;
-    background-color: #f5f5f5; /* 연한 그레이 배경 */
+    background-color: #222; /* 검정색 배경 */
     padding: 10px 0;
     gap: 10px;
 }
 
 .sub-category-item {
-    color: #222;
-    background: transparent;
+    /*color: #222;*/
+    background-color: #222; /* 검정색 배경 */
     border: none;
     padding: 8px 12px;
     font-size: 14px;
@@ -97,11 +98,9 @@
 
 }
 
-.sub-category-item.active {
-    color: #000; /* 선택된 항목은 검정색 */
-    font-weight: bold;
-    border-bottom: 2px solid #000;
-}
+/*.sub-category-item.active {*/
+/*    font-weight: bold;*/
+/*}*/
 
 /* 상품 리스트 스타일 */
 .product-grid {
@@ -150,4 +149,45 @@
 
 .product-NotFound{
     color: #222;
+}
+/* ================================ */
+/* 📱 반응형: 모바일 & 태블릿 대응 */
+/* ================================ */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+        margin-left: 0;
+    }
+
+    .search-bar {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(1, 1fr); /* 모바일: 1개 */
+        padding: 10px;
+        gap: 16px;
+    }
+
+    .product-info h3 {
+        font-size: 14px;
+    }
+
+    .category-item,
+    .sub-category-item {
+        font-size: 13px;
+        padding: 8px 6px;
+    }
 }

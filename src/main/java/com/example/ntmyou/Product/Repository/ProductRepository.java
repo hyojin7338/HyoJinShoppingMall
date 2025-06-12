@@ -24,4 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByMasterId(@Param("masterId")Long masterId);
 
     boolean existsByCode(String code);
+
+    // main 화면에서 폼목 keyword가 포함된 상품 리스트 검색
+    List<Product> findByNameContainingIgnoreCase(String keyword);
 }

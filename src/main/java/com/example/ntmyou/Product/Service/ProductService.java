@@ -13,10 +13,7 @@ import com.example.ntmyou.Master.Repository.MasterRepository;
 import com.example.ntmyou.Product.DTO.*;
 import com.example.ntmyou.Product.Entity.Product;
 import com.example.ntmyou.Product.Entity.ProductSize;
-import com.example.ntmyou.Product.Mapper.ProductAdjustCntMapper;
-import com.example.ntmyou.Product.Mapper.ProductMapper;
-import com.example.ntmyou.Product.Mapper.ProductSizeMapper;
-import com.example.ntmyou.Product.Mapper.ProductUpdateMapper;
+import com.example.ntmyou.Product.Mapper.*;
 import com.example.ntmyou.Product.Repository.ProductRepository;
 
 import com.example.ntmyou.Product.Repository.ProductSizeRepository;
@@ -50,6 +47,18 @@ public class ProductService {
     private final ProductSizeRepository productSizeRepository;
 
     private final ProductUpdateMapper productUpdateMapper;
+
+
+    // 상품 검색
+    @Transactional(readOnly = true)
+    public List<SearchProductResponseDto> searchByKeyword(String keyword) {
+        System.out.println("@@@@@@@@@@@1@@@@@@@@@@@@@@@@");
+        System.out.println("🔍 검색 키워드: " + keyword);
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        return products.stream()
+                .map(ProductSearchMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     // 상품 생성
     @Transactional
