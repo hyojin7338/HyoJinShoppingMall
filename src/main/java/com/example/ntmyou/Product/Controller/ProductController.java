@@ -99,12 +99,19 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/testDto")
-    public ResponseEntity<String> testDto(@RequestBody ProductAdjustCntRequestDto requestDto) {
-        System.out.println("📌 test-dto에서 받은 requestDto: " + requestDto);
-        System.out.println("📌 test-dto에서 받은 adjustCnt: " + requestDto.getAdjustCnt());
-        return ResponseEntity.ok("adjustCnt = " + requestDto.getAdjustCnt());
+    // 메인화면에서 serach 검색기능 활성화
+    @GetMapping("/product/search")
+    public ResponseEntity<List<SearchProductResponseDto>> searchProducts(@RequestParam String keyword) {
+        List<SearchProductResponseDto> results = productService.searchByKeyword(keyword);
+        return ResponseEntity.ok(results);
     }
+
+//    @PostMapping("/testDto")
+//    public ResponseEntity<String> testDto(@RequestBody ProductAdjustCntRequestDto requestDto) {
+//        System.out.println("📌 test-dto에서 받은 requestDto: " + requestDto);
+//        System.out.println("📌 test-dto에서 받은 adjustCnt: " + requestDto.getAdjustCnt());
+//        return ResponseEntity.ok("adjustCnt = " + requestDto.getAdjustCnt());
+//    }
 
 
 }

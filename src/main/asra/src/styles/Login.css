@@ -4,34 +4,35 @@ body {
     margin: 0;
     padding: 0;
     background-color: #121212; /* 어두운 배경색 */
-    color: #ffffff; /* 텍스트는 흰색으로 */
+    color: #ffffff; /* 기본 텍스트 색상: 흰색 */
 }
 
-/* 로그인 전체 컨테이너 */
+/* 로그인 폼 전체 컨테이너 */
 .login-form {
-    max-width: 400px;
-    margin: 80px auto; /* 화면 가운데 정렬 */
-    padding: 20px;
-    background-color: #1e1e1e; /* 폼 배경 */
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 부드러운 그림자 */
+    max-width: 400px;               /* 데스크톱 기준 최대 너비 */
+    margin: 80px auto;              /* 화면 중앙 정렬 */
+    padding: 20px;                  /* 내부 여백 */
+    background-color: #1e1e1e;      /* 어두운 배경 */
+    border-radius: 12px;            /* 모서리 둥글게 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
 }
 
-/* 헤더 영역 */
+/* 로그인 상단 헤더 (타이틀 + 회원가입 버튼 영역) */
 .login-header {
     display: flex;
-    justify-content: space-between; /* 수평으로 간격 벌리기 */
+    justify-content: space-between; /* 좌우 정렬 */
     align-items: center;
     margin-bottom: 20px;
 }
 
 .login-header h2 {
     margin: 0;
-    font-size: 24px;
+    font-size: 24px; /* 제목 크기 */
 }
 
-.login-button:hover{
-    background-color: #f5f5f5;
+/* 로그인 버튼 hover 효과 */
+.login-button:hover {
+    background-color: #e0e0e0; /* 마우스 올렸을 때 색상 변경 */
     color: #121212;
     border: none;
     padding: 8px 16px;
@@ -40,20 +41,16 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-.login-button:hover{
-    background-color: #e0e0e0; /* 살짝 어두운 회색 */
-    color: #121212;
-}
 
-/* 입력 필드 */
+/* 입력 필드 스타일 */
 input[type="text"],
 input[type="password"] {
-    width: calc(100% - 16px); /* 패딩 제외하고 100% 크기 */
+    width: calc(100% - 16px); /* 좌우 패딩 감안한 너비 */
     padding: 8px;
     margin-bottom: 15px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #2a2a2a;       /* 어두운 테두리 */
     border-radius: 8px;
-    background-color: #2e2e2e;
+    background-color: #2e2e2e;       /* 어두운 입력 배경 */
     color: #f5f5f5;
     font-size: 14px;
     transition: all 0.3s ease;
@@ -61,25 +58,25 @@ input[type="password"] {
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-    border-color: #f5f5f5; /* 포커스 시 밝은 테두리 */
+    border-color: #f5f5f5; /* 포커스 시 테두리 밝게 */
     outline: none;
 }
 
-/* 이메일 기억하기 체크박스 */
+/* 체크박스 및 라벨 */
 label {
     font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* 체크박스와 텍스트 간격 */
 }
 
 input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: #f5f5f5; /* 체크박스 색상 */
+    accent-color: #f5f5f5; /* 체크 표시 색상 */
 }
 
-/* 버튼 */
+/* 로그인 제출 버튼 */
 button[type="submit"] {
     width: 100%;
     padding: 10px 0;
@@ -94,18 +91,55 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #e0e0e0;
+    background-color: #e0e0e0; /* hover 시 색상 변화 */
 }
 
 /* 오류 및 성공 메시지 */
 .error {
-    color: #ff6b6b; /* 붉은색 */
+    color: #ff6b6b; /* 빨간색 경고 */
     font-size: 14px;
     margin-top: 10px;
 }
 
 .success {
-    color: #4caf50; /* 녹색 */
+    color: #4caf50; /* 초록색 알림 */
     font-size: 14px;
     margin-top: 10px;
+}
+
+/* ============================= */
+/* 📱 반응형 디자인 (모바일 대응) */
+/* ============================= */
+@media (max-width: 600px) {
+    .login-form {
+        width: 90%;            /* 모바일에서는 가로 90%로 확장 */
+        margin: 40px auto;     /* 위아래 여백 줄이기 */
+        padding: 16px;         /* 내부 여백도 축소 */
+        border-radius: 10px;   /* 살짝 덜 둥글게 */
+    }
+
+    .login-header h2 {
+        font-size: 20px;       /* 제목 폰트 크기 축소 */
+    }
+
+    .register-button,
+    button[type="submit"] {
+        font-size: 14px;       /* 버튼 폰트 크기 축소 */
+        padding: 8px 0;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;           /* 입력창 가로폭 100% */
+        font-size: 14px;
+    }
+
+    label {
+        font-size: 13px;       /* 체크박스 설명 폰트 축소 */
+    }
+
+    .error,
+    .success {
+        font-size: 13px;       /* 메시지 폰트 축소 */
+    }
 }

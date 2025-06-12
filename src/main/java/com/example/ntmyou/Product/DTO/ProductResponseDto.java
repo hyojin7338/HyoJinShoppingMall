@@ -1,6 +1,7 @@
 package com.example.ntmyou.Product.DTO;
 
 
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,4 +28,5 @@ public class ProductResponseDto {
 
     private String mainImg;  // 대표 이미지
     private List<String > imageUrls; // 서브 이미지
+
 }
