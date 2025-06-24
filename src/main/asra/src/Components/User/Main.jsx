@@ -18,6 +18,8 @@ const Main = () => {
     const [subCategories, setSubCategories] = useState([]); // 소분류 카테고리
     const [selectedSub, setSelectedSub] = useState(null); // 선택한 소분류
     const [products, setProducts] = useState([]); // 상품 목록
+    const [searchKeyword, setSearchKeyword] = useState(""); // 검색어 //2025-06-13 검색기능추가
+
 
 
     //  1. 대분류(ParentsCategory) 가져오기 (화면 진입 시 자동 조회)
@@ -89,15 +91,62 @@ const Main = () => {
         return price.toLocaleString();  // 1,000 단위로 콤마 추가
     };
 
+    // 검색기능 추가 //2025-06-13
+    const handleSearch = async () => {
+        if (!searchKeyword.trim()) return;
+
+        const encodedKeyword = encodeURIComponent(searchKeyword);
+        console.log("전송할 인코딩된 검색어:", encodedKeyword);
+
+        try {
+            const response = await axios.get(
+                `http://15.164.216.15/api/products/search-by-keyword?keyword=${encodedKeyword}`,
+                { withCredentials: true }
+            );
+            console.log("검색 결과:", response.data);
+            setProducts(response.data);
+            setSelectedParent(null);
+            setSelectedChild(null);
+            setSelectedSub(null);
+        } catch (error) {
+            console.error("검색 실패:", error);
+        }
+    };
+
+
+
+    const resetMainState = () => {
+        setSelectedParent(null);
+        setSelectedChild(null);
+        setSelectedSub(null);
+        setProducts([]); // 또는 초기 인기 상품 불러오기도 가능
+        setSearchKeyword("");
+    };
+
+
 
     return (
         <div className="main-container">
 
             <nav className="navbar">
-                <div className="logo">ASRA</div> {/* 왼쪽 상단 로고 */}
+
+                <div className="logo" onClick={resetMainState} style={{ cursor: "pointer" }}>
+                    ASRA
+                </div> {/* 왼쪽 상단 로고 */}
+
                 <div className="search-bar">
-                    <input type="text" placeholder="검색어를 입력하세요" />
-                    <button>검색</button>
+                    <input
+                        type="text"
+                        placeholder="검색어를 입력하세요"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSearch();
+                            }
+                        }}
+                    />
+                    <button onClick={handleSearch}>검색</button>
                 </div>
 
                 <button

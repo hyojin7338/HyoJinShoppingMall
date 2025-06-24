@@ -84,9 +84,16 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 메인화면에서 serach 검색기능 활성화
+    @GetMapping("/products/search-by-keyword")
+    public ResponseEntity<List<SearchProductResponseDto>> searchProducts(@RequestParam String keyword) {
+        List<SearchProductResponseDto> results = productService.searchByKeyword(keyword);
+        return ResponseEntity.ok(results);
+    }
+
     // 특정 상품만 조회되는 로직도 필요했네..! -> 상품상세페이지 들어갈 때
     // DetailProduct 상품상세 페이지로 들어갔을 때 필요한 API 있어야한다
-    @GetMapping("/product/{productId}")
+    @GetMapping("/products/{productId:[0-9]+}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long productId) {
         ProductResponseDto responseDto = productService.getProductById(productId);
         return ResponseEntity.ok(responseDto);
@@ -99,12 +106,6 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 메인화면에서 serach 검색기능 활성화
-    @GetMapping("/product/search")
-    public ResponseEntity<List<SearchProductResponseDto>> searchProducts(@RequestParam String keyword) {
-        List<SearchProductResponseDto> results = productService.searchByKeyword(keyword);
-        return ResponseEntity.ok(results);
-    }
 
 //    @PostMapping("/testDto")
 //    public ResponseEntity<String> testDto(@RequestBody ProductAdjustCntRequestDto requestDto) {

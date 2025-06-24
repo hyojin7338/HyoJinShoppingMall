@@ -8,8 +8,8 @@ public class ProductSearchMapper {
         return SearchProductResponseDto.builder()
                 .productId(product.getProductId())
                 .name(product.getName())
-                .mainImg(product.getMainImgUrl())
-                .amount(product.getAmount())
+                .mainImg(product.getMainImgUrl()) // <--- null 값이어도 가지고 와야 함
+                .amount(product.getAmount()) // <--- null 값이어도 가지고 와야 함
                 .businessName(product.getMaster() != null ? product.getMaster().getBusinessName() : null)
                 .build();
     }
