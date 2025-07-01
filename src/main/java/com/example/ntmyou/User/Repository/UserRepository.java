@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByCode(String code);
 
     boolean existsByName(String name);
+
+    // kakaoId로 User 조회 // 2025-07-01
+    Optional<User> findByKakaoId(String kakaoId);
 }
