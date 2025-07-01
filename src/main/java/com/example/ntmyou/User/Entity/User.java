@@ -77,6 +77,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Cart cart;
 
+
     // 주문확인 페이지에서 배송정보 변경가능하게 추가 //2025-03-06
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Addresses> addresses = new ArrayList<>();
@@ -122,4 +123,9 @@ public class User {
         }
 
     }
+
+
+    // 카카오톡 로그인 추가를 위한 고유 식별자 kakaoId를 추가  // 2025-07-01
+    @Column(unique = true)
+    private String kakaoId;
 }
