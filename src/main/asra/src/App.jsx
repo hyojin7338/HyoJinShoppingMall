@@ -27,6 +27,8 @@ import {UserContext} from "./context/UserContext"; // 유저 정보 가져오기
 import {MasterContext} from "./context/MasterContext.jsx";
 import UpdateProduct from "./Components/Master/UpdateProduct.jsx";
 import CartCheckout from "./Components/User/CartCheckout.jsx";
+import KakaoRedirectHandler from "./Components/User/KakaoRedirectHandler.jsx"; // 경로에 맞게 import
+
 
 
 function App() {
@@ -43,6 +45,8 @@ function App() {
                 <Route path="/MasterLogin" element={<MasterLogin/>}/>
                 <Route path="/Main" element={<Main/>}/>
                 <Route path="/product/:productId" element={<DetailProduct/>}/>
+                <Route path="/KakaoRedirectHandler" element={<KakaoRedirectHandler />} />
+
 
                 {/*  유저가 로그인 후에만 접근 가능 */}
                 <Route element={<ProtectedRoute user={user}/>}>

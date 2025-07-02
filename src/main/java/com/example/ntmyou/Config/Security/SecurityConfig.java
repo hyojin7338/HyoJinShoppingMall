@@ -1,5 +1,8 @@
 package com.example.ntmyou.Config.Security;
 
+import com.example.ntmyou.User.Kakao.CustomOAuth2UserService;
+import com.example.ntmyou.User.Kakao.OAuth2SuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,7 +22,11 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -29,6 +36,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/**", "/api/oauth/**").permitAll()
                         .requestMatchers("/**","/login","/signup").permitAll()
                         .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**").permitAll()
                         .requestMatchers("/users").hasAnyRole("USER","Master")
