@@ -34,7 +34,11 @@ public class SecurityConfig {
                         .requestMatchers("/users").hasAnyRole("USER","Master")
                         .requestMatchers("/master").hasAnyRole("Master")
                         .anyRequest().authenticated()
-                );
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                .defaultSuccessUrl("/api/oauth/kakao/callback", true)
+        ); // 2025-07-02
 
         return http.build();
     }

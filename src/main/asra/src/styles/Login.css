@@ -107,6 +107,28 @@ button[type="submit"]:hover {
     margin-top: 10px;
 }
 
+
+/*
+카카오톡 로그인
+*/
+
+.kakao-login-button {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.kakao-login-button img {
+    cursor: pointer;
+    width: 180px;
+    height: 45px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.kakao-login-button img:hover {
+    transform: scale(1.05);
+}
+
+
 /* ============================= */
 /* 📱 반응형 디자인 (모바일 대응) */
 /* ============================= */

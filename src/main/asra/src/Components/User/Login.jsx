@@ -136,6 +136,15 @@ const Login = () => {
                     </label>
                 </div>
                 <button type="submit">로그인</button>
+                <div className="kakao-login-button">
+                    <img
+                        src="/assets/kakao_login_small.png"
+                        alt="카카오 로그인"
+                        onClick={() => {
+                            window.location.href = "http://15.164.216.15/oauth2/authorization/kakao";
+                        }}
+                    />
+                </div>
             </form>
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
